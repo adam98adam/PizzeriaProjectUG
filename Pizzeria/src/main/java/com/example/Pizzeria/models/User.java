@@ -1,6 +1,6 @@
 package com.example.Pizzeria.models;
 
-import com.sun.istack.NotNull;
+
 import lombok.*;
 
 import javax.persistence.*;
