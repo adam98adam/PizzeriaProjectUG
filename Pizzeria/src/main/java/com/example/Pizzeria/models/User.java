@@ -8,10 +8,8 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @Entity
-@Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Getter
 @ToString
 @Table(name = "Users")
 public class User {
@@ -34,9 +32,22 @@ public class User {
     @Column(unique=true)
     private String phonenumber;
 
-    @NotBlank
+
+    @Column(columnDefinition = "boolean default true")
     private Boolean customer;
 
+/*
     @OneToOne(mappedBy = "user")
     private Account account;
+*/
+
+    public User(){}
+    public User(String name,String surname,String email,String phonenumber,Boolean customer){
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phonenumber = phonenumber;
+        this.customer = customer;
+    }
+
 }
