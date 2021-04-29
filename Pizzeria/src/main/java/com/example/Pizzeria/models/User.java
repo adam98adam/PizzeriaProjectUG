@@ -36,7 +36,7 @@ public class User {
     @Column(columnDefinition = "boolean default true")
     private Boolean customer;
 
-/*
+    /*
     @OneToOne(mappedBy = "user")
     private Account account;
 */

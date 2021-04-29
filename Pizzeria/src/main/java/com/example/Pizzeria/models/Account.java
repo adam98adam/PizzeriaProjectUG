@@ -8,6 +8,7 @@ import javax.validation.constraints.NotEmpty;
 
 
 @Entity
+@ToString
 @Table(name = "Accounts")
 public class Account {
 
@@ -22,11 +23,11 @@ public class Account {
     @NotBlank
     private String password;
 
-/*
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
-*/
+
 
     public Account() {}
 
@@ -57,5 +58,13 @@ public class Account {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

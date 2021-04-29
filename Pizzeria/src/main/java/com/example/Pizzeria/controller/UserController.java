@@ -4,6 +4,7 @@ import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.UserRepository;
 import com.example.Pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
-@RestController
-@RequestMapping("/api/")
+//@CrossOrigin(origins = "http://localhost:3000")
+//@RestController
+//@RequestMapping("/api/")
 public class UserController {
 
     @Autowired
@@ -38,8 +39,13 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Integer id) {
-        User user = userService.getUserById(id);
-        return  ResponseEntity.ok(user);
+        try {
+            User user = userService.getUserById(id);
+            System.out.println(user);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/users/{id}")

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class AccountServiceImpl implements AccountService{
@@ -13,7 +14,21 @@ public class AccountServiceImpl implements AccountService{
     private AccountRepository accountRepository;
 
     @Override
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
+    public Account getAccount(String login,String password) {
+
+          List<Account> accounts = accountRepository.findAll();
+          Account acc = new Account();
+          //System.out.println(acc);
+          //System.out.println(accounts);
+          accounts.forEach(account -> {
+              if(account.getLogin().equals(login) && account.getPassword().equals(password)) {
+                  acc.setId(account.getId());
+                  acc.setLogin(login);
+                  acc.setPassword(password);
+                  acc.setUser(account.getUser());
+              }
+          });
+
+          return acc;
     }
 }

@@ -24,7 +24,9 @@ class UpdateUserComponent extends Component {
         UserService.getUserById(this.state.id).then((res) => {
             let user = res.data;
             this.setState({name: user.name,surname: user.surname,email: user.email,phonenumber: user.phonenumber});
-        })
+        }).catch((er => {
+            console.log(er)
+        }))
     }
 
     updateUser = (e) => {

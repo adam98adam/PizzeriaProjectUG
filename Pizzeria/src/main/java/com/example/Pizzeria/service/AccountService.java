@@ -2,8 +2,8 @@ package com.example.Pizzeria.service;
 
 import com.example.Pizzeria.models.Account;
 
-import java.util.List;
+import java.util.Optional;
 
 public interface AccountService {
-    List<Account> getAllAccounts();
+    Account getAccount(String login,String password);
 }

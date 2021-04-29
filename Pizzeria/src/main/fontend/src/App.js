@@ -6,6 +6,7 @@ import HeaderComponent from './components/HeaderComponent';
 import CreateUserComponent from './components/CreateUserComponent';
 import UpdateUserComponent from './components/UpdateUserComponent';
 import LoginComponent from './components/LoginComponent';
+import RegisterComponent from './components/RegisterComponent';
 
 function App() {
   return (
@@ -14,11 +15,8 @@ function App() {
         <HeaderComponent/>
           <div className="container">
             <Switch>
-              <Route path ="/" exact component = {ListUserComponent}></Route>
-              <Route path ="/users" component = {ListUserComponent}></Route>
-              <Route path ="/add-user" component = {CreateUserComponent}></Route>
-              <Route path ="/update-user/:id" component = {UpdateUserComponent}></Route>
-              <Route path ="/login" component = {LoginComponent}></Route>
+              <Route path ="/" exact  component = {LoginComponent}></Route>
+              <Route path ="/register" component = {RegisterComponent}></Route>
             </Switch>
           </div>
       </Router>
