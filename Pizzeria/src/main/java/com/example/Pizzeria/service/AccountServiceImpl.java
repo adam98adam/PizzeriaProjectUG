@@ -15,7 +15,6 @@ public class AccountServiceImpl implements AccountService{
 
     @Override
     public Account getAccount(String login,String password) {
-
           List<Account> accounts = accountRepository.findAll();
           Account acc = new Account();
           //System.out.println(acc);
@@ -31,4 +30,8 @@ public class AccountServiceImpl implements AccountService{
 
           return acc;
     }
+
+
+
+
 }

@@ -1,5 +1,8 @@
 package com.example.Pizzeria.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -24,16 +27,18 @@ public class Account {
     private String password;
 
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
+    @JsonBackReference
     private User user;
 
 
     public Account() {}
 
-    public Account(String login,String password) {
+    public Account(String login,String password,User user) {
         this.login = login;
         this.password = password;
+        this.user = user;
     }
 
     public Integer getId() {

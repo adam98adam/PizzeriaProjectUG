@@ -1,0 +1,18 @@
+import axios from 'axios';
+const User_Api_Base_Url = "http://localhost:8080/api/accounts"
+class AccountService {
+
+
+    getAccount(login,password) {
+        return axios.get(User_Api_Base_Url + "/" + login + "/" + password);
+    }
+
+    createAccount(account) {
+        return axios.post(User_Api_Base_Url,account)
+    }
+
+
+
+}
+
+export default new AccountService()

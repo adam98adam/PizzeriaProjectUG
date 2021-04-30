@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import LoginService from '../services/LoginService';
+import AccountService from '../services/AccountService';
 import Popup from 'reactjs-popup';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
@@ -17,12 +17,13 @@ class LoginComponent extends Component {
         this.loginToSystem = this.loginToSystem.bind(this);
         this.changeLoginStatus = this.changeLoginStatus.bind(this);
         this.popUp = this.popUp.bind(this);
+        this.register = this.register.bind(this);
     }
 
 
     loginToSystem = (e) => {
         e.preventDefault();
-        LoginService.getAccount(this.state.login,this.state.password)
+        AccountService.getAccount(this.state.login,this.state.password)
         .then((res) => {
             console.log(res.data)
         })
@@ -30,13 +31,15 @@ class LoginComponent extends Component {
             {this.changeLoginStatus()}
         })
     }
+
+    register = () => {
+        this.props.history.push('/register');
+    }
     
     popUp = () => {
         return(
            
                     <p>I'm A Pop Up!!!</p>
-          
-         
         )
 
     }
@@ -68,13 +71,16 @@ class LoginComponent extends Component {
                                 <form>
                                     <div className = "form-group">
                                         <label> Login : </label>
-                                        <input placeholder="Login" name="login" className="form-control" value={this.state.login} onChange={this.changeLoginHandler}/>
+                                        <input type="name" placeholder="Login" name="login" className="form-control" value={this.state.login} onChange={this.changeLoginHandler}/>
                                     </div>
                                     <div className = "form-group">
                                         <label> Password : </label>
                                         <input type="password" placeholder="Password" name="password" className="form-control" value={this.state.password} onChange={this.changePasswordHandler}/>
                                     </div>
-                                    <button className="btn btn-success" onClick={this.loginToSystem}>Login</button>  
+                                    <div style={{display: "flex",justifyContent:"center",margin:"10px"}}>
+                                        <button className="btn btn-info"  onClick={this.loginToSystem}>Login</button>
+                                        <button className="btn btn-success" onClick={this.register}>Register</button>
+                                    </div> 
 
                                 </form>
                                 {!this.state.loginStatus ? this.popUp() : null}

@@ -1,6 +1,8 @@
 package com.example.Pizzeria.models;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,10 +38,11 @@ public class User {
     @Column(columnDefinition = "boolean default true")
     private Boolean customer;
 
-    /*
-    @OneToOne(mappedBy = "user")
+
+    @OneToOne(targetEntity = Account.class,mappedBy = "user")
+    @JsonManagedReference
     private Account account;
-*/
+
 
     public User(){}
     public User(String name,String surname,String email,String phonenumber,Boolean customer){

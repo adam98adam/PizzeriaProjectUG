@@ -6,4 +6,5 @@ import java.util.Optional;
 
 public interface AccountService {
     Account getAccount(String login,String password);
+
 }

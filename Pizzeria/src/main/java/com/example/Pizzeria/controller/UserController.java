@@ -1,6 +1,8 @@
 package com.example.Pizzeria.controller;
 
+import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.User;
+import com.example.Pizzeria.repository.AccountRepository;
 import com.example.Pizzeria.repository.UserRepository;
 import com.example.Pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,24 +14,52 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.jws.soap.SOAPBinding;
 import javax.persistence.criteria.CriteriaBuilder;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-//@CrossOrigin(origins = "http://localhost:3000")
-//@RestController
-//@RequestMapping("/api/")
+@CrossOrigin(origins = "http://localhost:3000")
+@RestController
+@RequestMapping("/api/")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserRepository userRepository;
+
+
+    @PostMapping("/users")
+    public ResponseEntity<User> getAccountByEmailAndPhonenumebr(@RequestBody User newUser) {
+        List<User> users = userRepository.findByEmailOrPhonenumber(newUser.getEmail(),newUser.getPhonenumber());
+        if(users.isEmpty()) {
+            userRepository.save(newUser);
+            return new ResponseEntity<>(newUser, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new User(),HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
-        return userService.getAllUsers();
+        return userRepository.findAll();
     }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        if(user.isPresent()) {
+            userRepository.deleteById(id);
+            return new ResponseEntity<>("User with given id = " + id + " was deleted", HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User with given id = " + id + " doesn't exist",HttpStatus.NOT_FOUND);
+
+    }
+
+
+    /*
 
     @PostMapping("/users")
     public User createUser(@RequestBody User user){

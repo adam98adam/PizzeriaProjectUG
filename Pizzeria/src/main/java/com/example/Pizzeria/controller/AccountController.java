@@ -2,6 +2,7 @@ package com.example.Pizzeria.controller;
 
 import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.User;
+import com.example.Pizzeria.repository.AccountRepository;
 import com.example.Pizzeria.service.AccountService;
 import com.example.Pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +23,35 @@ public class AccountController {
     @Autowired
     private AccountService accountService;
 
+    @Autowired
+    private AccountRepository accountRepository;
 
-    @GetMapping("/login/{login}/{password}")
-    public ResponseEntity<Account> getAccouunt(@PathVariable String login,@PathVariable String password) {
-        Account acc = accountService.getAccount(login,password);
-        if(acc.getLogin() == null)
-            return new ResponseEntity<>(acc,HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(acc,HttpStatus.OK);
+
+    @GetMapping("/accounts/{login}/{password}")
+    public ResponseEntity<Account> getAccount(@PathVariable String login,@PathVariable String password) {
+        List<Account> accounts  = accountRepository.findByLoginAndPassword(login,password);
+        if(accounts.isEmpty())
+            return new ResponseEntity<>(new Account(),HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>(accounts.get(0),HttpStatus.OK);
+
+    }
+
+
+    @PostMapping("/accounts")
+    public ResponseEntity<Account> getAccountByLogin(@RequestBody Account newAccount) {
+            List<Account> accounts = accountRepository.findByLogin(newAccount.getLogin());
+            if(accounts.isEmpty()) {
+                accountRepository.save(newAccount);
+                return new ResponseEntity<>(newAccount,HttpStatus.OK);
+            }else {
+                return new ResponseEntity<>(new Account(), HttpStatus.NOT_FOUND);
+            }
+    }
+
+    @GetMapping("/accounts")
+    public List<Account> getAllAccounts() {
+        return accountRepository.findAll();
     }
 
 
