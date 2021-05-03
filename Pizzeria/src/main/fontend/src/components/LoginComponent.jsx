@@ -1,96 +1,142 @@
-import React, { Component } from 'react';
-import AccountService from '../services/AccountService';
-import Popup from 'reactjs-popup';
-import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
+import React from "react";
+import LoginService from "../services/LoginService";
+import Button from "react-bootstrap/Button";
+import "reactjs-popup/dist/index.css";
+import "../css/index.css";
+import { Form, Row, Col, Container, Card, Modal } from "react-bootstrap";
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import AccountService from "../services/AccountService";
 
-class LoginComponent extends Component {
-    constructor(props) {
-        super(props)
+const cardStyle = {
+  paddingTop: 30,
+  paddingBottom: 30,
+  textAlign: "center",
+  marginTop: "5rem",
+};
+const cardTitleStyle = {};
+const columnStyle = {
+  margin: "auto",
+};
+const LoginComponent = (props) => {
+  const [loginStatus, setLoginStatus] = useState(true);
+  const [showModal, setShowModal] = useState(false);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
 
-        this.state = {
-            loginStatus: true,
-            login:'',
-            password:''
-        }
-
-        this.loginToSystem = this.loginToSystem.bind(this);
-        this.changeLoginStatus = this.changeLoginStatus.bind(this);
-        this.popUp = this.popUp.bind(this);
-        this.register = this.register.bind(this);
-    }
-
-
-    loginToSystem = (e) => {
-        e.preventDefault();
-        AccountService.getAccount(this.state.login,this.state.password)
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (login === "" && password === "") {
+      setShowModal(true);
+    } else {
+      AccountService.getAccount(login, password)
         .then((res) => {
-            console.log(res.data)
+          console.log(res.data);
         })
         .catch((er) => {
-            {this.changeLoginStatus()}
-        })
+          {
+            setLoginStatus(!loginStatus);
+            setShowModal(true);
+            console.log(er.response);
+          }
+        });
     }
+  };
 
-    register = () => {
-        this.props.history.push('/register');
-    }
-    
-    popUp = () => {
-        return(
-           
-                    <p>I'm A Pop Up!!!</p>
-        )
+  const handleClose = () => {
+    setShowModal(false);
+    setLogin("");
+    setPassword("");
+  };
 
-    }
-
-
-    changeLoginStatus = () => {
-        this.setState({loginStatus: !this.state.loginStatus})
-    }
-
-    changeLoginHandler = (event) => {
-        this.setState({login: event.target.value});
-    }
-
-    changePasswordHandler = (event) => {
-        this.setState({password: event.target.value});
-    }
-
-
-
-
-    render() {
-        return (
-            <div>
-                <div className = "container">
-                    <div className = "row">
-                        <div className = "card col-md-6 offset-md-3 offset-md3">
-                            <h3 className="text-center">Login</h3>
-                            <div className = "card-body">
-                                <form>
-                                    <div className = "form-group">
-                                        <label> Login : </label>
-                                        <input type="name" placeholder="Login" name="login" className="form-control" value={this.state.login} onChange={this.changeLoginHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Password : </label>
-                                        <input type="password" placeholder="Password" name="password" className="form-control" value={this.state.password} onChange={this.changePasswordHandler}/>
-                                    </div>
-                                    <div style={{display: "flex",justifyContent:"center",margin:"10px"}}>
-                                        <button className="btn btn-info"  onClick={this.loginToSystem}>Login</button>
-                                        <button className="btn btn-success" onClick={this.register}>Register</button>
-                                    </div> 
-
-                                </form>
-                                {!this.state.loginStatus ? this.popUp() : null}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
-
+  return (
+    <Card style={cardStyle}>
+      <Card.Title text="white" style={cardTitleStyle}>
+        Log In
+      </Card.Title>
+      <Form className="center">
+        <Container>
+          <Row className="justify-content-md-center">
+            <Col
+              md={{ span: 4, offset: 3 }}
+              sm={12}
+              style={{
+                ...columnStyle,
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+                borderTopLeftRadius: 10,
+                borderTopRightRadius: 10,
+              }}
+            >
+              <Form.Group controlId="formLogin">
+                {/* <Form.Label>Login</Form.Label> */}
+                <Form.Control
+                  type="text"
+                  placeholder="Enter your login"
+                  onChange={({ target }) => setLogin(target.value)}
+                  value={login}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col
+              md={{ span: 4, offset: 3 }}
+              sm={12}
+              style={{
+                ...columnStyle,
+                borderBottomLeftRadius: 10,
+                borderBottomRightRadius: 10,
+                borderTopLeftRadius: 0,
+                borderTopRightRadius: 0,
+              }}
+            >
+              <Form.Group controlId="formPassword">
+                {/* <Form.Label>Password</Form.Label> */}
+                <Form.Control
+                  type="password"
+                  placeholder="Enter your password"
+                  onChange={({ target }) => setPassword(target.value)}
+                  value={password}
+                />
+              </Form.Group>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col md="auto">
+              <Button variant="success" type="submit" onClick={handleLogin}>
+                Submit
+              </Button>
+            </Col>
+            <Col md="auto">
+              <Button variant="secondary">
+                <Link style={{ color: "white" }} to={"/register"}>
+                  Register
+                </Link>
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+        <Modal show={showModal} centered onHide={handleClose}>
+          <Modal.Header>
+            <Modal.Title>User Not Found</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <p>Can't find user, wrong login/password</p>
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleClose}>
+              Try again
+            </Button>
+            <Button variant="secondary">
+              <Link style={{ color: "white" }} to={"/register"}>
+                Register
+              </Link>
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </Form>
+    </Card>
+  );
+};
 export default LoginComponent;

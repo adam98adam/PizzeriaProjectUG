@@ -1,128 +1,224 @@
-import React, { Component } from 'react';
-import UserService from '../services/UserService';
-import AccountService from '../services/AccountService';
+import React, { useState } from "react";
+import UserService from "../services/UserService";
+import AccountService from "../services/AccountService";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+} from "react-bootstrap";
+import { Link } from "react-router-dom";
 
-class RegisterComponent extends Component {
-    constructor(props) {
-        super(props)
+const cardStyle = {
+  paddingTop: 30,
+  paddingBottom: 30,
+  textAlign: "center",
+  marginTop: "5rem",
+};
 
-        this.state = {
-            registerStatus: true,
-            login:'',
-            password:'',
-            name:'',
-            surname:'',
-            email:'',
-            phonenumber:''
-        }
+const RegisterComponent = (props) => {
+  // const [registerStatus, setRegisterstatus] = useState(true)
+  const [showUserModal, setShowUserModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
-
-       // this.registerToSystem = this.registerToSystem.bind(this)
-
-    }
-
-    
-    registerToSystem = (e) => {
-        e.preventDefault();
-        let user = {name: this.state.name,surname: this.state.surname,email: this.state.email,phonenumber: this.state.phonenumber,customer : true}
-        UserService.createUser(user).then((res) => {
-            AccountService.createAccount({login: this.state.login,password: this.state.password,user: {id: parseInt(res.data.id,10)}}).then((res) => {
-                console.log(res.data)
-            }).catch((error) => {
-                UserService.deleteUser(res.data.id).then((res) => console.log(res.data))
-                console.log(error.response)
-
+  const registerToSystem = (e) => {
+    e.preventDefault();
+    const user = {
+      name: name,
+      surname: surname,
+      email: email,
+      phonenumber: phoneNumber,
+      customer: true,
+    };
+    const loginData = {
+      login: login,
+      password: password,
+    };
+    if (Object.values(user).every((el) => el.length !== 0)) {
+      if (Object.values(loginData).every((el) => el.length !== 0)) {
+        UserService.createUser(user)
+          .then((res) => {
+            AccountService.createAccount({
+              ...loginData,
+              user: { id: parseInt(res.data.id, 10) },
             })
-        }).catch((error) => console.log(error.response))
+              .then((res) => {
+                console.log(res.data);
+              })
+              .catch((error) => {
+                UserService.deleteUser(res.data.id).then((res) =>
+                  console.log(res.data)
+                );
+                console.log(error.response);
+              });
+          })
+          .catch((error) => console.log(error.response));
+      } else {
+        setShowLoginModal(true);
+      }
+    } else {
+      setShowUserModal(true);
     }
-    
-    /*
+  };
+
+  const handleUserModalClose = () => {
+    setShowUserModal(false);
+  };
+  const handleLoginModalClose = () => {
+    setShowLoginModal(false);
+  };
+
+  const userModal = () => {
+    return (
+      <Modal show={showUserModal} centered onHide={handleUserModalClose}>
+        <Modal.Header>
+          <Modal.Title>User Fields Empty</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            One or more of user fields are empty. Please fill up these fields.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleUserModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  const loginModal = () => {
+    return (
+      <Modal show={showLoginModal} centered onHide={handleLoginModalClose}>
+        <Modal.Header>
+          <Modal.Title>User Not Found</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Can't find user, wrong login/password</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleLoginModalClose}>
+            Try again
+          </Button>
+          <Button variant="secondary">
+            <Link style={{ color: "white" }} to={"/register"}>
+              Register
+            </Link>
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  /*
     registerToSystem = (e) => {
         e.preventDefault();
-        let user = {name: this.state.name,surname: this.state.surname,email: this.state.email,phonenumber: this.state.phonenumber,customer : true}
+        let user = {name: name,surname: surname,email: email,phonenumber: phonenumber,customer : true}
         RegisterService.createUser(user).then((res) => console.log(res.data)).catch((error) => console.log("Error"))
     }
     */
-    
 
+  const cancel = () => {
+    props.history.push("/");
+  };
 
+  return (
+    <Card
+      bg="Primary"
+      style={{
+        padding: 20,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Form className="center">
+        <Container>
+          <Row className="align-items-center">
+            {/* New account */}
+            <Col>
+              <Card style={cardStyle}>
+                <Card.Title>Add your personal data</Card.Title>
+                <Form.Group controlId="formUser">
+                  <Form.Label>First Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your first name"
+                    onChange={({ target }) => setName(target.value)}
+                  />
 
+                  <Form.Label>Last Name</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your last name"
+                    onChange={({ target }) => setSurname(target.value)}
+                  />
 
-    cancel = () => {
-        this.props.history.push("/");
-    }
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="email"
+                    placeholder="Enter your email"
+                    onChange={({ target }) => setEmail(target.value)}
+                  />
 
-    changeLoginHandler = (event) => {
-        this.setState({login: event.target.value});
-    }
-
-    changePasswordHandler = (event) => {
-        this.setState({password: event.target.value});
-    }
-
-    changeNameHandler= (event) => {
-        this.setState({name: event.target.value});
-    }
-
-    changeSurnameHandler = (event) => {
-        this.setState({surname: event.target.value});
-    }
-
-    changeEmailHandler = (event) => {
-        this.setState({email: event.target.value})
-    }
-
-    changePhonenumberHandler = (event) => {
-        this.setState({phonenumber: event.target.value})
-    }
-
-
-
-    render() {
-        return (
-              <div>
-                <div className = "container">
-                    <div className = "row">
-                        <div className = "card col-md-6 offset-md-3 offset-md3">
-                            <h3 className="text-center">Registration</h3>
-                            <div className = "card-body">
-                                <form>
-                                    <div className = "form-group">
-                                        <label> Login : </label>
-                                        <input  placeholder="Login" name="login" className="form-control" value={this.state.login} onChange={this.changeLoginHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Password : </label>
-                                        <input placeholder="Password" name="password" className="form-control" value={this.state.password} onChange={this.changePasswordHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Name : </label>
-                                        <input placeholder="Name" name="name" className="form-control" value={this.state.name} onChange={this.changeNameHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Surname : </label>
-                                        <input placeholder="Surname" name="surname" className="form-control" value={this.state.surname} onChange={this.changeSurnameHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Email : </label>
-                                        <input placeholder="Email" name="email" className="form-control" value={this.state.email} onChange={this.changeEmailHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Phonenumber : </label>
-                                        <input placeholder="Phonenumber" name="phonenumber" className="form-control" value={this.state.phonenumber} onChange={this.changePhonenumberHandler}/>
-                                    </div>
-                                    <div style={{display: "flex",justifyContent: "center",alignItems: "center"}}>
-                                        <button className="btn btn-success" onClick={this.registerToSystem}>Register</button>
-                                        <button className="btn btn-danger" onClick={this.cancel}>Cancel</button>  
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>  
-        );
-    }
-}
+                  <Form.Label>Phone Number</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your phone number"
+                    onChange={({ target }) => setPhoneNumber(target.value)}
+                  />
+                </Form.Group>
+              </Card>
+            </Col>
+            {/* User */}
+            <Col>
+              <Card>
+                <Card.Title>Add your new account</Card.Title>
+                <Form.Group controlId="formLogin">
+                  <Form.Label>Login</Form.Label>
+                  <Form.Control
+                    type="text"
+                    placeholder="Enter your login"
+                    onChange={({ target }) => setLogin(target.value)}
+                  />
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    placeholder="Enter your password"
+                    onChange={({ target }) => setPassword(target.value)}
+                  />
+                </Form.Group>
+              </Card>
+            </Col>
+          </Row>
+          <Row className="justify-content-md-center">
+            <Col md="auto">
+              <Button variant="success" onClick={registerToSystem}>
+                Register
+              </Button>
+            </Col>
+            <Col md="auto">
+              <Button variant="danger" onClick={cancel}>
+                Cancel
+              </Button>
+            </Col>
+          </Row>
+        </Container>
+        {showUserModal && userModal()}
+        {showLoginModal && loginModal()}
+      </Form>
+    </Card>
+  );
+};
 
 export default RegisterComponent;
