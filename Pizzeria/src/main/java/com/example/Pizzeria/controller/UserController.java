@@ -4,7 +4,6 @@ import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AccountRepository;
 import com.example.Pizzeria.repository.UserRepository;
-import com.example.Pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +20,7 @@ import java.util.*;
 @RequestMapping("/api/")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+
 
     @Autowired
     private UserRepository userRepository;

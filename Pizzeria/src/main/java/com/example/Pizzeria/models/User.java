@@ -2,12 +2,10 @@ package com.example.Pizzeria.models;
 
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Setter
@@ -40,8 +38,14 @@ public class User {
 
 
     @OneToOne(targetEntity = Account.class,mappedBy = "user")
-    @JsonManagedReference
+    //@JsonManagedReference
+    @JsonBackReference(value = "user-account")
     private Account account;
+
+    @OneToOne(targetEntity = Address.class,mappedBy = "user")
+    //@JsonManagedReference
+    @JsonBackReference(value = "user-address")
+    private Address address;
 
 
     public User(){}

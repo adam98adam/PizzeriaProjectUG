@@ -29,7 +29,8 @@ public class Account {
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
-    @JsonBackReference
+    //@JsonBackReference
+    @JsonManagedReference(value = "user-account")
     private User user;
 
 

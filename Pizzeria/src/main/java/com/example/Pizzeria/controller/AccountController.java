@@ -41,9 +41,11 @@ public class AccountController {
     @PostMapping("/accounts")
     public ResponseEntity<Account> getAccountByLogin(@RequestBody Account newAccount) {
             List<Account> accounts = accountRepository.findByLogin(newAccount.getLogin());
+            //System.out.println(newAccount.getUser());
             if(accounts.isEmpty()) {
                 accountRepository.save(newAccount);
-                return new ResponseEntity<>(newAccount,HttpStatus.OK);
+                accounts = accountRepository.findByLogin(newAccount.getLogin());
+                return new ResponseEntity<>(accounts.get(0),HttpStatus.OK);
             }else {
                 return new ResponseEntity<>(new Account(), HttpStatus.NOT_FOUND);
             }
@@ -52,6 +54,12 @@ public class AccountController {
     @GetMapping("/accounts")
     public List<Account> getAllAccounts() {
         return accountRepository.findAll();
+    }
+
+    @GetMapping("/accounts/{id}")
+    public  ResponseEntity<Optional<Account>> getAccount(@PathVariable Integer id) {
+        Optional<Account> acc = accountRepository.findById(id);
+        return new ResponseEntity<>(acc,HttpStatus.OK);
     }
 
 

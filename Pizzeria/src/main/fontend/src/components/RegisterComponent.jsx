@@ -43,16 +43,24 @@ const RegisterComponent = (props) => {
       login: login,
       password: password,
     };
+    const address = (id) => {
+      props.history.push(`/register-user-address/${id}`)
+    }
+
     if (Object.values(user).every((el) => el.length !== 0)) {
       if (Object.values(loginData).every((el) => el.length !== 0)) {
         UserService.createUser(user)
           .then((res) => {
             AccountService.createAccount({
               ...loginData,
-              user: { id: parseInt(res.data.id, 10) },
+              user: { id: parseInt(res.data.id, 10),name : res.data.name,surname : res.data.surname,email : res.data.email,phonenumber : res.data.phonenumber,customer : res.data.customer },
             })
               .then((res) => {
                 console.log(res.data);
+                console.log(res.data.user.id);
+                //res.data.user.id
+                //this.props.history.push(`/register-user-address/${id}`);
+                address(res.data.user.id)
               })
               .catch((error) => {
                 UserService.deleteUser(res.data.id).then((res) =>
@@ -131,7 +139,11 @@ const RegisterComponent = (props) => {
   const cancel = () => {
     props.history.push("/");
   };
-
+/*
+  const address = (id) => {
+    props.history.push(`/register-user-address/${id}`)
+  }
+*/
   return (
     <Card
       bg="Primary"
