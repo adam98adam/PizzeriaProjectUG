@@ -7,7 +7,7 @@ class EditAccountComponent extends Component {
         super(props)
 
         this.state = {
-            id: this.props.match.params.id,
+            idAccount: this.props.match.params.idAccount,
             login:'',
             password:'',
 
@@ -17,7 +17,7 @@ class EditAccountComponent extends Component {
     }
 
     componentDidMount() {
-        AccountService.getAccountById(parseInt(this.props.match.params.id,10)).then((res) => {
+        AccountService.getAccountById(parseInt(this.props.match.params.idAccount,10)).then((res) => {
             let account = res.data;
             this.setState({login: account.login,password: account.password});
         })
@@ -39,8 +39,8 @@ class EditAccountComponent extends Component {
     updateAccount = (e) => {
         e.preventDefault();
         let account = {login: this.state.login,password: this.state.password}
-        AccountService.updateAccount(account,parseInt(this.state.id,10)).then((res) => {
-            this.cancel(parseInt(this.state.id,10))
+        AccountService.updateAccount(account,parseInt(this.state.idAccount,10)).then((res) => {
+            this.cancel(parseInt(this.state.idAccount,10))
         }).catch((error) => console.log(error.response))
  
     }
@@ -64,7 +64,7 @@ class EditAccountComponent extends Component {
                                   <input placeholder="Password" name="password" className="form-control" value={this.state.password} onChange={this.changePasswordHandler}/>
                               </div>
                               <button className="btn btn-success" onClick={this.updateAccount}>Save</button>
-                              <button className="btn btn-danger" onClick={() => this.cancel(parseInt(this.state.id,10))}  style={{marginLeft: "10px"}}>Cancel</button>
+                              <button className="btn btn-danger" onClick={() => this.cancel(parseInt(this.state.idAccount,10))}  style={{marginLeft: "10px"}}>Cancel</button>
                           </form>
 
                       </div>

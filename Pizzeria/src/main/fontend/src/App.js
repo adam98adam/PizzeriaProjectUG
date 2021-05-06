@@ -25,7 +25,7 @@ function App() {
               <Route path ="/register"  component = {RegisterComponent}></Route>
               <Route path ="/register-user-address/:id"  component = {RegisterUserAddressComponent}></Route>
               <Route path ="/user/:id"  component = {UserPanelComponent}></Route>
-              <Route path ="/account-edit/:id"  component = {EditAccountComponent}></Route>
+              <Route path ="/account-edit/:idAccount"  component = {EditAccountComponent}></Route>
               <Route path ="/user-edit/:idAccount/:idUser" component = {EditUserComponent}></Route>
               <Route path ="/address-edit/:idAccount/:idAddress" component = {EditAddressComponent}></Route>
             </Switch>
