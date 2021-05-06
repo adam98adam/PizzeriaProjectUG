@@ -36,8 +36,8 @@ public class Address {
     @JsonManagedReference(value = "user-address")
     private User user;
 
-    Address(){};
-    Address(String city, String street, Integer id, User user) {
+    public Address(){};
+    public Address(String city, String street, Integer id, User user) {
         this.city = city;
         this.street = street;
         this.id = id;

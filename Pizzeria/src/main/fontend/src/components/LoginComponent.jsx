@@ -7,6 +7,7 @@ import { Form, Row, Col, Container, Card, Modal } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AccountService from "../services/AccountService";
+import HeaderComponent from "./HeaderComponent";
 
 const cardStyle = {
   paddingTop: 30,
@@ -24,6 +25,11 @@ const LoginComponent = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
+
+  const userPanel = (id) => {
+    props.history.push(`/user/${id}`)
+  }
+
   const handleLogin = (e) => {
     e.preventDefault();
     if (login === "" && password === "") {
@@ -32,6 +38,7 @@ const LoginComponent = (props) => {
       AccountService.getAccount(login, password)
         .then((res) => {
           console.log(res.data);
+          userPanel(res.data.id)
         })
         .catch((er) => {
           {
@@ -50,6 +57,15 @@ const LoginComponent = (props) => {
   };
 
   return (
+    <div>
+      <header>
+        <nav  style={{justifyContent:"center"}} className="navbar navbar-expand-md navbar-dark bg-dark">
+          <div >
+            <h2 style={{ padding: "10px 20px", color: "white"}}>Pizzeria Web Application</h2>
+          </div>
+         </nav>
+        </header>
+   
     <Card style={cardStyle}>
       <Card.Title text="white" style={cardTitleStyle}>
         Log In
@@ -137,6 +153,7 @@ const LoginComponent = (props) => {
         </Modal>
       </Form>
     </Card>
+    </div>
   );
 };
 export default LoginComponent;

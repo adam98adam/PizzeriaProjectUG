@@ -62,6 +62,34 @@ public class AccountController {
         return new ResponseEntity<>(acc,HttpStatus.OK);
     }
 
+    @PutMapping("/accounts/{id}")
+    public ResponseEntity<Account> updateAccount(@PathVariable Integer id,@RequestBody Account account) {
+       List<Account> acc = accountRepository.findByLogin(account.getLogin());
+       if(acc.isEmpty()) {
+           Optional<Account> ac = accountRepository.findById(id);
+           ac.ifPresent(value -> value.setLogin(account.getLogin()));
+           ac.ifPresent(value -> value.setPassword(account.getPassword()));
+           Account updatedAccount = accountRepository.save(ac.get());
+           return new ResponseEntity<>(updatedAccount,HttpStatus.OK);
+
+       }
+       else if(acc.get(0).getId().equals(id)) {
+           acc.get(0).setLogin(account.getLogin());
+           acc.get(0).setPassword(account.getPassword());
+           Account updatedAccount = accountRepository.save(acc.get(0));
+           return new ResponseEntity<>(updatedAccount,HttpStatus.OK);
+       }
+       else {
+           return new ResponseEntity<>(new Account(),HttpStatus.NOT_FOUND);
+       }
+
+
+
+
+
+
+    }
+
 
 
 }

@@ -45,6 +45,14 @@ class RegisterUserAddressComponent extends Component {
     render() {
         return (
             <div>
+                <header>
+                    <nav  style={{justifyContent:"center"}} className="navbar navbar-expand-md navbar-dark bg-dark">
+                        <div >
+                            <h2 style={{ padding: "10px 20px", color: "white"}}>Pizzeria Web Application</h2>
+                        </div>
+                    </nav>
+                </header>
+               
                  <div className = "container">
                     <div className = "row">
                         <div className = "card col-md-6 offset-md-3 offset-md3">

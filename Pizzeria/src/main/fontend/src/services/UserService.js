@@ -12,16 +12,16 @@ class UserService{
         return axios.post(User_Api_Base_Url,user);
     }
 
-    getUserById(userId) {
-        return axios.get(User_Api_Base_Url + "/" + userId)
+    getUserById(id) {
+        return axios.get(User_Api_Base_Url + "/" + id)
     }
 
-    updateUser(user,userId) {
-        return axios.put(User_Api_Base_Url + "/" + userId,user);
+    updateUser(user,id) {
+        return axios.put(User_Api_Base_Url + "/" + id,user);
     }
 
-    deleteUser(userId) {
-        return axios.delete(User_Api_Base_Url + "/" + userId);
+    deleteUser(id) {
+        return axios.delete(User_Api_Base_Url + "/" + id);
     }
 
 

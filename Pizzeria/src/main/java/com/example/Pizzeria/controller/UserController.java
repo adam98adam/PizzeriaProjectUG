@@ -1,8 +1,10 @@
 package com.example.Pizzeria.controller;
 
 import com.example.Pizzeria.models.Account;
+import com.example.Pizzeria.models.Address;
 import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AccountRepository;
+import com.example.Pizzeria.repository.AddressRepository;
 import com.example.Pizzeria.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,12 @@ import java.util.*;
 public class UserController {
 
 
+    @Autowired
+    private AccountRepository accountRepository;
+
+    @Autowired
+    private AddressRepository addressRepository;
+
 
     @Autowired
     private UserRepository userRepository;
@@ -28,16 +36,14 @@ public class UserController {
 
     @PostMapping("/users")
     public ResponseEntity<User> getAccountByEmailAndPhonenumebr(@RequestBody User newUser) {
-        List<User> users = userRepository.findByEmailOrPhonenumber(newUser.getEmail(),newUser.getPhonenumber());
-        if(users.isEmpty()) {
+        List<User> users = userRepository.findByEmailOrPhonenumber(newUser.getEmail(), newUser.getPhonenumber());
+        if (users.isEmpty()) {
             userRepository.save(newUser);
             return new ResponseEntity<>(newUser, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(new User(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
         }
     }
-
-
 
 
     @GetMapping("/users")
@@ -47,14 +53,65 @@ public class UserController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
+        Optional<Account> account = accountRepository.findAccountByUserId(id);
+        Optional<Address> address = addressRepository.findAddressByUserId(id);
         Optional<User> user = userRepository.findById(id);
-        if(user.isPresent()) {
+        if(account.isPresent() && address.isPresent() && user.isPresent()) {
+            accountRepository.delete(account.get());
+            addressRepository.delete(address.get());
             userRepository.deleteById(id);
             return new ResponseEntity<>("User with given id = " + id + " was deleted", HttpStatus.OK);
         }
-        return new ResponseEntity<>("User with given id = " + id + " doesn't exist",HttpStatus.NOT_FOUND);
-
+        return new ResponseEntity<>("User with given id = " + id + " doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        List<User> u = userRepository.findByEmailOrPhonenumber(user.getEmail(), user.getPhonenumber());
+        if (u.isEmpty()) {
+            Optional<User> us = userRepository.findById(id);
+            us.ifPresent(value -> value.setName(user.getName()));
+            System.out.println("Name : " + user.getName());
+            us.ifPresent(value -> value.setSurname(user.getSurname()));
+            System.out.println("Surname : " + user.getSurname());
+            us.ifPresent(value -> value.setEmail(user.getEmail()));
+            System.out.println("Email : " + user.getEmail());
+            us.ifPresent(value -> value.setPhonenumber(user.getPhonenumber()));
+            System.out.println("Phonenumber : " + user.getPhonenumber());
+            User updatedUser = userRepository.save(us.get());
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+
+        } else if (u.size() == 1) {
+            if (u.get(0).getId().equals(id)) {
+                u.get(0).setName(user.getName());
+                System.out.println("Name : " + user.getName());
+                u.get(0).setSurname(user.getSurname());
+                System.out.println("Surname : " + user.getSurname());
+                u.get(0).setEmail(user.getEmail());
+                System.out.println("Email : " + user.getEmail());
+                u.get(0).setPhonenumber(user.getPhonenumber());
+                System.out.println("Phonenumber : " + user.getPhonenumber());
+                User updatedUser = userRepository.save(u.get(0));
+                return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            }
+            else {
+                return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
+            }
+        } else {
+            return new ResponseEntity<>(new User(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/users/{id}")
+    public ResponseEntity<Optional<User>> getUserById(@PathVariable Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent())
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+    }
+
+
 
 
     /*

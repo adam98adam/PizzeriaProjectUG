@@ -145,6 +145,15 @@ const RegisterComponent = (props) => {
   }
 */
   return (
+
+    <div>
+      <header>
+        <nav  style={{justifyContent:"center"}} className="navbar navbar-expand-md navbar-dark bg-dark">
+          <div >
+            <h2 style={{ padding: "10px 20px", color: "white"}}>Pizzeria Web Application</h2>
+          </div>
+         </nav>
+        </header>
     <Card
       bg="Primary"
       style={{
@@ -230,6 +239,7 @@ const RegisterComponent = (props) => {
         {showLoginModal && loginModal()}
       </Form>
     </Card>
+    </div>
   );
 };
 
