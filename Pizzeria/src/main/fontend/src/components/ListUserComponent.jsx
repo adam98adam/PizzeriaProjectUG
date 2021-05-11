@@ -43,7 +43,7 @@ class ListUserComponent extends Component {
     render() {
         return (
             <div>
-                <h2 className="text-center">Users List</h2>
+                <h2 className="text-center">Or List</h2>
                 <div className="btn btn-primary" onClick={this.addUser}>Add User</div>
                 <div style={{marginLeft: "10px"}} className="btn btn-primary" onClick={this.login}>Login</div>
                 <div className="row">

@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account,Integer> {
-    @Query(value = "SELECT * FROM Accounts a WHERE a.user_id = :id",nativeQuery = true)
-    Optional<Account> findAccountByUserId(@Param("id") Integer id);
+
+   // @Query(value = "SELECT * FROM Accounts a WHERE a.user_id = :id",nativeQuery = true)
+    //Optional<Account> findAccountByUserId(@Param("id") Integer id);
+   Optional<Account> findByUser_Id(@Param("id") Integer id);
 
     List<Account> findByLoginAndPassword(String login, String password);
 

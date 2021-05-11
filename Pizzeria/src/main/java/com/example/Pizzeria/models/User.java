@@ -1,17 +1,21 @@
 package com.example.Pizzeria.models;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Setter
 @Getter
 @ToString
 @Table(name = "Users")
+//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
+@JsonIgnoreProperties(value = { "orders" })
 public class User {
 
     @Id
@@ -48,6 +52,13 @@ public class User {
     private Address address;
 
 
+    @OneToMany(targetEntity = Orders.class,mappedBy="user")
+    //@JsonBackReference(value = "user-account")
+    //@JsonBackReference(value = "user-orders")
+    //@JsonManagedReference(value = "user-orders")
+    private List<Orders> orders;
+
+
     public User(){}
     public User(String name,String surname,String email,String phonenumber,Boolean customer){
         this.name = name;
@@ -56,5 +67,7 @@ public class User {
         this.phonenumber = phonenumber;
         this.customer = customer;
     }
+
+
 
 }

@@ -41,7 +41,8 @@ public class AddressController {
 
     @GetMapping("/users/address/{id}")
     public ResponseEntity<Optional<Address>> getAddressByUserId(@PathVariable Integer id) {
-        Optional<Address> address = addressRepository.findAddressByUserId(id);
+        //Optional<Address> address = addressRepository.findAddressByUserId(id);
+        Optional<Address> address = addressRepository.findByUser_Id(id);
         if(address.isPresent())
             return new ResponseEntity<>(address,HttpStatus.OK);
         else

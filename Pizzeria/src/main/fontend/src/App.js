@@ -14,6 +14,7 @@ import UserPanelComponent from './components/UserPanelComponent';
 import EditAccountComponent from './components/EditAccountComponent';
 import EditUserComponent from './components/EditUserComponent';
 import EditAddressComponent from './components/EditAddressComponent';
+import UserOrdersComponent from './components/UserOrdersComponent';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path ="/account-edit/:idAccount"  component = {EditAccountComponent}></Route>
               <Route path ="/user-edit/:idAccount/:idUser" component = {EditUserComponent}></Route>
               <Route path ="/address-edit/:idAccount/:idAddress" component = {EditAddressComponent}></Route>
+              <Route path ="/user-orders/:idAccount/:idUser" component = {UserOrdersComponent}></Route>
             </Switch>
           </div>
       </Router>

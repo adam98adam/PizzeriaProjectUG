@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import AccountService from '../services/AccountService';
 import AddressService from '../services/AddressService';
+import OrdersService from '../services/OrdersService';
+import PizzaService from '../services/PizzaService';
 import UserService from '../services/UserService';
 
 class UserPanelComponent extends Component {
@@ -20,6 +22,7 @@ class UserPanelComponent extends Component {
             city:'',
             street:'',
             number:'',
+            pizza:[]
 
         }
     }
@@ -42,6 +45,13 @@ class UserPanelComponent extends Component {
                 this.setState({city: res.data.city})
                 this.setState({street: res.data.street})
                 this.setState({number: res.data.number})
+            })
+
+            PizzaService.getAllPizza().then((res) =>{
+                console.log(res.data)
+                this.setState({pizza: res.data})
+                console.log(this.state.pizza)
+
             })
             
         })
@@ -68,6 +78,17 @@ class UserPanelComponent extends Component {
         
     }
 
+    myOrders = (idAccount,idUser) => {
+        this.props.history.push(`/user-orders/${idAccount}/${idUser}`);
+        
+    }
+
+    
+
+    choosePizza = (id) => {
+        console.log(id)
+    }
+
     logout = () => {
         this.props.history.push("/");
     }
@@ -77,16 +98,54 @@ class UserPanelComponent extends Component {
     
     render() {
         return (
+    <div>
             <header>
                 <nav>
                     <a>Pizza</a> |
                     <a onClick={() => this.account(parseInt(this.state.idAccount,10))}>Account</a> |
                     <a onClick={() => this.user(parseInt(this.state.idAccount,10),parseInt(this.state.idUser,10))}>User</a> |
                     <a onClick={() => this.address(parseInt(this.state.idAccount,10),parseInt(this.state.idAddress,10))}>Address</a> |
+                    <a onClick={() => this.myOrders(parseInt(this.state.idAccount,10),parseInt(this.state.idUser,10))}>My Orders</a> |
                     <a onClick={() => this.deleteAccount(parseInt(this.state.idUser,10))}>Delete Account</a> |                        
                     <a onClick={this.logout}>Logout</a>
                 </nav>
             </header>
+
+            <div>
+                <h2 className="text-center">Pizza List</h2>
+                <div className="row">
+                    <table className = "table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                                <th>Price</th>
+                                <th>Image</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                                this.state.pizza.map(
+                                    pizza =>
+                                        <tr key = {pizza.id}>
+                                            <td> {pizza.name} </td>
+                                            <td> {pizza.description}</td>
+                                            <td> {pizza.price}</td>
+                                            <td> <img src= {pizza.image} alt="iamge {{}}" ></img> </td>
+                                            <td>
+                                            <button onClick = {() => this.choosePizza(pizza.id)} className="btn btn-info">Order</button>
+                                        </td>
+                                        </tr>
+                                )
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+    </div>
+
+
 
         );
     }

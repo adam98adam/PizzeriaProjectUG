@@ -2,9 +2,11 @@ package com.example.Pizzeria.controller;
 
 import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.Address;
+import com.example.Pizzeria.models.Orders;
 import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AccountRepository;
 import com.example.Pizzeria.repository.AddressRepository;
+import com.example.Pizzeria.repository.OrdersRepository;
 import com.example.Pizzeria.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private OrdersRepository ordersRepository;
+
 
     @PostMapping("/users")
     public ResponseEntity<User> getAccountByEmailAndPhonenumebr(@RequestBody User newUser) {
@@ -53,12 +58,16 @@ public class UserController {
 
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
-        Optional<Account> account = accountRepository.findAccountByUserId(id);
-        Optional<Address> address = addressRepository.findAddressByUserId(id);
+        //Optional<Account> account = accountRepository.findAccountByUserId(id);
+        Optional<Account> account = accountRepository.findByUser_Id(id);
+        //Optional<Address> address = addressRepository.findAddressByUserId(id);
+        Optional<Address> address = addressRepository.findByUser_Id(id);
+        Optional<List<Orders>> orders = ordersRepository.findByUser_Id(id);
         Optional<User> user = userRepository.findById(id);
         if(account.isPresent() && address.isPresent() && user.isPresent()) {
             accountRepository.delete(account.get());
             addressRepository.delete(address.get());
+            orders.ifPresent(ordersList -> ordersList.forEach(order -> ordersRepository.deleteById(order.getId())));
             userRepository.deleteById(id);
             return new ResponseEntity<>("User with given id = " + id + " was deleted", HttpStatus.OK);
         }

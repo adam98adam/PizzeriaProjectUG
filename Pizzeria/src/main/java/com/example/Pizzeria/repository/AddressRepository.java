@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AddressRepository extends JpaRepository<Address,Integer> {
-    @Query(value = "SELECT * FROM User_Address u WHERE u.user_id = :id",nativeQuery = true)
-    Optional<Address> findAddressByUserId(@Param("id") Integer id);
+    //@Query(value = "SELECT * FROM User_Address u WHERE u.user_id = :id",nativeQuery = true)
+    //Optional<Address> findAddressByUserId(@Param("id") Integer id);
+    Optional<Address> findByUser_Id(@Param("id") Integer id);
 
 }

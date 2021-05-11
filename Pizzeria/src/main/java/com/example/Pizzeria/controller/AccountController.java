@@ -3,8 +3,6 @@ package com.example.Pizzeria.controller;
 import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AccountRepository;
-import com.example.Pizzeria.service.AccountService;
-import com.example.Pizzeria.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/")
 public class AccountController {
 
-    @Autowired
-    private AccountService accountService;
+
 
     @Autowired
     private AccountRepository accountRepository;
