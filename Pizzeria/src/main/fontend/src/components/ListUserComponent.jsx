@@ -1,87 +1,86 @@
-import React, { Component } from 'react';
-import UserService from '../services/UserService';
+import React, { useState, useEffect } from "react";
+import UserService from "../services/UserService";
 
+const ListUserComponent = (props) => {
+  const [users, setUsers] = useState([]);
+  // odpowiednik componentDidMount
+  useEffect(() => {
+    UserService.getUsers().then((res) => {
+      setUsers(res.data);
+    });
+  }, []);
 
-class ListUserComponent extends Component {
-    constructor(props) {
-        super(props)
+  const addUser = () => {
+    props.history.push("/add-user");
+  };
 
-        this.state = {
-            users:[]
-        }
-        this.addUser = this.addUser.bind(this);
-        this.editUser = this.editUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.login = this.login.bind(this).bind(this);
-    }
-    componentDidMount(){
-        UserService.getUsers().then((res) => {
-            this.setState({users: res.data});
-        })
-    }
+  const editUser = (id) => {
+    props.history.push(`/update-user/${id}`);
+  };
 
-    addUser() {
-        this.props.history.push('/add-user');
-    }
+  const deleteUser = (id) => {
+    UserService.deleteUser(id).then((res) => {
+      setUsers(users.filter((user) => user.id !== id));
+    });
+  };
 
-    editUser(id){
-        this.props.history.push(`/update-user/${id}`);
-    }
+  const login = () => {
+    props.history.push(`/login/`);
+  };
 
-    deleteUser(id) {
-        UserService.deleteUser(id).then((res) => {
-            this.setState({users: this.state.users.filter(user => user.id !==id)});
-        });
-    }
-
-    login(){
-        this.props.history.push(`/login/`);
-    }
-
-
-
-    render() {
-        return (
-            <div>
-                <h2 className="text-center">Or List</h2>
-                <div className="btn btn-primary" onClick={this.addUser}>Add User</div>
-                <div style={{marginLeft: "10px"}} className="btn btn-primary" onClick={this.login}>Login</div>
-                <div className="row">
-                    <table className = "table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Surname</th>
-                                <th>Email</th>
-                                <th>Phonenumber</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.users.map(
-                                    user =>
-                                    <tr key = {user.id}>
-                                        <td> {user.name} </td>
-                                        <td> {user.surname}</td>
-                                        <td> {user.email}</td>
-                                        <td> {user.phonenumber} </td>
-                                        <td>
-                                            <button onClick = {() => this.editUser(user.id)} className="btn btn-info">Update</button>
-                                            <button style={{marginLeft: "10px"}} onClick = {() => this.deleteUser(user.id)} className="btn btn-danger">Delete</button>
-                                        </td>
-                                    </tr>
-                                )
-            
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-                
-            </div>
-        );
-    }
-}
+  return (
+    <div>
+      <h2 className="text-center">Users List</h2>
+      <div className="btn btn-primary" onClick={addUser}>
+        Add User
+      </div>
+      <div
+        style={{ marginLeft: "10px" }}
+        className="btn btn-primary"
+        onClick={login}
+      >
+        Login
+      </div>
+      <div className="row">
+        <table className="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Surname</th>
+              <th>Email</th>
+              <th>Phonenumber</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td> {user.name} </td>
+                <td> {user.surname}</td>
+                <td> {user.email}</td>
+                <td> {user.phonenumber} </td>
+                <td>
+                  <button
+                    onClick={() => editUser(user.id)}
+                    className="btn btn-info"
+                  >
+                    Update
+                  </button>
+                  <button
+                    style={{ marginLeft: "10px" }}
+                    onClick={() => deleteUser(user.id)}
+                    className="btn btn-danger"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
 
 export default ListUserComponent;

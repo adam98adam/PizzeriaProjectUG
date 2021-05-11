@@ -1,107 +1,255 @@
-import React, { Component } from 'react'
-import UserService from '../services/UserService';
+import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Navbar,
+  Row,
+} from "react-bootstrap";
+import UserService from "../services/UserService";
+import PizzaLogo from "./../images/pizza-logo.png";
+import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
+import WarningIcon from "./icons/WarningIcon";
 
-class EditUserComponent extends Component {
-    constructor(props) {
-        super(props)
+const EditUserComponent = (props) => {
+  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
+  const [idUser, setIdUser] = useState(props.match.params.idUser);
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
-        this.state = {
-            idAccount: this.props.match.params.idAccount,
-            idUser: this.props.match.params.idUser,
-            name:'',
-            surname:'',
-            email:'',
-            phonenumber:''
+  const [nameValid, setNameValid] = useState(true);
+  const [surnameValid, setSurnameValid] = useState(true);
+  const [emailValid, setEmailValid] = useState(true);
+  const [phoneNumberValid, setPhoneNumberValid] = useState(true);
 
+  const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
-        }
-        this.changeNameHandler = this.changeNameHandler.bind(this);
-        this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
-        this.changeEmailHandler = this.changeEmailHandler.bind(this);
-        this.changePhonenumberHandler = this.changePhonenumberHandler.bind(this);
-    }
+  useEffect(() => {
+    UserService.getUserById(parseInt(props.match.params.idUser, 10)).then(
+      (res) => {
+        let user = res.data;
+        setName(user.name);
+        setSurname(user.surname);
+        setEmail(user.email);
+        setPhoneNumber(user.phonenumber);
+      }
+    );
+  }, [props.match.params.id]);
 
-    componentDidMount() {
-        UserService.getUserById(parseInt(this.props.match.params.idUser,10)).then((res) => {
-            let user = res.data;
-            this.setState({name: user.name,surname: user.surname,email: user.email,phonenumber: user.phonenumber});
+  const invalidUserModalClose = () => {
+    setShowInvalidUserModal(false);
+  };
+
+  const invalidUserModal = () => {
+    return (
+      <Modal
+        show={showInvalidUserModal}
+        centered
+        onHide={invalidUserModalClose}
+      >
+        <Modal.Header>
+          <Modal.Title>Invalid New data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Data to update is not valid. </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={invalidUserModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  const cancel = (id) => {
+    props.history.push(`/user/${id}`);
+  };
+  const validateName = (name) => {
+    const re = /^[A-Z][a-z]+$/;
+    return re.test(name);
+  };
+
+  const changeNameHandler = (event) => {
+    setName(event.target.value);
+    setNameValid(validateName(event.target.value));
+    console.log(validateName(event.target.name));
+  };
+
+  // surname
+  const validateSurname = (surname) => {
+    const re = /^[A-Z][a-z]+$/;
+    return re.test(surname);
+  };
+  const changeSurnameHandler = (event) => {
+    setSurname(event.target.value);
+    setSurnameValid(validateSurname(event.target.value));
+  };
+
+  // email
+  const validateEmail = (email) => {
+    const re = /^([a-z0-9]+\.?)+[a-z0-9]+@[a-z]{2,}\.[a-z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
+
+  const changeEmailHandler = (event) => {
+    setEmail(event.target.value);
+    setEmailValid(validateEmail(event.target.value));
+  };
+
+  // phone number
+  const validatePhoneNumber = (phoneNumber) => {
+    const re = /^(\+[0-9]{2,3})?[0-9]{9}$/;
+    return re.test(phoneNumber);
+  };
+
+  const changePhoneNumberHandler = (event) => {
+    setPhoneNumber(event.target.value);
+    setPhoneNumberValid(validatePhoneNumber(event.target.value));
+  };
+
+  const handleInvalidUserModalClose = () => {
+    setShowInvalidUserModal(false);
+  };
+
+  const updateUser = (e) => {
+    const validations = [nameValid, surnameValid, emailValid, phoneNumberValid];
+    let user = {
+      name: name,
+      surname: surname,
+      email: email,
+      phonenumber: phoneNumber,
+    };
+    e.preventDefault();
+    if (
+      Object.values(user).every((el) => el) &&
+      validations.every((el) => el)
+    ) {
+      console.log(user);
+      UserService.updateUser(user, parseInt(idUser, 10))
+        .then((res) => {
+          cancel(parseInt(idAccount, 10));
         })
-
+        .catch((error) => {
+          console.log(error.response);
+          setShowInvalidUserModal(true);
+        });
+    } else {
+      setShowInvalidUserModal(true);
     }
+  };
 
-    changeNameHandler = (event) => {
-        this.setState({name: event.target.value});
-    }
+  return (
+    <div>
+      <PizzeriaUpdatePageNavHeader />
+      <Card className="main-card">
+        <Card.Body>
+          <Card.Title>Update User</Card.Title>
+          <Form className="center">
+            <Container>
+              <Row>
+                <Col md={{ span: 6, offset: 3 }}>
+                  <Form.Group>
+                    <Form.Label> Name : </Form.Label>
+                    <Form.Control
+                      placeholder="Name"
+                      className={
+                        nameValid ? "form-control" : "form-control-error"
+                      }
+                      name="name"
+                      value={name}
+                      onChange={changeNameHandler}
+                    />
+                    {!nameValid && (
+                      <Form.Text className="text-muted">
+                        <span style={{ color: "red" }}>
+                          <WarningIcon /> Name is not valid
+                        </span>
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Surname : </Form.Label>
+                    <Form.Control
+                      placeholder="Surname"
+                      className={
+                        surnameValid ? "form-control" : "form-control-error"
+                      }
+                      name="surname"
+                      value={surname}
+                      onChange={changeSurnameHandler}
+                    />
+                    {!surnameValid && (
+                      <Form.Text className="text-muted">
+                        <span style={{ color: "red" }}>
+                          <WarningIcon /> Last name is not valid
+                        </span>
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Email : </Form.Label>
+                    <Form.Control
+                      placeholder="Email"
+                      className={
+                        emailValid ? "form-control" : "form-control-error"
+                      }
+                      name="email"
+                      value={email}
+                      onChange={changeEmailHandler}
+                    />
+                    {!emailValid && (
+                      <Form.Text className="text-muted">
+                        <span style={{ color: "red" }}>
+                          <WarningIcon /> Email is not valid
+                        </span>
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Phonenumber : </Form.Label>
+                    <Form.Control
+                      placeholder="Phonenumber"
+                      className={
+                        phoneNumberValid ? "form-control" : "form-control-error"
+                      }
+                      name="phonenumber"
+                      value={phoneNumber}
+                      onChange={changePhoneNumberHandler}
+                    />
+                    {!phoneNumberValid && (
+                      <Form.Text className="text-muted">
+                        <p style={{ color: "red" }}>
+                          <WarningIcon /> Phone number is invalid
+                        </p>
+                      </Form.Text>
+                    )}
+                  </Form.Group>
 
-    changeSurnameHandler = (event) => {
-        this.setState({surname: event.target.value});
-    }
+                  <Button variant="success" onClick={updateUser}>
+                    Save
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => cancel(parseInt(idAccount, 10))}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </Form>
+        </Card.Body>
+      </Card>
+      {showInvalidUserModal && invalidUserModal()}
+    </div>
+  );
+};
 
-    changeEmailHandler = (event) => {
-        this.setState({email: event.target.value});
-    }
-
-    changePhonenumberHandler = (event) => {
-        this.setState({phonenumber: event.target.value});
-    }
-
-
-
-
-
-    cancel = (id) => {
-
-        this.props.history.push(`/user/${id}`);
-    }
-
-    updateUser = (e) => {
-        e.preventDefault();
-        let user = {name: this.state.name,surname: this.state.surname,email: this.state.email,phonenumber: this.state.phonenumber}
-        console.log(user);
-        UserService.updateUser(user,parseInt(this.state.idUser,10)).then((res) => {
-            this.cancel(parseInt(this.state.idAccount,10))
-        }).catch((error) => console.log(error.response))
- 
-    }
-
-    render () {
-        return (
-            <div>
-                <div className = "container">
-              <div className = "row">
-                  <div className = "card col-md-6 offset-md-3 offset-md3">
-                      <h3 className="text-center">Update User</h3>
-                      <div className = "card-body">
-                          <form>
-                              <div className = "form-group">
-                                  <label> Name : </label>
-                                  <input placeholder="Name" name="name" className="form-control" value={this.state.name} onChange={this.changeNameHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Surname : </label>
-                                  <input placeholder="Surname" name="surname" className="form-control" value={this.state.surname} onChange={this.changeSurnameHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Email : </label>
-                                  <input placeholder="Email" name="email" className="form-control" value={this.state.email} onChange={this.changeEmailHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Phonenumber : </label>
-                                  <input placeholder="Phonenumber" name="phonenumber" className="form-control" value={this.state.phonenumber} onChange={this.changePhonenumberHandler}/>
-                              </div>
-
-                              <button className="btn btn-success" onClick={this.updateUser}>Save</button>
-                              <button className="btn btn-danger" onClick={() => this.cancel(parseInt(this.state.idAccount,10))}  style={{marginLeft: "10px"}}>Cancel</button>
-                          </form>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-                
-            </div>
-        )
-    }
-}
-
-export default EditUserComponent
+export default EditUserComponent;

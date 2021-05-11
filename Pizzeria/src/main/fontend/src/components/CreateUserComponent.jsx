@@ -1,89 +1,123 @@
-import React, { Component } from 'react';
-import UserService from '../services/UserService';
+import React, { useState } from "react";
+import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
+import UserService from "../services/UserService";
 
-class CreateUserComponent extends Component {
-    constructor(props) {
-        super(props)
+const CreateUserComponent = (props) => {
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [emailValid, setEmailValid] = useState(false);
 
-        this.state = {
-            name:'',
-            surname:'',
-            email:'',
-            phonenumber:''
+  const saveUser = (e) => {
+    e.preventDefault();
 
-        }
-        this.changeNameHandler = this.changeNameHandler.bind(this);
-        this.changeSurnameHandler = this.changeSurnameHandler.bind(this);
-        this.changeEmailHandler = this.changeEmailHandler.bind(this);
-        this.changePhonenumberHandler = this.changePhonenumberHandler.bind(this);
-        this.saveUser = this.saveUser.bind(this);
-    }
+    let user = {
+      name: name,
+      surname: surname,
+      email: email,
+      phonenumber: phoneNumber,
+    };
+    console.log("user => " + JSON.stringify(user));
+    UserService.createUser(user).then((res) => {
+      this.props.history.push("/users");
+    });
+  };
+  const changeNameHandler = (event) => {
+    setName(event.target.value);
+  };
 
-    saveUser = (e) => {
-        e.preventDefault();
-        let user = {name: this.state.name,surname: this.state.surname,email: this.state.email,phonenumber: this.state.phonenumber}
-        console.log('user => ' + JSON.stringify(user));
-        UserService.createUser(user).then(res => {
-            this.props.history.push('/users');
-        })
-    }
+  const changeSurnameHandler = (event) => {
+    setSurname(event.target.value);
+  };
 
-    cancel() {
-        this.props.history.push('/users');
-    }
+  const validateEmail = (email) => {
+    const re = /^[a-z0-9]{3,}@[a-z]{2,}.[a-z]{2,}$/;
+    return re.test(String(email).toLowerCase());
+  };
 
-    changeNameHandler= (event) => {
-        this.setState({name: event.target.value});
-    }
+  const changeEmailHandler = (event) => {
+    setEmail(event.target.value);
+    setEmailValid(validateEmail(event.target.value));
+    console.log(emailValid);
+  };
 
-    changeSurnameHandler = (event) => {
-        this.setState({surname: event.target.value});
-    }
+  const changePhonenumberHandler = (event) => {
+    setPhoneNumber(event.target.value);
+  };
 
-    changeEmailHandler = (event) => {
-        this.setState({email: event.target.value})
-    }
+  const cancel = () => {
+    props.history.push("/users");
+  };
+  const allFieldsValid = () => {
+      const validations = [emailValid]
+  }
 
-    changePhonenumberHandler = (event) => {
-        this.setState({phonenumber: event.target.value})
-    }
+  return (
+    <Card>
+      <Container>
+        <Row>
+          <Col md={{ span: 6, offset: 3 }}>
+            <h3 className="text-center">Add User</h3>
+            <Card.Body>
+              <Form>
+                <Form.Group>
+                  <Form.Label> Name : </Form.Label>
+                  <Form.Control
+                    placeholder="Name"
+                    name="name"
+                    value={name}
+                    onChange={changeNameHandler}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label> Surname : </Form.Label>
+                  <Form.Control
+                    placeholder="Surname"
+                    name="surname"
+                    value={surname}
+                    onChange={changeSurnameHandler}
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label> Email : </Form.Label>
+                  <Form.Control
+                    placeholder="Email"
+                    name="email"
+                    value={email}
+                    onChange={changeEmailHandler}
+                  />
 
-    render() {
-        return (
-            <div>
-                <div className = "container">
-                    <div className = "row">
-                        <div className = "card col-md-6 offset-md-3 offset-md3">
-                            <h3 className="text-center">Add User</h3>
-                            <div className = "card-body">
-                                <form>
-                                    <div className = "form-group">
-                                        <label> Name : </label>
-                                        <input placeholder="Name" name="name" className="form-control" value={this.state.name} onChange={this.changeNameHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Surname : </label>
-                                        <input placeholder="Surname" name="surname" className="form-control" value={this.state.surname} onChange={this.changeSurnameHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Email : </label>
-                                        <input placeholder="Email" name="email" className="form-control" value={this.state.email} onChange={this.changeEmailHandler}/>
-                                    </div>
-                                    <div className = "form-group">
-                                        <label> Phonenumber : </label>
-                                        <input placeholder="Phonenumber" name="phonenumber" className="form-control" value={this.state.phonenumber} onChange={this.changePhonenumberHandler}/>
-                                    </div>
-                                    <button className="btn btn-success" onClick={this.saveUser}>Save</button>
-                                    <button className="btn btn-danger" onClick={this.cancel.bind(this)}  style={{marginLeft: "10px"}}>Cancel</button>
-                                </form>
+                  <Form.Text className="text-muted"> Wrong email</Form.Text>
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label> Phonenumber : </Form.Label>
+                  <Form.Control
+                    placeholder="Phonenumber"
+                    name="phonenumber"
+                    value={phoneNumber}
+                    onChange={changePhonenumberHandler}
+                  />
+                </Form.Group>
+                <Button disabled={() => {
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+                }} variant="success" onClick={saveUser}>
+                  Save
+                </Button>
+                <Button
+                  variant="danger"
+                  onClick={cancel}
+                  style={{ marginLeft: "10px" }}
+                >
+                  Cancel
+                </Button>
+              </Form>
+            </Card.Body>
+          </Col>
+        </Row>
+      </Container>
+    </Card>
+  );
+};
 
 export default CreateUserComponent;

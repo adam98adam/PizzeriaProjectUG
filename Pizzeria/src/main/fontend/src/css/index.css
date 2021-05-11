@@ -9,3 +9,30 @@
   justify-content: center;
   align-items: center;
 }
+
+.container {
+  max-width: 100%;
+}
+.main-card {
+  padding-top: 30;
+  padding-bottom: 30;
+  text-align: center;
+  margin-top: 5rem;
+  background-color: rgba(0, 122, 0, 0.315);
+  margin-bottom: 15;
+}
+.secondary-card {
+  padding-top: 30;
+  padding-bottom: 30;
+  text-align: center;
+  margin-top: 5rem;
+  background-color: rgba(0, 247, 144, 0.22);
+  margin-bottom: 15;
+}
+.form-control:focus {
+  border-color: #28a745;
+}
+.form-control-error:focus {
+  border-color: #ce5e5e;
+  box-shadow: 0 0 0 0.2rem rgba(187, 76, 76, 0.712);
+}

@@ -1,76 +1,101 @@
-import React, { Component } from 'react'
-import OrdersService from '../services/OrdersService';
+import React, { useEffect, useState } from "react";
+import { Button, Card, Modal, Nav, Navbar } from "react-bootstrap";
+import OrdersService from "../services/OrdersService";
+import PizzaLogo from "./../images/pizza-logo.png";
 
-class UserOrdersComponent extends Component {
-    constructor(props) {
-        super(props)
+const UserOrdersComponent = (props) => {
+  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
+  const [idUser, setIdUser] = useState(props.match.params.idUser);
+  const [orders, setOrders] = useState([]);
 
-        this.state = {
-            idAccount: this.props.match.params.idAccount,
-            idUser: this.props.match.params.idUser,
-            orders:[]
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-        }
+  useEffect(() => {
+    OrdersService.getOrdersByUserId(props.match.params.idUser).then((res) => {
+      setOrders(res.data);
+    });
+  }, []);
 
-    }
+  const logout = () => {
+    props.history.push("/");
+  };
 
-    componentDidMount(){
-        OrdersService.getOrdersByUserId(this.props.match.params.idUser).then((res) => {
-            this.setState({orders: res.data});
-        })
-    }
+  const getBackToUserPanel = (id) => {
+    props.history.push(`/user/${id}`);
+  };
 
-    logout = () => {
-        this.props.history.push("/");
-    }
+  const handleLogoutClose = () => {
+    setShowLogoutModal(false);
+  };
+  const logoutModal = () => {
+    return (
+      <Modal show={showLogoutModal} centered onHide={handleLogoutClose}>
+        <Modal.Header>
+          <Modal.Title>Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={logout}>
+            Logout
+          </Button>
+          <Button variant="success" onClick={handleLogoutClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  return (
+    <div>
+      <header>
+        <Navbar fixed="top" bg="dark" variant="dark">
+          <Navbar.Brand>
+            <img alt="pizza-logo" src={PizzaLogo} width="30" height="30" />
+            Pizzeria Web Application
+          </Navbar.Brand>
+          <Nav className="justify-content-end" style={{ width: "100%" }}>
+            <Nav.Link onClick={() => setShowLogoutModal(true)}>Logout</Nav.Link>
+          </Nav>
+        </Navbar>
+        {showLogoutModal && logoutModal()}
+      </header>
+      <Card className="main-card">
+        <Card.Body>
+          <Card.Title className="text-center">My Orders</Card.Title>
+          <div className="row">
+            <table className="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Pizza</th>
+                  <th>Bakestyle</th>
+                  <th>Drink</th>
+                </tr>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.id}>
+                    <td> {order.pizza.name} </td>
+                    <td> {order.bakestyle.name}</td>
+                    <td> {order.drink.name}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div display="flex" justify-content="center">
+            <button
+              onClick={() => getBackToUserPanel(parseInt(idAccount, 10))}
+              className="btn btn-info"
+            >
+              Back to user panel
+            </button>
+          </div>
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};
 
-    getBackToUserPanel = (id) => {
-        this.props.history.push(`/user/${id}`)
-    }
-
-
-
-    render () {
-        return (
-            <div>
-                <header>
-                <nav>
-                    <a>Pizza</a> |
-                    <a onClick={this.logout}>Logout</a>
-                </nav>
-            </header>
-                <h2 className="text-center">My Orders</h2>
-                <div className="row">
-                    <table className = "table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Pizza</th>
-                                <th>Bakestyle</th>
-                                <th>Drink</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.orders.map(
-                                    order =>
-                                    <tr key = {order.id}>
-                                        <td> {order.pizza.name} </td>
-                                        <td> {order.bakestyle.name}</td>
-                                        <td> {order.drink.name}</td>                  
-                                    </tr>
-                                )
-            
-                            }
-                        </tbody>
-                    </table>
-                </div>
-                <div display="flex" justify-content="center">
-                    <button onClick = {() => this.getBackToUserPanel(parseInt(this.state.idAccount,10))} className="btn btn-info">Back to user panel</button>
-                </div>
-                
-            </div>
-        )
-    }
-}
-
-export default UserOrdersComponent
+export default UserOrdersComponent;

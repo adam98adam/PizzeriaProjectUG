@@ -1,41 +1,34 @@
-import React, { Component } from 'react';
+import React from "react";
+import { Nav, Navbar } from "react-bootstrap";
 
-class HeaderUserHomePageComponent extends Component {
-    constructor(props) {
-        super(props)
-
-        this.state = {
-
-        }
-    }
-    
-    render() {
-        return (
-            <div>
-                <header>
-                    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                        <a class="navbar-brand" href="#">Pizzeria</a>
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarNav">
-                            <ul class="navbar-nav">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="#">Home </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Features</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#">Pricing</a>
-                             </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </header>
-            </div>
-        );
-    }
-}
+const HeaderUserHomePageComponent = () => {
+  return (
+    <div>
+      <header>
+        <Navbar fixed="top" bg="light" variant="light">
+          <Nav.Link href="#">Pizzeria</Nav.Link>
+          <Navbar.Toggle
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNav"
+            aria-controls="navbarNav"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </Navbar.Toggle>
+          <Navbar.Collapse id="navbarNav">
+            <Nav>
+              <Nav.Link href="#">Home</Nav.Link>
+              <Nav.Link href="#">Features</Nav.Link>
+              <Nav.Link href="#">Pricing</Nav.Link>
+            </Nav>
+          </Navbar.Collapse>
+        </Navbar>
+      </header>
+    </div>
+  );
+};
 
 export default HeaderUserHomePageComponent;
