@@ -3,6 +3,7 @@ package com.example.Pizzeria.controller;
 import com.example.Pizzeria.models.Bakestyle;
 import com.example.Pizzeria.models.Drinks;
 import com.example.Pizzeria.models.Pizza;
+import com.example.Pizzeria.models.Pizzasize;
 import com.example.Pizzeria.repository.DrinksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -53,6 +54,18 @@ public class DrinksController {
             return new ResponseEntity<>(updatedDrinks, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new Drinks(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/drinks/{id}")
+    private ResponseEntity<String> deleteDrinkById(@PathVariable Integer id) {
+        Optional<Drinks> drink = drinksRepository.findById(id);
+        if (drink.isPresent()) {
+            drinksRepository.deleteById(id);
+            return new ResponseEntity<>("Drink with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Drink with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
         }
     }
 }

@@ -28,7 +28,7 @@ public class Crust {
     @NotBlank
     private float price;
 
-    @OneToMany(targetEntity = Orders.class,mappedBy="crust")
+    @OneToMany(targetEntity = Orders.class,mappedBy="crust",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "bakestyle-orders")
     //@JsonManagedReference(value = "bakestyle-orders")

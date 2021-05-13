@@ -1,9 +1,6 @@
 package com.example.Pizzeria.controller;
 
-import com.example.Pizzeria.models.Address;
-import com.example.Pizzeria.models.Bakestyle;
-import com.example.Pizzeria.models.Crust;
-import com.example.Pizzeria.models.User;
+import com.example.Pizzeria.models.*;
 import com.example.Pizzeria.repository.CrustRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,6 +64,18 @@ public class CrustController {
             return new ResponseEntity<>(new Crust(), HttpStatus.NOT_FOUND);
         }
 
+    }
+
+    @DeleteMapping("/crusts/{id}")
+    private ResponseEntity<String> deleteCrustById(@PathVariable Integer id) {
+        Optional<Crust> crust = crustRepository.findById(id);
+        if (crust.isPresent()) {
+            crustRepository.deleteById(id);
+            return new ResponseEntity<>("Crust with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Crust with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
+        }
     }
 }
 

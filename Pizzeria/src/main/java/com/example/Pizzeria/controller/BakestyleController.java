@@ -1,10 +1,7 @@
 package com.example.Pizzeria.controller;
 
 
-import com.example.Pizzeria.models.Account;
-import com.example.Pizzeria.models.Address;
-import com.example.Pizzeria.models.Bakestyle;
-import com.example.Pizzeria.models.Pizza;
+import com.example.Pizzeria.models.*;
 import com.example.Pizzeria.repository.BakestyleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -55,6 +52,18 @@ public class BakestyleController {
             return new ResponseEntity<>(updatedBakestyle, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new Bakestyle(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/bakestyle/{id}")
+    private ResponseEntity<String> deleteBakestyleById(@PathVariable Integer id) {
+        Optional<Bakestyle> bakestyle = bakestyleRepository.findById(id);
+        if (bakestyle.isPresent()) {
+            bakestyleRepository.deleteById(id);
+            return new ResponseEntity<>("Bakestyle with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Bakestyle with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
         }
     }
 }

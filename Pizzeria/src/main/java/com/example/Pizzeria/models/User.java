@@ -41,18 +41,18 @@ public class User {
     private Boolean customer;
 
 
-    @OneToOne(targetEntity = Account.class,mappedBy = "user")
+    @OneToOne(targetEntity = Account.class,mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonManagedReference
     //@JsonBackReference(value = "user-account")
     private Account account;
 
-    @OneToOne(targetEntity = Address.class,mappedBy = "user")
+    @OneToOne(targetEntity = Address.class,mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonManagedReference
     //@JsonBackReference(value = "user-address")
     private Address address;
 
 
-    @OneToMany(targetEntity = Orders.class,mappedBy="user")
+    @OneToMany(targetEntity = Orders.class,mappedBy="user",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "user-orders")
     //@JsonManagedReference(value = "user-orders")

@@ -37,7 +37,7 @@ public class Pizza {
     @NotBlank
     private String image;
 
-    @OneToMany(targetEntity = Orders.class,mappedBy="pizza")
+    @OneToMany(targetEntity = Orders.class,mappedBy="pizza",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "pizza-orders")
     //@JsonManagedReference(value = "pizza-orders")

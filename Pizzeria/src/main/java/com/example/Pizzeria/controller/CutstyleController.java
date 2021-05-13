@@ -4,6 +4,7 @@ package com.example.Pizzeria.controller;
 import com.example.Pizzeria.models.Bakestyle;
 import com.example.Pizzeria.models.Crust;
 import com.example.Pizzeria.models.Cutstyle;
+import com.example.Pizzeria.models.Pizzasize;
 import com.example.Pizzeria.repository.CutstyleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -54,6 +55,18 @@ public class CutstyleController {
             return new ResponseEntity<>(updatedCutstyle, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new Cutstyle(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @DeleteMapping("/cutstyle/{id}")
+    private ResponseEntity<String> deleteCutstyleById(@PathVariable Integer id) {
+        Optional<Cutstyle> cutstyle = cutstyleRepository.findById(id);
+        if (cutstyle.isPresent()) {
+            cutstyleRepository.deleteById(id);
+            return new ResponseEntity<>("Cutstyle with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Cutstyle with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
         }
     }
 

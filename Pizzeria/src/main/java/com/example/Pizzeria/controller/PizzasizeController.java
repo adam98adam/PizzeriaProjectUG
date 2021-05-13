@@ -73,5 +73,16 @@ public class PizzasizeController {
         }
     }
 
+    @DeleteMapping("/pizzasize/{id}")
+    private ResponseEntity<String> deletePizzasizeById(@PathVariable Integer id) {
+        Optional<Pizzasize> pizzasize = pizzasizeRepository.findById(id);
+        if (pizzasize.isPresent()) {
+            pizzasizeRepository.deleteById(id);
+            return new ResponseEntity<>("Pizzasize with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Pizzasize with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

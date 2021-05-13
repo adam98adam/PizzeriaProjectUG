@@ -1,6 +1,7 @@
 package com.example.Pizzeria.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,14 +11,13 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-
 @Entity
 @Setter
 @Getter
 @ToString
-@Table(name = "Pizzasize")
+@Table(name = "Sauces")
 @JsonIgnoreProperties(value = { "orders" })
-public class Pizzasize {
+public class Sauces {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,18 +27,13 @@ public class Pizzasize {
     private String name;
 
     @NotBlank
-    private Integer diameter;
+    private float price;
 
-    @NotBlank
-    private float pizzacostfactor;
-
-    @OneToMany(targetEntity = Orders.class,mappedBy="pizzasize",cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(targetEntity = Orders.class,mappedBy="sauce",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "bakestyle-orders")
     //@JsonManagedReference(value = "bakestyle-orders")
     private List<Orders> orders;
-
-
 
 
 }

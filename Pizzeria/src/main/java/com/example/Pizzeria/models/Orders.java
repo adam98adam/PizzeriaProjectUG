@@ -69,8 +69,16 @@ public class Orders {
     //@JsonManagedReference(value = "drinks-orders")
     private Drinks drink;
 
+    @ManyToOne
+    @JoinColumn(name = "sauce_id", referencedColumnName = "id")
+    //@JsonBackReference(value = "drinks-orders")
+    //@JsonManagedReference(value = "drinks-orders")
+    private Sauces sauce;
 
 
+
+    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT DATE_TRUNC('minute',CURRENT_TIMESTAMP::timestamp)")
+    private Timestamp date;
 
 
 

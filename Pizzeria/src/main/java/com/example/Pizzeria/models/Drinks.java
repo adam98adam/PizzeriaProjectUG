@@ -28,7 +28,7 @@ public class Drinks {
     @NotBlank
     private float price;
 
-    @OneToMany(targetEntity = Orders.class,mappedBy="drink")
+    @OneToMany(targetEntity = Orders.class,mappedBy="drink",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "drinks-orders")
     //@JsonManagedReference(value = "drinks-orders")

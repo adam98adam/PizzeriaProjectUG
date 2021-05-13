@@ -2,6 +2,7 @@ package com.example.Pizzeria.controller;
 
 import com.example.Pizzeria.models.Bakestyle;
 import com.example.Pizzeria.models.Pizza;
+import com.example.Pizzeria.models.Pizzasize;
 import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.PizzaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +74,20 @@ public class PizzaController {
             }
         } else {
             return new ResponseEntity<>(new Pizza(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+
+    @DeleteMapping("/pizza/{id}")
+    private ResponseEntity<String> deletePizzaById(@PathVariable Integer id) {
+        Optional<Pizza> pizza = pizzaRepository.findById(id);
+        if (pizza.isPresent()) {
+            pizzaRepository.deleteById(id);
+            return new ResponseEntity<>("Pizza with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("Pizza with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
         }
     }
 

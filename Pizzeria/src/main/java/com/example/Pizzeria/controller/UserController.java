@@ -1,9 +1,6 @@
 package com.example.Pizzeria.controller;
 
-import com.example.Pizzeria.models.Account;
-import com.example.Pizzeria.models.Address;
-import com.example.Pizzeria.models.Orders;
-import com.example.Pizzeria.models.User;
+import com.example.Pizzeria.models.*;
 import com.example.Pizzeria.repository.AccountRepository;
 import com.example.Pizzeria.repository.AddressRepository;
 import com.example.Pizzeria.repository.OrdersRepository;
@@ -56,6 +53,7 @@ public class UserController {
         return userRepository.findAll();
     }
 
+    /*
     @DeleteMapping("/users/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         //Optional<Account> account = accountRepository.findAccountByUserId(id);
@@ -73,6 +71,8 @@ public class UserController {
         }
         return new ResponseEntity<>("User with given id = " + id + " doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+     */
 
     @PutMapping("/users/{id}")
     public ResponseEntity<User> updateUserById(@PathVariable Integer id, @RequestBody User user) {
@@ -118,6 +118,18 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         else
             return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+    }
+
+    @DeleteMapping("/users/{id}")
+    private ResponseEntity<String> deleteUserById(@PathVariable Integer id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            userRepository.deleteById(id);
+            return new ResponseEntity<>("User with given id = " + id + " was deleted", HttpStatus.OK);
+
+        } else {
+            return new ResponseEntity<>("User with given id = " + id + " was not found", HttpStatus.NOT_FOUND);
+        }
     }
 
 

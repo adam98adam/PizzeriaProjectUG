@@ -25,7 +25,7 @@ public class Cutstyle {
     @NotBlank
     private String name;
 
-    @OneToMany(targetEntity = Orders.class,mappedBy="cutstyle")
+    @OneToMany(targetEntity = Orders.class,mappedBy="cutstyle",cascade = CascadeType.ALL, orphanRemoval = true)
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "bakestyle-orders")
     //@JsonManagedReference(value = "bakestyle-orders")
