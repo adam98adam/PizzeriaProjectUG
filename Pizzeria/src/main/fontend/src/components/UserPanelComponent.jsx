@@ -5,6 +5,7 @@ import AddressService from "../services/AddressService";
 import OrdersService from "../services/OrdersService";
 import PizzaService from "../services/PizzaService";
 import UserService from "../services/UserService";
+import CrustService from "../services/CrustService.js";
 import PizzaLogo from "./../images/pizza-logo.png";
 import PizzaListComponent from "./PizzaListComponent";
 
@@ -26,6 +27,7 @@ const UserPanelComponent = (props) => {
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const [pizza, setPizza] = useState([]);
+  const [crust, setCrust] = useState([]);
 
   useEffect(() => {
     AccountService.getAccountById(parseInt(props.match.params.id, 10)).then(
@@ -52,6 +54,10 @@ const UserPanelComponent = (props) => {
           console.log(res.data);
           setPizza(res.data);
           console.log(pizza);
+        });
+        CrustService.getAllCrust().then((res) => {
+          setCrust(res.data);
+          console.log(res.data);
         });
       }
     );
@@ -184,7 +190,7 @@ const UserPanelComponent = (props) => {
         {showDeleteAccountModal && deleteAccountModal()}
         {showLogoutModal && logoutModal()}
       </header>
-      <PizzaListComponent pizza={pizza} style={{}} />
+      <PizzaListComponent crust={crust} pizza={pizza} style={{}} />
     </>
   );
 };

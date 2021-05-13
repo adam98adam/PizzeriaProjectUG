@@ -1,23 +1,40 @@
 import React, { useState } from "react";
 import {
-  Accordion,
   Button,
   Card,
   CardDeck,
-  CardGroup,
   Col,
   Container,
   Form,
+  Modal,
   Row,
-  useAccordionToggle,
+  Image,
 } from "react-bootstrap";
 import PizzaLogo from "./../images/pizza-background.png";
 import "./../css/pizza-list-style.css";
 import PizzaOrderModal from "./PizzaOrderModal";
 
 const PizzaListComponent = (props) => {
-  const [pizzaOrderShow, setPizzaOrderShow] = useState(false);
+  const [showPizzaOrder, setShowPizzaOrder] = useState(false);
+  const [showPizzaDescription, setShowPizzaDescription] = useState(false);
+  const [selectedPizza, setSelectedPizza] = useState(null);
   const pizzaList = props.pizza;
+  console.log(props.crust);
+
+  const pizzaDescriptionModal = () => {
+    return (
+      <Modal
+        show={showPizzaDescription}
+        centered
+        onHide={() => setShowPizzaDescription(false)}
+      >
+        <Card>
+          <Card.Header>{selectedPizza.name}</Card.Header>
+          <Card.Body>{selectedPizza.description}</Card.Body>
+        </Card>
+      </Modal>
+    );
+  };
 
   return (
     <Container fluid className="main-card">
@@ -30,44 +47,73 @@ const PizzaListComponent = (props) => {
           }}
         >
           {pizzaList.map((pizza, index) => (
-            <Col xl={3} md={4} sm={6} key={index}>
+            <Col xl={4} md={6} sm={12} key={index}>
               <Card
                 style={{
                   margin: 10,
+                  overflow: "auto",
+                  borderRadius: 15,
                 }}
               >
                 <Card.Img
-                  src={pizza.image}
+                  src={PizzaLogo}
                   style={{
                     width: "100%",
-                    height: "15vw",
+                    height: "10rem",
                     objectFit: "cover",
+                    backgroundImage:
+                      "linear-gradient(180deg, rgba(115,0,2,0), rgba(255,255,255,1))",
                   }}
-                  width="1rem"
                 />
-                <Card.ImgOverlay
+                <Image
+                  src={pizza.image}
+                  roundedCircle
+                  thumbnail
                   style={{
-                    backgroundColor: "rgba(255,255,255,0.50)",
+                    position: "absolute",
+                    left: "50%",
+                    top: "10em",
+                    transform: "translate(-50%,-50%)",
+                    width: 100,
+                    height: 100,
+                    flexGrow: 1,
+
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                />
+                <Card.Title
+                  style={{
+                    marginTop: "3rem",
                   }}
                 >
-                  <Card.Body>
-                    <Card.Title>{pizza.name}</Card.Title>
-                    <Button
-                      variant="info"
-                      size="sm"
-                      onClick={() => setPizzaOrderShow(true)}
-                    >
-                      Choose
-                    </Button>
-                  </Card.Body>
-                </Card.ImgOverlay>
+                  {pizza.name}
+                </Card.Title>
+
+                <Card.Body
+                  style={{
+                    backgroundColor: "rgba(0,0,0,0.17)",
+                    borderRadius: 15,
+                  }}
+                >
+                  <Card.Text>{pizza.description}</Card.Text>
+                </Card.Body>
+                <Card.Footer style={{ display: "none" }}></Card.Footer>
+                <Button
+                  variant="success"
+                  onClick={() => setShowPizzaOrder(true)}
+                >
+                  Choose
+                </Button>
               </Card>
             </Col>
           ))}
           <PizzaOrderModal
-            show={pizzaOrderShow}
-            onHide={() => setPizzaOrderShow(false)}
+            crust={props.crust}
+            show={showPizzaOrder}
+            onHide={() => setShowPizzaOrder(false)}
           />
+          {/* {showPizzaDescription && pizzaDescriptionModal()} */}
         </CardDeck>
       </Row>
     </Container>
