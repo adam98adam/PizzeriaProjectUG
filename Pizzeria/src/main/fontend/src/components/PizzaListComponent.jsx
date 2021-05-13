@@ -17,10 +17,17 @@ import PizzaOrderModal from "./PizzaOrderModal";
 const PizzaListComponent = (props) => {
   const [showPizzaOrder, setShowPizzaOrder] = useState(false);
   const [showPizzaDescription, setShowPizzaDescription] = useState(false);
-  const [selectedPizza, setSelectedPizza] = useState(null);
-  const pizzaList = props.pizza;
-  console.log(props.crust);
-
+  const [selectedPizza, setSelectedPizza] = useState({});
+  const [selectedPizzaId, setSelectedPizzaId] = useState("");
+  const { pizzalist } = props;
+  const {
+    crustlist,
+    drinkslist,
+    bakestylelist,
+    pizzasizelist,
+    cutstylelist,
+    saucelist,
+  } = props;
   const pizzaDescriptionModal = () => {
     return (
       <Modal
@@ -46,7 +53,7 @@ const PizzaListComponent = (props) => {
             alignContent: "flex-start",
           }}
         >
-          {pizzaList.map((pizza, index) => (
+          {pizzalist.map((pizza, index) => (
             <Col xl={4} md={6} sm={12} key={index}>
               <Card
                 style={{
@@ -61,8 +68,6 @@ const PizzaListComponent = (props) => {
                     width: "100%",
                     height: "10rem",
                     objectFit: "cover",
-                    backgroundImage:
-                      "linear-gradient(180deg, rgba(115,0,2,0), rgba(255,255,255,1))",
                   }}
                 />
                 <Image
@@ -94,6 +99,8 @@ const PizzaListComponent = (props) => {
                   style={{
                     backgroundColor: "rgba(0,0,0,0.17)",
                     borderRadius: 15,
+                    borderBottomLeftRadius: 0,
+                    borderBottomRightRadius: 0,
                   }}
                 >
                   <Card.Text>{pizza.description}</Card.Text>
@@ -101,7 +108,10 @@ const PizzaListComponent = (props) => {
                 <Card.Footer style={{ display: "none" }}></Card.Footer>
                 <Button
                   variant="success"
-                  onClick={() => setShowPizzaOrder(true)}
+                  onClick={() => {
+                    setSelectedPizza(pizza);
+                    setShowPizzaOrder(true);
+                  }}
                 >
                   Choose
                 </Button>
@@ -109,7 +119,13 @@ const PizzaListComponent = (props) => {
             </Col>
           ))}
           <PizzaOrderModal
-            crust={props.crust}
+            pizza={selectedPizza}
+            crustlist={crustlist}
+            bakestylelist={bakestylelist}
+            drinkslist={drinkslist}
+            pizzasizelist={pizzasizelist}
+            cutstylelist={cutstylelist}
+            saucelist={saucelist}
             show={showPizzaOrder}
             onHide={() => setShowPizzaOrder(false)}
           />

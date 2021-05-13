@@ -1,13 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { Button, Nav, Navbar, Modal, Card, Container } from "react-bootstrap";
+
 import AccountService from "../services/AccountService";
 import AddressService from "../services/AddressService";
 import OrdersService from "../services/OrdersService";
 import PizzaService from "../services/PizzaService";
 import UserService from "../services/UserService";
-import CrustService from "../services/CrustService.js";
+import CrustService from "../services/CrustService";
+import BakestyleService from "../services/BakestyleService";
+import DrinksService from "../services/DrinksService";
+import PizzasizeService from "../services/PizzasizeService";
+import CutstyleService from "../services/CutstyleService";
+
 import PizzaLogo from "./../images/pizza-logo.png";
 import PizzaListComponent from "./PizzaListComponent";
+import SaucesService from "../services/SaucesService";
 
 const UserPanelComponent = (props) => {
   const [idAccount, setIdAccount] = useState(props.match.params.id);
@@ -26,8 +33,13 @@ const UserPanelComponent = (props) => {
   const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const [pizza, setPizza] = useState([]);
-  const [crust, setCrust] = useState([]);
+  const [pizzaList, setPizzaList] = useState([]);
+  const [crustList, setCrustList] = useState([]);
+  const [bakestyleList, setBakestyleList] = useState([]);
+  const [drinksList, setDrinksList] = useState([]);
+  const [pizzaSizeList, setPizzaSizeList] = useState([]);
+  const [cutstyleList, setCutstyleList] = useState([]);
+  const [sauceList, setSauceList] = useState([]);
 
   useEffect(() => {
     AccountService.getAccountById(parseInt(props.match.params.id, 10)).then(
@@ -52,11 +64,31 @@ const UserPanelComponent = (props) => {
 
         PizzaService.getAllPizza().then((res) => {
           console.log(res.data);
-          setPizza(res.data);
-          console.log(pizza);
+          setPizzaList(res.data);
+          console.log(pizzaList);
         });
         CrustService.getAllCrust().then((res) => {
-          setCrust(res.data);
+          setCrustList(res.data);
+          console.log(res.data);
+        });
+        BakestyleService.getAllBakestyle().then((res) => {
+          setBakestyleList(res.data);
+          console.log(res.data);
+        });
+        DrinksService.getAllDrinks().then((res) => {
+          setDrinksList(res.data);
+          console.log(res.data);
+        });
+        PizzasizeService.getAllPizzasize().then((res) => {
+          setPizzaSizeList(res.data);
+          console.log(res.data);
+        });
+        CutstyleService.getAllCutstyle().then((res) => {
+          setCutstyleList(res.data);
+          console.log(res.data);
+        });
+        SaucesService.getAllSauces().then((res) => {
+          setSauceList(res.data);
           console.log(res.data);
         });
       }
@@ -190,7 +222,16 @@ const UserPanelComponent = (props) => {
         {showDeleteAccountModal && deleteAccountModal()}
         {showLogoutModal && logoutModal()}
       </header>
-      <PizzaListComponent crust={crust} pizza={pizza} style={{}} />
+      <PizzaListComponent
+        crustlist={crustList}
+        pizzalist={pizzaList}
+        bakestylelist={bakestyleList}
+        drinkslist={drinksList}
+        pizzasizelist={pizzaSizeList}
+        cutstylelist={cutstyleList}
+        saucelist={sauceList}
+        style={{}}
+      />
     </>
   );
 };

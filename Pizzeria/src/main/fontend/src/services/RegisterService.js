@@ -15,5 +15,4 @@ class RegisterService {
 }
 
 
-
 export default new RegisterService()
