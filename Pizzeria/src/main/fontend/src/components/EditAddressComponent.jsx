@@ -68,7 +68,7 @@ const EditAddressComponent = (props) => {
   };
 
   const validateStreet = (street) => {
-    const re = /(ul\. | al\.)?\ [A-Z][a-z]+/;
+    const re = /(ul\. | al\.)?[A-Z][a-z]+/;
     return re.test(street);
   };
 

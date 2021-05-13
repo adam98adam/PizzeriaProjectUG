@@ -3,6 +3,7 @@ import "reactjs-popup/dist/index.css";
 import "./../css/index.css";
 
 const PizzaOrderModal = (props) => {
+  const crustList = props.crust;
   return (
     <Modal centered {...props}>
       <Modal.Header closeButton>
@@ -42,10 +43,14 @@ const PizzaOrderModal = (props) => {
             </Form.Label>
             <Col>
               <Form.Control size="sm" as="select" className="my-1 mr-sm-2">
-                <option value="choose">Bakestyle</option>
-                <option value="Regular">Regular</option>
-                <option value="Bake Light">Bake Light</option>
-                <option value="Bake Extra Well">Bake Extra Well</option>
+
+                {crustList.map((crust) => {
+                  return (
+                    <option value={crust} key={crust.id}>
+                      {crust.crust}
+                    </option>
+                  );
+                })}
               </Form.Control>
             </Col>
           </Form.Group>
