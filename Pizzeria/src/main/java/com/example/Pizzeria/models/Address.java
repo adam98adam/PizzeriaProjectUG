@@ -35,7 +35,7 @@ public class Address {
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     //@JsonBackReference
-    @JsonManagedReference(value = "user-address")
+    //@JsonManagedReference(value = "user-address")
     private User user;
 
     public Address(){};

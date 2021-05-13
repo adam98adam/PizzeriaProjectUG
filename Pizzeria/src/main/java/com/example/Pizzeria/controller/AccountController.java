@@ -60,7 +60,7 @@ public class AccountController {
     }
 
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Account> updateAccount(@PathVariable Integer id,@RequestBody Account account) {
+    public ResponseEntity<Account> updateAccountById(@PathVariable Integer id,@RequestBody Account account) {
        List<Account> acc = accountRepository.findByLogin(account.getLogin());
        if(acc.isEmpty()) {
            Optional<Account> ac = accountRepository.findById(id);

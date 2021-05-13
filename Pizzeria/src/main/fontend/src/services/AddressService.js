@@ -15,7 +15,6 @@ class AddressService {
 
     }
 
-
     updateAddress(address,id) {
         return axios.put(User_Api_Base_Url + "/" + id,address)
     }

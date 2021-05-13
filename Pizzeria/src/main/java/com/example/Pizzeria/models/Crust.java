@@ -10,35 +10,27 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.List;
 
-
 @Entity
 @Setter
 @Getter
 @ToString
-@Table(name = "Pizzasize")
+@Table(name = "Crust")
 @JsonIgnoreProperties(value = { "orders" })
-public class Pizzasize {
+public class Crust {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @NotBlank
-    private String name;
+    private String crust;
 
     @NotBlank
-    private Integer diameter;
+    private float price;
 
-    @NotBlank
-    private float pizzacostfactor;
-
-    @OneToMany(targetEntity = Orders.class,mappedBy="pizzasize")
+    @OneToMany(targetEntity = Orders.class,mappedBy="crust")
     //@JsonBackReference(value = "user-account")
     //@JsonBackReference(value = "bakestyle-orders")
     //@JsonManagedReference(value = "bakestyle-orders")
     private List<Orders> orders;
-
-
-
-
 }

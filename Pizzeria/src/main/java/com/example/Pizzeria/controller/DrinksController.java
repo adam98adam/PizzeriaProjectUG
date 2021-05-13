@@ -1,17 +1,16 @@
 package com.example.Pizzeria.controller;
 
+import com.example.Pizzeria.models.Bakestyle;
 import com.example.Pizzeria.models.Drinks;
 import com.example.Pizzeria.models.Pizza;
 import com.example.Pizzeria.repository.DrinksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -28,5 +27,32 @@ public class DrinksController {
             return new ResponseEntity<>(drinks, HttpStatus.NOT_FOUND);
         else
             return new ResponseEntity<>(drinks,HttpStatus.OK);
+    }
+
+    @GetMapping("/drinks/{id}")
+    public ResponseEntity<Optional<Drinks>> getDrinkById(@PathVariable Integer id) {
+        Optional<Drinks> drinks = drinksRepository.findById(id);
+        if(drinks.isPresent())
+            return new ResponseEntity<>(drinks,HttpStatus.OK);
+        else
+            return new ResponseEntity<>(drinks,HttpStatus.NOT_FOUND);
+
+    }
+
+    @PutMapping("/drinks/{id}")
+    public ResponseEntity<Drinks> updateDrinkById(@PathVariable Integer id, @RequestBody Drinks drinks) {
+        List<Drinks> dri = drinksRepository.findByName(drinks.getName());
+        if (dri.isEmpty()) {
+            Optional<Drinks> ac = drinksRepository.findById(id);
+            ac.ifPresent(value -> value.setName(drinks.getName()));
+            Drinks updatedDrinks = drinksRepository.save(ac.get());
+            return new ResponseEntity<>(updatedDrinks, HttpStatus.OK);
+        } else if (dri.get(0).getId().equals(id)) {
+            dri.get(0).setName(drinks.getName());
+            Drinks updatedDrinks = drinksRepository.save(dri.get(0));
+            return new ResponseEntity<>(updatedDrinks, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(new Drinks(), HttpStatus.NOT_FOUND);
+        }
     }
 }

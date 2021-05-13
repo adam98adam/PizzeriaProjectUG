@@ -75,7 +75,7 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Integer id, @RequestBody User user) {
+    public ResponseEntity<User> updateUserById(@PathVariable Integer id, @RequestBody User user) {
         List<User> u = userRepository.findByEmailOrPhonenumber(user.getEmail(), user.getPhonenumber());
         if (u.isEmpty()) {
             Optional<User> us = userRepository.findById(id);

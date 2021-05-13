@@ -15,7 +15,7 @@ import java.util.Set;
 @ToString
 @Table(name = "Users")
 //@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
-@JsonIgnoreProperties(value = { "orders" })
+@JsonIgnoreProperties(value = { "orders","account","address" })
 public class User {
 
     @Id
@@ -43,12 +43,12 @@ public class User {
 
     @OneToOne(targetEntity = Account.class,mappedBy = "user")
     //@JsonManagedReference
-    @JsonBackReference(value = "user-account")
+    //@JsonBackReference(value = "user-account")
     private Account account;
 
     @OneToOne(targetEntity = Address.class,mappedBy = "user")
     //@JsonManagedReference
-    @JsonBackReference(value = "user-address")
+    //@JsonBackReference(value = "user-address")
     private Address address;
 
 

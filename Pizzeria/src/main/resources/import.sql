@@ -21,9 +21,21 @@ INSERT INTO Drinks(name,price) VALUES ('Sprite',2.0);
 INSERT INTO Bakestyle(name) VALUES ('Regular');
 INSERT INTO Bakestyle(name) VALUES ('Bake Light');
 INSERT INTO Bakestyle(name) VALUES ('Bake Extra Well');
-INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,drink_id) VALUES (1,1,1,1);
-INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,drink_id) VALUES (1,2,2,2);
-INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,drink_id) VALUES (1,2,2,2);
+INSERT INTO Pizzasize(name,diameter,pizzacostfactor) VALUES  ('Small',10,1.0);
+INSERT INTO Pizzasize(name,diameter,pizzacostfactor) VALUES  ('Medium',12,1.5);
+INSERT INTO Pizzasize(name,diameter,pizzacostfactor) VALUES  ('Large',14,2.0);
+INSERT INTO Pizzasize(name,diameter,pizzacostfactor) VALUES  ('Family',16,2.5);
+INSERT INTO Crust(crust,price) VALUES ('Thin',1.0);
+INSERT INTO Crust(crust,price) VALUES ('Classic',1.5);
+INSERT INTO Crust(crust,price) VALUES ('Thick',2.0);
+INSERT INTO Cutstyle(name) VALUES ('Regular');
+INSERT INTO Cutstyle(name) VALUES ('Cut Square');
+INSERT INTO Cutstyle(name) VALUES ('Cut in 8');
+INSERT INTO Cutstyle(name) VALUES ('Cut in 10');
+INSERT INTO Cutstyle(name) VALUES ('Cut in 12');
+INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,crust_id,pizzasize_id,cutstyle_id,drink_id) VALUES (1,1,1,1,1,1,1);
+INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,crust_id,pizzasize_id,cutstyle_id,drink_id) VALUES (1,2,2,2,2,2,2);
+INSERT INTO ORDERS(user_id,pizza_id,bakestyle_id,crust_id,pizzasize_id,cutstyle_id,drink_id) VALUES (1,2,2,3,3,3,3);
 
 
 

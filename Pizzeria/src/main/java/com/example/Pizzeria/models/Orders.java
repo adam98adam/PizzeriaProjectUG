@@ -8,8 +8,13 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Setter
@@ -41,10 +46,46 @@ public class Orders {
     private Bakestyle bakestyle;
 
     @ManyToOne
+    @JoinColumn(name = "crust_id", referencedColumnName = "id")
+    //@JsonBackReference(value = "drinks-orders")
+    //@JsonManagedReference(value = "drinks-orders")
+    private Crust crust;
+
+    @ManyToOne
+    @JoinColumn(name = "pizzasize_id", referencedColumnName = "id")
+    //@JsonBackReference(value = "drinks-orders")
+    //@JsonManagedReference(value = "drinks-orders")
+    private Pizzasize pizzasize;
+
+    @ManyToOne
+    @JoinColumn(name = "cutstyle_id", referencedColumnName = "id")
+    //@JsonBackReference(value = "drinks-orders")
+    //@JsonManagedReference(value = "drinks-orders")
+    private Cutstyle cutstyle;
+
+    @ManyToOne
     @JoinColumn(name = "drink_id", referencedColumnName = "id")
     //@JsonBackReference(value = "drinks-orders")
     //@JsonManagedReference(value = "drinks-orders")
     private Drinks drink;
+
+
+
+
+
+
+
+    /*
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "time", nullable = false)
+    private Date timestamp;
+
+    @PrePersist
+    private void onCreate() {
+        timestamp = new Date();
+    }
+    */
+
 
 
 }
