@@ -1,154 +1,192 @@
-import React, { Component } from 'react';
-import AccountService from '../services/AccountService';
-import AddressService from '../services/AddressService';
-import OrdersService from '../services/OrdersService';
-import PizzaService from '../services/PizzaService';
-import UserService from '../services/UserService';
+import React, { useEffect, useState } from "react";
+import { Button, Nav, Navbar, Modal, Card, Container } from "react-bootstrap";
+import AccountService from "../services/AccountService";
+import AddressService from "../services/AddressService";
+import OrdersService from "../services/OrdersService";
+import PizzaService from "../services/PizzaService";
+import UserService from "../services/UserService";
+import PizzaLogo from "./../images/pizza-logo.png";
+import PizzaListComponent from "./PizzaListComponent";
 
-class UserPanelComponent extends Component {
-    constructor(props) {
-        super(props)
+const UserPanelComponent = (props) => {
+  const [idAccount, setIdAccount] = useState(props.match.params.id);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [idUser, setIdUser] = useState("");
+  const [name, setName] = useState("");
+  const [surname, setSurname] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [idAddress, setIdAddress] = useState("");
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [number, setNumber] = useState("");
 
-        this.state = {
-            idAccount: this.props.match.params.id,
-            login:'',
-            password:'',
-            idUser:'',
-            name:'',
-            surname:'',
-            email:'',
-            phonenumber:'',
-            idAddress:'',
-            city:'',
-            street:'',
-            number:'',
-            pizza:[]
+  const [showDeleteAccountModal, setShowDeleteAccountModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-        }
-    }
+  const [pizza, setPizza] = useState([]);
 
-    componentDidMount(){
-        AccountService.getAccountById(parseInt(this.props.match.params.id, 10)).then((res) => {
-            console.log(res.data)
-            this.setState({login: res.data.login})
-            this.setState({password: res.data.password})
-            this.setState({idUser: res.data.user.id})
-            this.setState({name: res.data.user.name})
-            this.setState({surname: res.data.user.surname})
-            this.setState({email: res.data.user.email})
-            this.setState({phonenumber: res.data.user.phonenumber})
-          
-            
-            AddressService.getAddressByUserId(parseInt(this.state.idUser,10)).then((res) => {
-                console.log(res.data)
-                this.setState({idAddress: res.data.id})
-                this.setState({city: res.data.city})
-                this.setState({street: res.data.street})
-                this.setState({number: res.data.number})
-            })
-
-            PizzaService.getAllPizza().then((res) =>{
-                console.log(res.data)
-                this.setState({pizza: res.data})
-                console.log(this.state.pizza)
-
-            })
-            
-        })
-
-
-    }
-
-    user = (idAccount,idUser) => {
-        this.props.history.push(`/user-edit/${idAccount}/${idUser}`);
-    }
-
-    account = (idAccount) => {
-        this.props.history.push(`/account-edit/${idAccount}`);
-    }
-
-    address = (idAccount,idAddress) => {
-        this.props.history.push(`/address-edit/${idAccount}/${idAddress}`);
-    }
-
-    deleteAccount = (idUser) => {
-        UserService.deleteUser(idUser).then((res) => {
-            this.props.history.push("/");
-        })
-        
-    }
-
-    myOrders = (idAccount,idUser) => {
-        this.props.history.push(`/user-orders/${idAccount}/${idUser}`);
-        
-    }
-
-    
-
-    choosePizza = (id) => {
-        console.log(id)
-    }
-
-    logout = () => {
-        this.props.history.push("/");
-    }
-
-
-
-    
-    render() {
-        return (
-    <div>
-            <header>
-                <nav>
-                    <a>Pizza</a> |
-                    <a onClick={() => this.account(parseInt(this.state.idAccount,10))}>Account</a> |
-                    <a onClick={() => this.user(parseInt(this.state.idAccount,10),parseInt(this.state.idUser,10))}>User</a> |
-                    <a onClick={() => this.address(parseInt(this.state.idAccount,10),parseInt(this.state.idAddress,10))}>Address</a> |
-                    <a onClick={() => this.myOrders(parseInt(this.state.idAccount,10),parseInt(this.state.idUser,10))}>My Orders</a> |
-                    <a onClick={() => this.deleteAccount(parseInt(this.state.idUser,10))}>Delete Account</a> |                        
-                    <a onClick={this.logout}>Logout</a>
-                </nav>
-            </header>
-
-            <div>
-                <h2 className="text-center">Pizza List</h2>
-                <div className="row">
-                    <table className = "table table-striped table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th>Price</th>
-                                <th>Image</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                this.state.pizza.map(
-                                    pizza =>
-                                        <tr key = {pizza.id}>
-                                            <td> {pizza.name} </td>
-                                            <td> {pizza.description}</td>
-                                            <td> {pizza.price}</td>
-                                            <td> <img src= {pizza.image} alt="iamge {{}}" ></img> </td>
-                                            <td>
-                                            <button onClick = {() => this.choosePizza(pizza.id)} className="btn btn-info">Order</button>
-                                        </td>
-                                        </tr>
-                                )
-                            }
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-    </div>
-
-
-
+  useEffect(() => {
+    AccountService.getAccountById(parseInt(props.match.params.id, 10)).then(
+      (res) => {
+        console.log(res.data);
+        setLogin(res.data.login);
+        setPassword(res.data.password);
+        setIdUser(res.data.user.id);
+        setName(res.data.user.name);
+        setSurname(res.data.user.surname);
+        setEmail(res.data.user.email);
+        setPhoneNumber(res.data.user.phonenumber);
+        AddressService.getAddressByUserId(parseInt(res.data.user.id, 10)).then(
+          (res) => {
+            console.log(res.data);
+            setIdAddress(res.data.id);
+            setCity(res.data.city);
+            setStreet(res.data.street);
+            setNumber(res.data.number);
+          }
         );
-    }
-}
+
+        PizzaService.getAllPizza().then((res) => {
+          console.log(res.data);
+          setPizza(res.data);
+          console.log(pizza);
+        });
+      }
+    );
+  }, [props.match.params.id]);
+
+  const user = (idAccount, idUser) => {
+    props.history.push(`/user-edit/${idAccount}/${idUser}`);
+  };
+
+  const account = (idAccount) => {
+    props.history.push(`/account-edit/${idAccount}`);
+  };
+
+  const address = (idAccount, idAddress) => {
+    props.history.push(`/address-edit/${idAccount}/${idAddress}`);
+  };
+  const myOrders = (idAccount, idUser) => {
+    props.history.push(`/user-orders/${idAccount}/${idUser}`);
+  };
+
+  const choosePizza = (id) => {
+    console.log(id);
+  };
+
+  const deleteAccount = (idUser) => {
+    UserService.deleteUser(idUser).then((res) => {
+      props.history.push("/");
+    });
+  };
+
+  const logout = () => {
+    props.history.push("/");
+  };
+
+  const handleDeleteAccountClose = () => {
+    setShowDeleteAccountModal(false);
+  };
+
+  const deleteAccountModal = () => {
+    return (
+      <Modal
+        show={showDeleteAccountModal}
+        centered
+        onHide={handleDeleteAccountClose}
+      >
+        <Modal.Header>
+          <Modal.Title>Delete Account</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="danger"
+            onClick={() => deleteAccount(parseInt(idUser, 10))}
+          >
+            Confirm
+          </Button>
+          <Button variant="success" onClick={handleDeleteAccountClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  const handleLogoutClose = () => {
+    setShowLogoutModal(false);
+  };
+  const logoutModal = () => {
+    return (
+      <Modal show={showLogoutModal} centered onHide={handleLogoutClose}>
+        <Modal.Header>
+          <Modal.Title>Logout</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Are you sure?</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={logout}>
+            Logout
+          </Button>
+          <Button variant="success" onClick={handleLogoutClose}>
+            Cancel
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  return (
+    <>
+      <header>
+        <Navbar fixed="top" bg="dark" variant="dark">
+          <Navbar.Brand>
+            <img alt="pizza-logo" src={PizzaLogo} width="30" height="30" />
+            Pizzeria Web Application
+          </Navbar.Brand>
+          <Nav className="justify-content-end" style={{ width: "100%" }}>
+            <Nav.Link onClick={() => account(parseInt(idAccount, 10))}>
+              Account
+            </Nav.Link>
+            <Nav.Link
+              onClick={() =>
+                user(parseInt(idAccount, 10), parseInt(idUser, 10))
+              }
+            >
+              User
+            </Nav.Link>
+            <Nav.Link
+              onClick={() =>
+                address(parseInt(idAccount, 10), parseInt(idAddress, 10))
+              }
+            >
+              Address
+            </Nav.Link>
+            <Nav.Link
+              onClick={() =>
+                myOrders(parseInt(idAccount, 10), parseInt(idAddress, 10))
+              }
+            >
+              My Orders
+            </Nav.Link>
+            <Nav.Link onClick={() => setShowDeleteAccountModal(true)}>
+              Delete Account
+            </Nav.Link>
+            <Nav.Link onClick={() => setShowLogoutModal(true)}>Logout</Nav.Link>
+          </Nav>
+        </Navbar>
+        {showDeleteAccountModal && deleteAccountModal()}
+        {showLogoutModal && logoutModal()}
+      </header>
+      <PizzaListComponent pizza={pizza} style={{}} />
+    </>
+  );
+};
 
 export default UserPanelComponent;

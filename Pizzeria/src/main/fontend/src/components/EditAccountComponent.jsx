@@ -1,79 +1,270 @@
-import React, { Component } from 'react';
-import AccountService from '../services/AccountService';
-import UserService from '../services/UserService';
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Overlay,
+  Row,
+  Tooltip,
+} from "react-bootstrap";
+import AccountService from "../services/AccountService";
+import UserService from "../services/UserService";
+import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
+import WarningIcon from "./icons/WarningIcon";
 
-class EditAccountComponent extends Component {
-    constructor(props) {
-        super(props)
+const EditAccountComponent = (props) => {
+  const loginButtonTarget = useRef(null);
+  const passwordButtonTarget = useRef(null);
+  const [id, setId] = useState(props.match.params.id);
+  const [login, setLogin] = useState("");
+  const [password, setPassword] = useState("");
+  const [
+    showInvalidAccountUpdateModal,
+    setShowInvalidAccountUpdateModal,
+  ] = useState(false);
 
-        this.state = {
-            idAccount: this.props.match.params.idAccount,
-            login:'',
-            password:'',
+  const [loginValid, setLoginValid] = useState(true);
+  const [passwordValid, setPasswordValid] = useState(true);
 
-        }
-        this.changeLoginHandler = this.changeLoginHandler.bind(this);
-        this.changePasswordHandler = this.changePasswordHandler.bind(this);
-    }
+  const [showLoginInfoTooltip, setShowLoginInfoTooltip] = useState(false);
+  const [showPasswordInfoTooltip, setShowPasswordInfoTooltip] = useState(false);
 
-    componentDidMount() {
-        AccountService.getAccountById(parseInt(this.props.match.params.idAccount,10)).then((res) => {
-            let account = res.data;
-            this.setState({login: account.login,password: account.password});
+  useEffect(() => {
+    console.log(id);
+    AccountService.getAccountById(parseInt(props.match.params.id, 10))
+      .then((res) => {
+        let account = res.data;
+        setLogin(account.login);
+        setPassword(account.password);
+      })
+      .catch((err) => {
+        console.log(err.response);
+        setShowInvalidAccountUpdateModal(true);
+      });
+  }, [props.match.params.id]);
+
+  const cancel = (id) => {
+    props.history.push(`/user/${id}`);
+  };
+
+  const invalidAccountUpdateModalClose = () => {
+    setShowInvalidAccountUpdateModal(false);
+  };
+
+  const invalidAccountUpdateModal = () => {
+    return (
+      <Modal
+        show={showInvalidAccountUpdateModal}
+        centered
+        onHide={invalidAccountUpdateModalClose}
+      >
+        <Modal.Header>
+          <Modal.Title>Invalid New data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Data to update is not valid. </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={invalidAccountUpdateModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+
+  const updateAccount = (e) => {
+    e.preventDefault();
+    const loginValidations = [loginValid, passwordValid];
+    let account = { login: login, password: password };
+    if (
+      Object.values(account).every((el) => el) &&
+      loginValidations.every((el) => el)
+    ) {
+      AccountService.updateAccount(account, parseInt(id, 10))
+        .then((res) => {
+          cancel(parseInt(id, 10));
         })
-
+        .catch((error) => {
+          console.log(error.response);
+          setShowInvalidAccountUpdateModal(true);
+        });
+    } else {
+      setShowInvalidAccountUpdateModal(true);
     }
+  };
 
-    changeLoginHandler = (event) => {
-        this.setState({login: event.target.value});
-    }
+  const validateLogin = (login) => {
+    const re = /[a-zA-Z][a-zA-Z0-9]{3,}$/;
+    return re.test(login);
+  };
 
-    changePasswordHandler = (event) => {
-        this.setState({password: event.target.value});
-    }
+  const changeLoginHandler = (event) => {
+    setLogin(event.target.value);
+    setLoginValid(validateLogin(event.target.value));
+  };
 
-    cancel = (id) => { 
-        this.props.history.push(`/user/${id}`);
-    }
+  const validatePassword = (password) => {
+    const re = /^\w+(\w+[\.@\?]\w*)+$/;
+    return re.test(password);
+  };
 
-    updateAccount = (e) => {
-        e.preventDefault();
-        let account = {login: this.state.login,password: this.state.password}
-        AccountService.updateAccount(account,parseInt(this.state.idAccount,10)).then((res) => {
-            this.cancel(parseInt(this.state.idAccount,10))
-        }).catch((error) => console.log(error.response))
- 
-    }
-
-
-    render() {
-        return (
-          <div>
-          <div className = "container">
-              <div className = "row">
-                  <div className = "card col-md-6 offset-md-3 offset-md3">
-                      <h3 className="text-center">Update Acccount</h3>
-                      <div className = "card-body">
-                          <form>
-                              <div className = "form-group">
-                                  <label> Login : </label>
-                                  <input placeholder="Login" name="login" className="form-control" value={this.state.login} onChange={this.changeLoginHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Password : </label>
-                                  <input placeholder="Password" name="password" className="form-control" value={this.state.password} onChange={this.changePasswordHandler}/>
-                              </div>
-                              <button className="btn btn-success" onClick={this.updateAccount}>Save</button>
-                              <button className="btn btn-danger" onClick={() => this.cancel(parseInt(this.state.idAccount,10))}  style={{marginLeft: "10px"}}>Cancel</button>
-                          </form>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-      </div>
-        );
-    }
-}
+  const changePasswordHandler = (event) => {
+    setPassword(event.target.value);
+    setPasswordValid(validatePassword(event.target.value));
+  };
+  const loginInfoIcon = () => {
+    return (
+      <>
+        <a
+          ref={loginButtonTarget}
+          onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
+          style={{ color: "blue" }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-info"
+            viewBox="0 0 16 16"
+          >
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+          </svg>
+        </a>
+        <Overlay
+          target={loginButtonTarget.current}
+          show={showLoginInfoTooltip}
+          placement="right"
+        >
+          {(props) => (
+            <Tooltip id="overlay-example" {...props}>
+              <span>
+                Login should: <br />
+                - have at least 6 characters <br />- have only lower- and
+                uppercase letters and special characters <br />- start with a
+                letter
+              </span>
+            </Tooltip>
+          )}
+        </Overlay>
+      </>
+    );
+  };
+  const passwordInfoIcon = () => {
+    return (
+      <>
+        <a
+          ref={passwordButtonTarget}
+          onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
+          style={{ color: "blue" }}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            className="bi bi-info"
+            viewBox="0 0 16 16"
+          >
+            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
+          </svg>
+        </a>
+        <Overlay
+          target={passwordButtonTarget.current}
+          show={showPasswordInfoTooltip}
+          placement="right"
+        >
+          {(props) => (
+            <Tooltip id="overlay-example" {...props}>
+              <p>
+                Password should: <br />
+                - have at least 6 characters
+                <br />- have at least one of characters(. or @)
+                <br />- start with a letter
+              </p>
+            </Tooltip>
+          )}
+        </Overlay>
+      </>
+    );
+  };
+  return (
+    <div>
+      <PizzeriaUpdatePageNavHeader />
+      <Card className="main-card">
+        <Card.Body>
+          <Card.Title>Update Acccount</Card.Title>
+          <Form className="center">
+            <Container>
+              <Row>
+                <Col md={{ span: 6, offset: 3 }}>
+                  <Form.Group>
+                    <Form.Label> Login : </Form.Label>
+                    <Form.Control
+                      placeholder="Login"
+                      name="login"
+                      className={
+                        loginValid ? "form-control" : "form-control-error"
+                      }
+                      className="form-control"
+                      value={login}
+                      onChange={changeLoginHandler}
+                    />
+                    {!loginValid && (
+                      <Form.Text className="text-muted">
+                        <span style={{ color: "red" }}>
+                          <WarningIcon />
+                          Login is not valid
+                        </span>
+                        {loginInfoIcon()}
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Password : </Form.Label>
+                    <Form.Control
+                      placeholder="Password"
+                      className={
+                        passwordValid ? "form-control" : "form-control-error"
+                      }
+                      name="password"
+                      className="form-control"
+                      value={password}
+                      onChange={changePasswordHandler}
+                    />
+                    {!passwordValid && (
+                      <Form.Text className="text-muted">
+                        <span style={{ color: "red" }}>
+                          <WarningIcon />
+                          Password is invalid
+                        </span>
+                        {passwordInfoIcon()}
+                      </Form.Text>
+                    )}
+                  </Form.Group>
+                  <Button variant="success" onClick={updateAccount}>
+                    Save
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => cancel(parseInt(id, 10))}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </Form>
+        </Card.Body>
+      </Card>
+      {showInvalidAccountUpdateModal && invalidAccountUpdateModal()}
+    </div>
+  );
+};
 
 export default EditAccountComponent;

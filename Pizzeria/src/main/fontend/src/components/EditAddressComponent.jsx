@@ -1,93 +1,199 @@
-import React, { Component } from 'react';
-import AddressService from '../services/AddressService';
+import React, { useEffect, useState } from "react";
+import AddressService from "../services/AddressService";
+import {
+  Button,
+  Card,
+  Col,
+  Container,
+  Form,
+  Modal,
+  Row,
+} from "react-bootstrap";
+import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
+import WarningIcon from "./icons/WarningIcon";
 
-class EditAddressComponent extends Component {
-    constructor(props) {
-        super(props)
+const EditAddressComponent = (props) => {
+  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
+  const [idAddress, setIdAddress] = useState(props.match.params.idAddress);
+  const [city, setCity] = useState("");
+  const [street, setStreet] = useState("");
+  const [number, setNumber] = useState(0);
 
-        this.state = {
-            idAccount: this.props.match.params.idAccount,
-            idAddress: this.props.match.params.idAddress,
-            city:'',
-            street:'',
-            number: 0
+  const [cityValid, setCityValid] = useState(true);
+  const [streetValid, setStreetValid] = useState(true);
+  const [numberValid, setNumberValid] = useState(true);
 
-        }
-        this.changeCityHandler = this.changeCityHandler.bind(this);
-        this.changeStreetHandler = this.changeStreetHandler.bind(this);
-        this.changeNumberHandler = this.changeNumberHandler.bind(this);
-    }
-     
-    componentDidMount() {
-        AddressService.getAddressById(parseInt(this.props.match.params.idAddress,10)).then((res) => {
-            let address = res.data;
-            this.setState({city: address.city,street: address.street,number: address.number});
+  const [showAddressModal, setShowAddressModal] = useState(false);
+
+  useEffect(() => {
+    AddressService.getAddressById(
+      parseInt(props.match.params.idAddress, 10)
+    ).then((res) => {
+      let address = res.data;
+      console.log(address);
+      setCity(address.city);
+      setStreet(address.street);
+      setNumber(address.number);
+    });
+  }, [props.match.params.idAddress]);
+  const updateAddress = (e) => {
+    const validations = [cityValid, streetValid, numberValid];
+    e.preventDefault();
+    let address = {
+      city: city,
+      street: street,
+      number: number,
+    };
+    if (
+      Object.values(address).every((el) => el.length !== 0) &&
+      validations.every((el) => el)
+    ) {
+      AddressService.updateAddress(address, parseInt(idAddress, 10))
+        .then((res) => {
+          cancel(parseInt(idAccount, 10));
         })
-
+        .catch((error) => console.log(error.response));
+    } else {
+      setShowAddressModal(true);
     }
+  };
+  const validateCity = (city) => {
+    const re = /^[A-Z][a-z]+$/;
+    return re.test(city);
+  };
 
-    changeCityHandler = (event) => {
-        this.setState({city: event.target.value});
-    }
+  const changeCityHandler = (event) => {
+    setCity(event.target.value);
+    setCityValid(validateCity(event.target.value));
+  };
 
-    changeStreetHandler = (event) => {
-        this.setState({street: event.target.value});
-    }
+  const validateStreet = (street) => {
+    const re = /(ul\. | al\.)?\ [A-Z][a-z]+/;
+    return re.test(street);
+  };
 
-    changeNumberHandler = (event) => {
-        this.setState({number: event.target.value});
-    }
+  const changeStreetHandler = (event) => {
+    setStreet(event.target.value);
+    setStreetValid(validateStreet(event.target.value));
+  };
 
+  const validateNumber = (number) => {
+    const re = /^[1-9]+[0-9]*(\/[1-9]+[0-9]*)?$/;
+    return re.test(number);
+  };
 
+  const changeNumberHandler = (event) => {
+    setNumber(event.target.value);
+    setNumberValid(validateNumber(event.target.value));
+  };
 
-    cancel = (id) => { 
-        this.props.history.push(`/user/${id}`);
-    }
+  const cancel = (id) => {
+    props.history.push(`/user/${id}`);
+  };
 
-    updateAddress = (e) => {
-        e.preventDefault();
-        let address = {city: this.state.city,street: this.state.street,number: this.state.number}
-        AddressService.updateAddress(address,parseInt(this.state.idAddress,10)).then((res) => {
-            this.cancel(parseInt(this.state.idAccount,10))
-        }).catch((error) => console.log(error.response))
- 
-    }
-
-
-
-    render() {
-        return (
-            <div>
-                <div className = "container">
-              <div className = "row">
-                  <div className = "card col-md-6 offset-md-3 offset-md3">
-                      <h3 className="text-center">Update Address</h3>
-                      <div className = "card-body">
-                          <form>
-                              <div className = "form-group">
-                                  <label> City : </label>
-                                  <input placeholder="City" name="city" className="form-control" value={this.state.city} onChange={this.changeCityHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Street : </label>
-                                  <input placeholder="Street" name="street" className="form-control" value={this.state.street} onChange={this.changeStreetHandler}/>
-                              </div>
-                              <div className = "form-group">
-                                  <label> Number : </label>
-                                  <input placeholder="Number" name="street" className="form-control" value={this.state.number} onChange={this.changeNumberHandler}/>
-                              </div>
-                              <button className="btn btn-success" onClick={this.updateAddress}>Save</button>
-                              <button className="btn btn-danger" onClick={() => this.cancel(parseInt(this.state.idAccount,10))}  style={{marginLeft: "10px"}}>Cancel</button>
-                          </form>
-
-                      </div>
-                  </div>
-              </div>
-          </div>
-                
-            </div>
-        );
-    }
-}
+  const handleAddressModalClose = () => {
+    setShowAddressModal(false);
+  };
+  const addressModal = () => {
+    return (
+      <Modal show={showAddressModal} centered onHide={handleAddressModalClose}>
+        <Modal.Header>
+          <Modal.Title>Address Fields Empty/Not Valid</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            One or more of address fields are empty or not valid. Please fill up
+            these fields.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleAddressModalClose}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
+  return (
+    <div>
+      <PizzeriaUpdatePageNavHeader />
+      <Card className="main-card">
+        <Card.Body>
+          <Card.Title>Update User</Card.Title>
+          <Form className="center">
+            <Container fluid>
+              <Row>
+                <Col md={{ span: 6, offset: 3 }}>
+                  <Form.Group>
+                    <Form.Label> City : </Form.Label>
+                    <Form.Control
+                      placeholder="City"
+                      name="city"
+                      className={
+                        cityValid ? "form-control" : "form-control-error"
+                      }
+                      value={city}
+                      onChange={changeCityHandler}
+                    />
+                    {!cityValid && (
+                      <span style={{ color: "red" }}>
+                        <WarningIcon /> City is not valid
+                      </span>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Street : </Form.Label>
+                    <Form.Control
+                      placeholder="Street"
+                      name="street"
+                      className={
+                        streetValid ? "form-control" : "form-control-error"
+                      }
+                      value={street}
+                      onChange={changeStreetHandler}
+                    />
+                    {!streetValid && (
+                      <span style={{ color: "red" }}>
+                        <WarningIcon /> Street is not valid
+                      </span>
+                    )}
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label> Number : </Form.Label>
+                    <Form.Control
+                      placeholder="Number"
+                      name="number"
+                      className={
+                        numberValid ? "form-control" : "form-control-error"
+                      }
+                      value={number}
+                      onChange={changeNumberHandler}
+                    />
+                    {!numberValid && (
+                      <span style={{ color: "red" }}>
+                        <WarningIcon /> Number is not valid
+                      </span>
+                    )}
+                  </Form.Group>
+                  <Button variant="success" onClick={updateAddress}>
+                    Save
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => cancel(parseInt(idAccount, 10))}
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Cancel
+                  </Button>
+                </Col>
+              </Row>
+            </Container>
+          </Form>
+          {showAddressModal && addressModal()}
+        </Card.Body>
+      </Card>
+    </div>
+  );
+};
 
 export default EditAddressComponent;
