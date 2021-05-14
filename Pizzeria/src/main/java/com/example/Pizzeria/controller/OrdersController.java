@@ -46,5 +46,9 @@ public class OrdersController {
 
     }
     */
-
+    @PostMapping("/user/{id}/orders")
+        private ResponseEntity<Orders> OrderByUser(@PathVariable Integer id, @RequestBody Orders orders) {
+            ordersRepository.save(orders);
+            return new ResponseEntity<>(orders,HttpStatus.OK);
+    }
 }

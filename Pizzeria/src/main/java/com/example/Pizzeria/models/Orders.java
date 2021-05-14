@@ -76,23 +76,20 @@ public class Orders {
     private Sauces sauce;
 
 
-
-    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT DATE_TRUNC('minute',CURRENT_TIMESTAMP::timestamp)")
-    private Timestamp date;
-
-
-
-
-    /*
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "time", nullable = false)
-    private Date timestamp;
+//    @Column(columnDefinition = "TIMESTAMP WITH TIME ZONE DEFAULT DATE_TRUNC('minute',CURRENT_TIMESTAMP::timestamp)")
+    @Column(columnDefinition = "DATE DEFAULT DATE_TRUNC('minute',CURRENT_TIMESTAMP::timestamp)")
+    private Date date;
+
+
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @Column(nullable = false)
+//    private Date timestamp;
 
     @PrePersist
     private void onCreate() {
-        timestamp = new Date();
+        date = new Date();
     }
-    */
 
 
 

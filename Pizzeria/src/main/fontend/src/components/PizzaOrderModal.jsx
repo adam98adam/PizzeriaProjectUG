@@ -3,6 +3,9 @@ import { Button, Card, Col, Form, Modal, Row } from "react-bootstrap";
 import "reactjs-popup/dist/index.css";
 import "./../css/index.css";
 import "./../css/pizza-list-style.css";
+import OrdersService from "./../services/OrdersService";
+import UserService from "./../services/UserService";
+
 const selectStyle = {
   borderRadius: 13,
 };
@@ -23,6 +26,9 @@ const PizzaOrderModal = (props) => {
   const [pizzaCrust, setPizzaCrust] = useState({ price: 0 });
   const [drink, setDrink] = useState({ price: 0 });
   const [sauce, setSauce] = useState({ price: 0 });
+  const [bakestyle, setBakestyle] = useState({});
+  const [cutstyle, setCutstyle] = useState({});
+  const [user, setUser] = useState({});
   const [selected, setSelected] = useState({
     size: false,
     crust: false,
@@ -42,6 +48,11 @@ const PizzaOrderModal = (props) => {
         sauce.price
     );
   }, [pizzaSize, pizzaCrust, drink, sauce]);
+  useEffect(() => {
+    UserService.getUserById(localStorage.getItem("idUser")).then((res) => {
+      setUser(res.data);
+    });
+  }, []);
   /* 
   useEffect(() => {
     console.log(selected);
@@ -83,12 +94,26 @@ const PizzaOrderModal = (props) => {
     }
   };
   const handleBakestyleChange = ({ target }) => {
+    if (target.value === "") {
+      setBakestyle({});
+    } else {
+      setBakestyle(
+        bakestylelist.filter((el) => el.id === parseInt(target.value))[0]
+      );
+    }
     setSelected({
       ...selected,
       bakestyle: target.value !== "",
     });
   };
   const handleCutstyleChange = ({ target }) => {
+    if (target.value === "") {
+      setCutstyle({});
+    } else {
+      setCutstyle(
+        cutstylelist.filter((el) => el.id === parseInt(target.value))[0]
+      );
+    }
     setSelected({
       ...selected,
       cutstyle: target.value !== "",
@@ -110,6 +135,32 @@ const PizzaOrderModal = (props) => {
       cutstyle: false,
     });
     setPrice(0);
+  };
+  const sendOrder = () => {
+    const order = {
+      user: user,
+      pizza: pizza,
+      bakestyle: bakestyle,
+      crust: pizzaCrust,
+      cutstyle: cutstyle,
+      pizzasize: pizzaSize,
+      drink: drink.price === 0 ? null : drink,
+      sauce: sauce.price === 0 ? null : sauce,
+    };
+    // const order = {
+    //   pizza: pizza.id,
+    //   bakestyle: bakestyle.id,
+    //   crust: pizzaCrust.id,
+    //   cutstyle: cutstyle.id,
+    //   drink: drink.price === 0 ? null : drink.id,
+    //   sauce: sauce.price === 0 ? null : sauce.id,
+    //   user_id: localStorage.getItem("idUser"),
+    // };
+    console.log(order);
+
+    OrdersService.postOrdersByUserId(user.id, order).then((res) => {
+      console.log(res.data);
+    });
   };
   const requiredLabel = () => {
     return (
@@ -222,7 +273,7 @@ const PizzaOrderModal = (props) => {
                 <option value="">None</option>
                 {bakestylelist.map((bakestyle) => {
                   return (
-                    <option value={bakestyle.name} key={bakestyle.id}>
+                    <option value={bakestyle.id} key={bakestyle.id}>
                       {bakestyle.name}
                     </option>
                   );
@@ -255,7 +306,7 @@ const PizzaOrderModal = (props) => {
                 <option value="">None</option>
                 {cutstylelist.map((cutstyle) => {
                   return (
-                    <option value={cutstyle.name} key={cutstyle.id}>
+                    <option value={cutstyle.id} key={cutstyle.id}>
                       {cutstyle.name}
                     </option>
                   );
@@ -344,7 +395,10 @@ const PizzaOrderModal = (props) => {
       </Modal.Body>
       <Modal.Footer>
         <Col md={6}>
-          <Button disabled={!Object.values(selected).every((el) => el)}>
+          <Button
+            onClick={sendOrder}
+            disabled={!Object.values(selected).every((el) => el)}
+          >
             Order
           </Button>
         </Col>

@@ -103,28 +103,37 @@ const UserOrdersComponent = (props) => {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
-                  <tr key={order.id}>
-                    <td>
-                      {" "}
-                      {order.pizza.name} ({order.pizzasize.name}){" "}
-                    </td>
-                    <td> {order.bakestyle.name}</td>
-                    <td> {order.crust.crust}</td>
-                    <td> {order.cutstyle.name}</td>
-                    <td> {order.drink.name ? order.drink.name : " - "}</td>
-                    <td> {order.sauce.name ? order.sauce.name : " - "}</td>
-                    <td>
-                      {" "}
-                      {order.pizza.price * order.pizzasize.pizzacostfactor +
-                        order.crust.price +
-                        order.drink.price +
-                        order.sauce.price}
-                      {"$"}
-                    </td>
-                    <td>{formatDate(order.date)}</td>
-                  </tr>
-                ))}
+                {orders.map((order) => {
+                  console.log(order);
+                  return (
+                    <tr key={order.id}>
+                      <td>
+                        {" "}
+                        {order.pizza.name} ({order.pizzasize.name}){" "}
+                      </td>
+                      <td> {order.bakestyle.name}</td>
+                      <td> {order.crust.crust}</td>
+                      <td> {order.cutstyle.name}</td>
+                      <td>
+                        {" "}
+                        {order.drink !== null ? order.drink.name : " - "}
+                      </td>
+                      <td>
+                        {" "}
+                        {order.sauce !== null ? order.sauce.name : " - "}
+                      </td>
+                      <td>
+                        {" "}
+                        {order.pizza.price * order.pizzasize.pizzacostfactor +
+                          order.crust.price +
+                          (order.drink !== null ? order.drink.price : 0) +
+                          (order.sauce !== null ? order.sauce.price : 0)}
+                        {"$"}
+                      </td>
+                      <td>{formatDate(order.date)}</td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
