@@ -26,9 +26,12 @@ const LoginComponent = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const userPanel = (id) => {
+  const userPanel = (id,data) => {
     localStorage.setItem("idUser", id);
-    props.history.push(`/user/${id}`);
+    if(data.user.customer)
+      props.history.push(`/user/${id}`);
+    else
+      props.history.push(`/admin/${id}`);
   };
 
   const handleLogin = (e) => {
@@ -39,7 +42,7 @@ const LoginComponent = (props) => {
       AccountService.getAccount(login, password)
         .then((res) => {
           console.log(res.data);
-          userPanel(res.data.id);
+          userPanel(res.data.id,res.data);
         })
         .catch((er) => {
           setLoginStatus(!loginStatus);
