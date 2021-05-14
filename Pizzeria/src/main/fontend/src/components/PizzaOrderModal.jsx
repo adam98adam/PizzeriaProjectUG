@@ -160,6 +160,14 @@ const PizzaOrderModal = (props) => {
 
     OrdersService.postOrdersByUserId(user.id, order).then((res) => {
       console.log(res.data);
+      props.onHide();
+      setSelected({
+        size: false,
+        crust: false,
+        bakestyle: false,
+        cutstyle: false,
+      });
+      setPrice(0);
     });
   };
   const requiredLabel = () => {
