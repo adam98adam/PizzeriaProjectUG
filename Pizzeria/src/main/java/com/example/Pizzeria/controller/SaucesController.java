@@ -39,6 +39,17 @@ public class SaucesController {
             return new ResponseEntity<>(sauces, HttpStatus.NOT_FOUND);
 
     }
+    @PostMapping("/sauces")
+    public ResponseEntity<Sauces> saveSauce(@RequestBody Sauces sauce) {
+        List<Sauces> sauces =  saucesRepository.findByName(sauce.getName());
+        if(sauces.isEmpty()) {
+            saucesRepository.save(sauce);
+            return new ResponseEntity<>(sauce,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Sauces(),HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PutMapping("/sauces/{id}")
     public ResponseEntity<Sauces> updateSauceById(@PathVariable Integer id, @RequestBody Sauces sauces) {
@@ -59,7 +70,16 @@ public class SaucesController {
         }
     }
 
-
+    @DeleteMapping("/sauces/{id}")
+    public ResponseEntity<String> deleteSauceById(@PathVariable Integer id) {
+        Optional<Sauces> sauce = saucesRepository.findById(id);
+        if(sauce.isPresent()) {
+            saucesRepository.deleteById(id);
+            return new ResponseEntity<>("Sauce with given id = " + id + " was deleted", HttpStatus.OK);
+        }
+        else
+            return new ResponseEntity<>("Sauce with given id = " + id + " was not found",HttpStatus.NOT_FOUND);
+    }
 
 
 }

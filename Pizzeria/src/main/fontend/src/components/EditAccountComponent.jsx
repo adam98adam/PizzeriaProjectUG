@@ -21,10 +21,8 @@ const EditAccountComponent = (props) => {
   const [id, setId] = useState(props.match.params.id);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
-  const [
-    showInvalidAccountUpdateModal,
-    setShowInvalidAccountUpdateModal,
-  ] = useState(false);
+  const [showInvalidAccountUpdateModal, setShowInvalidAccountUpdateModal] =
+    useState(false);
 
   const [loginValid, setLoginValid] = useState(true);
   const [passwordValid, setPasswordValid] = useState(true);
@@ -47,7 +45,8 @@ const EditAccountComponent = (props) => {
   }, [props.match.params.id]);
 
   const cancel = (id) => {
-    props.history.push(`/user/${id}`);
+    const userType = localStorage.getItem("userType");
+    props.history.push(`/${userType}/${id}`);
   };
 
   const invalidAccountUpdateModalClose = () => {

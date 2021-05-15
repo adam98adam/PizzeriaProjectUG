@@ -14,6 +14,15 @@ import EditAccountComponent from "./components/EditAccountComponent";
 import EditUserComponent from "./components/EditUserComponent";
 import EditAddressComponent from "./components/EditAddressComponent";
 import UserOrdersComponent from "./components/UserOrdersComponent";
+import AdminPanelComponent from "./components/AdminPanelComponent";
+import AdminOrdersComponent from "./components/AdminOrdersComponent";
+import AdminPizzaListComponent from "./components/AdminPizzaListComponent";
+import AdminCrustListComponent from "./components/AdminCrustListComponent";
+import AdminBakestyleListComponent from "./components/AdminBakestyleListComponent";
+import AdminDrinksListComponent from "./components/AdminDrinksListComponent";
+import AdminPizzasizeListComponent from "./components/AdminPizzasizeListComponent";
+import AdminCutstyleListComponent from "./components/AdminCutstyleListComponent";
+import AdminSaucesListComponent from "./components/AdminSaucesListComponent";
 
 function App() {
   return (
@@ -28,6 +37,39 @@ function App() {
               component={RegisterUserAddressComponent}
             ></Route>
             <Route path="/user/:id" component={UserPanelComponent}></Route>
+            <Route path="/admin/:id" component={AdminPanelComponent}></Route>
+            <Route
+              path="/admin-orders"
+              component={AdminOrdersComponent}
+            ></Route>
+            <Route
+              path="/admin-pizza"
+              component={AdminPizzaListComponent}
+            ></Route>
+            <Route
+              path="/admin-crust"
+              component={AdminCrustListComponent}
+            ></Route>
+            <Route
+              path="/admin-bakestyle"
+              component={AdminBakestyleListComponent}
+            ></Route>
+            <Route
+              path="/admin-drinks"
+              component={AdminDrinksListComponent}
+            ></Route>
+            <Route
+              path="/admin-pizzasize"
+              component={AdminPizzasizeListComponent}
+            ></Route>
+            <Route
+              path="/admin-cutstyle"
+              component={AdminCutstyleListComponent}
+            ></Route>
+            <Route
+              path="/admin-sauces"
+              component={AdminSaucesListComponent}
+            ></Route>
             <Route
               path="/account-edit/:id"
               component={EditAccountComponent}

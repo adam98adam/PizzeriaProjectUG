@@ -10,13 +10,12 @@ import {
   Row,
 } from "react-bootstrap";
 import UserService from "../services/UserService";
-import PizzaLogo from "./../images/pizza-logo.png";
 import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
 const EditUserComponent = (props) => {
-  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
-  const [idUser, setIdUser] = useState(props.match.params.idUser);
+  const idAccount = localStorage.getItem("idAccount");
+  const idUser = localStorage.getItem("idUser");
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
@@ -30,16 +29,14 @@ const EditUserComponent = (props) => {
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   useEffect(() => {
-    UserService.getUserById(parseInt(props.match.params.idUser, 10)).then(
-      (res) => {
-        let user = res.data;
-        setName(user.name);
-        setSurname(user.surname);
-        setEmail(user.email);
-        setPhoneNumber(user.phonenumber);
-      }
-    );
-  }, [props.match.params.id]);
+    UserService.getUserById(parseInt(idUser, 10)).then((res) => {
+      let user = res.data;
+      setName(user.name);
+      setSurname(user.surname);
+      setEmail(user.email);
+      setPhoneNumber(user.phonenumber);
+    });
+  }, []);
 
   const invalidUserModalClose = () => {
     setShowInvalidUserModal(false);
@@ -68,7 +65,8 @@ const EditUserComponent = (props) => {
   };
 
   const cancel = (id) => {
-    props.history.push(`/user/${id}`);
+    const userType = localStorage.getItem("userType");
+    props.history.push(`/${userType}/${id}`);
   };
   const validateName = (name) => {
     const re = /^[A-Z][a-z]+$/;

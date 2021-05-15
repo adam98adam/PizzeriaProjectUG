@@ -1,24 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
   CardDeck,
   Col,
   Container,
-  Form,
-  Modal,
   Row,
   Image,
 } from "react-bootstrap";
-import PizzaLogo from "./../images/pizza-background.png";
+import PizzaBackground from "./../images/pizza-background.png";
 import "./../css/pizza-list-style.css";
 import PizzaOrderModal from "./PizzaOrderModal";
+import OrdersService from "../services/OrdersService";
 
 const PizzaListComponent = (props) => {
   const [showPizzaOrder, setShowPizzaOrder] = useState(false);
-  const [showPizzaDescription, setShowPizzaDescription] = useState(false);
   const [selectedPizza, setSelectedPizza] = useState({});
-  const [selectedPizzaId, setSelectedPizzaId] = useState("");
   const { pizzalist } = props;
   const {
     crustlist,
@@ -28,20 +25,13 @@ const PizzaListComponent = (props) => {
     cutstylelist,
     saucelist,
   } = props;
-  const pizzaDescriptionModal = () => {
-    return (
-      <Modal
-        show={showPizzaDescription}
-        centered
-        onHide={() => setShowPizzaDescription(false)}
-      >
-        <Card>
-          <Card.Header>{selectedPizza.name}</Card.Header>
-          <Card.Body>{selectedPizza.description}</Card.Body>
-        </Card>
-      </Modal>
+  useEffect(() => {
+    OrdersService.getOrdersByUserId(localStorage.getItem("idUser")).then(
+      (res) => {
+        localStorage.setItem("userOrders", JSON.stringify(res.data));
+      }
     );
-  };
+  }, []);
 
   return (
     <Container fluid className="main-card">
@@ -63,7 +53,7 @@ const PizzaListComponent = (props) => {
                 }}
               >
                 <Card.Img
-                  src={PizzaLogo}
+                  src={PizzaBackground}
                   style={{
                     width: "100%",
                     height: "10rem",

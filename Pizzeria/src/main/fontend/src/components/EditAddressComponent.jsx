@@ -13,7 +13,7 @@ import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
 const EditAddressComponent = (props) => {
-  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
+  const idAccount = localStorage.getItem("idAccount");
   const [idAddress, setIdAddress] = useState(props.match.params.idAddress);
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
@@ -88,7 +88,8 @@ const EditAddressComponent = (props) => {
   };
 
   const cancel = (id) => {
-    props.history.push(`/user/${id}`);
+    const userType = localStorage.getItem("userType");
+    props.history.push(`/${userType}/${id}`);
   };
 
   const handleAddressModalClose = () => {

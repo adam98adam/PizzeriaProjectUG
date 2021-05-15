@@ -28,15 +28,15 @@ const formatDate = (datetime) => {
   } ${formattedDate.getDate()}-${formattedDate.getMonth()}-${formattedDate.getFullYear()}`;
 };
 
-const UserOrdersComponent = (props) => {
-  const idAccount = localStorage.getItem("idAccount");
-  const idUser = props.match.params.idUser;
+const AdminOrdersComponent = (props) => {
+  const idAccount = localStorage.getItem("idUser");
+  const [idUser, setIdUser] = useState(props.match.params.idUser);
   const [orders, setOrders] = useState([]);
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
-    OrdersService.getOrdersByUserId(idUser).then((res) => {
+    OrdersService.getAllOrders().then((res) => {
       setOrders(res.data);
     });
   }, []);
@@ -45,8 +45,8 @@ const UserOrdersComponent = (props) => {
     props.history.push("/");
   };
 
-  const getBackToUserPanel = (id) => {
-    props.history.push(`/user/${id}`);
+  const getBackToAdminPanel = (id) => {
+    props.history.push(`/admin/${id}`);
   };
 
   const handleLogoutClose = () => {
@@ -88,11 +88,33 @@ const UserOrdersComponent = (props) => {
       </header>
       <Card className="main-card order-card">
         <Card.Body>
-          <Card.Title className="text-center">My Orders</Card.Title>
+          <Card.Title className="text-center">Users' Orders</Card.Title>
           <div className="row">
-            <Table striped bordered hover responsive>
-              <thead>
-                <tr>
+            <Table
+              striped
+              bordered
+              hover
+              responsive
+              style={{
+                backgroundColor: "rgba(0,188,44,0.63)",
+                borderRadius: 30,
+              }}
+            >
+              <thead
+                style={{
+                  backgroundColor: "rgba(255,255,255,0.3)",
+                  borderRadius: 13,
+                }}
+              >
+                <tr
+                  style={{
+                    backgroundColor: "rgba(255,255,255,0.3)",
+                    borderRadius: 13,
+                  }}
+                >
+                  <th>User</th>
+                  <th>Email</th>
+                  <th>Phone number</th>
                   <th>Pizza</th>
                   <th>Bakestyle</th>
                   <th>Crust</th>
@@ -108,6 +130,9 @@ const UserOrdersComponent = (props) => {
                   console.log(order);
                   return (
                     <tr key={order.id}>
+                      <td>{`${order.user.name} ${order.user.surname}`}</td>
+                      <td>{order.user.email}</td>
+                      <td>{order.user.phonenumber}</td>
                       <td>
                         {" "}
                         {order.pizza.name} ({order.pizzasize.name}){" "}
@@ -140,10 +165,10 @@ const UserOrdersComponent = (props) => {
           </div>
           <div display="flex" justify-content="center">
             <button
-              onClick={() => getBackToUserPanel(parseInt(idAccount, 10))}
+              onClick={() => getBackToAdminPanel(parseInt(idAccount, 10))}
               className="btn btn-info"
             >
-              Back to user panel
+              Back to admin panel
             </button>
           </div>
         </Card.Body>
@@ -151,5 +176,4 @@ const UserOrdersComponent = (props) => {
     </div>
   );
 };
-
-export default UserOrdersComponent;
+export default AdminOrdersComponent;

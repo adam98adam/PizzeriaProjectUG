@@ -1,5 +1,4 @@
 import React from "react";
-import LoginService from "../services/LoginService";
 import Button from "react-bootstrap/Button";
 import "reactjs-popup/dist/index.css";
 import "../css/index.css";
@@ -15,10 +14,8 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AccountService from "../services/AccountService";
-import HeaderComponent from "./HeaderComponent";
 
 const inputStyle = {};
-
 
 const LoginComponent = (props) => {
   const [loginStatus, setLoginStatus] = useState(true);
@@ -26,12 +23,16 @@ const LoginComponent = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const userPanel = (id,data) => {
-    localStorage.setItem("idUser", id);
-    if(data.user.customer)
+  const userPanel = (id, data) => {
+    localStorage.setItem("idAccount", id);
+    localStorage.setItem("idUser", data.user.id);
+    if (data.user.customer) {
+      localStorage.setItem("userType", "user");
       props.history.push(`/user/${id}`);
-    else
+    } else {
+      localStorage.setItem("userType", "admin");
       props.history.push(`/admin/${id}`);
+    }
   };
 
   const handleLogin = (e) => {
@@ -42,7 +43,7 @@ const LoginComponent = (props) => {
       AccountService.getAccount(login, password)
         .then((res) => {
           console.log(res.data);
-          userPanel(res.data.id,res.data);
+          userPanel(res.data.id, res.data);
         })
         .catch((er) => {
           setLoginStatus(!loginStatus);

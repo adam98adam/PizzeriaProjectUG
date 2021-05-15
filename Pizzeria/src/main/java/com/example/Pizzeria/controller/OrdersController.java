@@ -20,6 +20,14 @@ public class OrdersController {
     @Autowired
     private OrdersRepository ordersRepository;
 
+    @GetMapping("/user/orders")
+    public ResponseEntity<List<Orders>> getAllOrders() {
+        List<Orders> orders = ordersRepository.findAll();
+        if(orders.isEmpty())
+            return new ResponseEntity<>(orders, HttpStatus.NOT_FOUND);
+        else
+            return new ResponseEntity<>(orders,HttpStatus.OK);
+    }
 
     @GetMapping("/user/{id}/orders")
     private ResponseEntity<Optional<List<Orders>>> getOrdersByUserId(@PathVariable Integer id) {
@@ -29,10 +37,8 @@ public class OrdersController {
             return new ResponseEntity<>(orders, HttpStatus.OK);
         else
             return new ResponseEntity<>(orders, HttpStatus.BAD_REQUEST);
-
-
-
     }
+
 
     /*
     @GetMapping("/user/{id}/orders")

@@ -39,6 +39,17 @@ public class PizzaController {
             return new ResponseEntity<>(pizza,HttpStatus.NOT_FOUND);
 
     }
+    @PostMapping("/pizza")
+    public ResponseEntity<Pizza> savePizza(@RequestBody Pizza pizza) {
+        List<Pizza> pizzas = pizzaRepository.findByNameOrDescriptionOrImage(pizza.getName(),pizza.getDescription(),pizza.getImage());
+        if(pizzas.isEmpty()) {
+            pizzaRepository.save(pizza);
+            return new ResponseEntity<>(pizza,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Pizza(),HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PutMapping("/pizza/{id}")
     public ResponseEntity<Pizza> updatePizzaById(@PathVariable Integer id, @RequestBody Pizza pizza) {

@@ -39,6 +39,17 @@ public class DrinksController {
             return new ResponseEntity<>(drinks,HttpStatus.NOT_FOUND);
 
     }
+    @PostMapping("/drinks")
+    public ResponseEntity<Drinks> saveDrink(@RequestBody Drinks drink) {
+        List<Drinks> drinks = drinksRepository.findByName(drink.getName());
+        if(drinks.isEmpty()) {
+            drinksRepository.save(drink);
+            return new ResponseEntity<>(drink,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Drinks(),HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PutMapping("/drinks/{id}")
     public ResponseEntity<Drinks> updateDrinkById(@PathVariable Integer id, @RequestBody Drinks drinks) {
@@ -46,10 +57,12 @@ public class DrinksController {
         if (dri.isEmpty()) {
             Optional<Drinks> ac = drinksRepository.findById(id);
             ac.ifPresent(value -> value.setName(drinks.getName()));
+            ac.ifPresent(value -> value.setPrice(drinks.getPrice()));
             Drinks updatedDrinks = drinksRepository.save(ac.get());
             return new ResponseEntity<>(updatedDrinks, HttpStatus.OK);
         } else if (dri.get(0).getId().equals(id)) {
             dri.get(0).setName(drinks.getName());
+            dri.get(0).setPrice(drinks.getPrice());
             Drinks updatedDrinks = drinksRepository.save(dri.get(0));
             return new ResponseEntity<>(updatedDrinks, HttpStatus.OK);
         } else {

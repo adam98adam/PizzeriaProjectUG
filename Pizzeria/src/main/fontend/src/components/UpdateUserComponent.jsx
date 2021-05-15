@@ -13,7 +13,7 @@ import WarningIcon from "./icons/WarningIcon";
 
 const UpdateUserComponent = (props) => {
   const id = props.match.params.id;
-  const [idAccount, setIdAccount] = useState(props.match.params.idAccount);
+  const idAccount = localStorage.getItem("idAccount");
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");

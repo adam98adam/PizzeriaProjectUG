@@ -34,9 +34,18 @@ public class CrustController {
             return new ResponseEntity<>(crust, HttpStatus.OK);
         else
             return new ResponseEntity<>(crust, HttpStatus.NOT_FOUND);
-
     }
-
+    @PostMapping("/crusts")
+    public ResponseEntity<Crust> saveCrust(@RequestBody Crust crust) {
+        List<Crust> crusts = crustRepository.findByCrustOrPrice(crust.getCrust(), crust.getPrice());
+        if(crusts.isEmpty()) {
+            crustRepository.save(crust);
+            return new ResponseEntity<>(crust,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Crust(),HttpStatus.NOT_FOUND);
+        }
+    }
     @PutMapping("/crusts/{id}")
     public ResponseEntity<Crust> updateCrustById(@PathVariable Integer id, @RequestBody Crust crust) {
         List<Crust> u = crustRepository.findByCrustOrPrice(crust.getCrust(), crust.getPrice());

@@ -40,7 +40,17 @@ public class CutstyleController {
             return new ResponseEntity<>(cutstyle,HttpStatus.NOT_FOUND);
 
     }
-
+    @PostMapping("/cutstyle")
+    public ResponseEntity<Cutstyle> saveCutstyle(@RequestBody Cutstyle cutstyle) {
+        List<Cutstyle> cutstyles  = cutstyleRepository.findByName(cutstyle.getName());
+        if(cutstyles.isEmpty()) {
+            cutstyleRepository.save(cutstyle);
+            return new ResponseEntity<>(cutstyle,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Cutstyle(),HttpStatus.NOT_FOUND);
+        }
+    }
     @PutMapping("/cutstyle/{id}")
     public ResponseEntity<Cutstyle> updateCutstyleById(@PathVariable Integer id, @RequestBody Cutstyle cutstyle) {
         List<Cutstyle> cut = cutstyleRepository.findByName(cutstyle.getName());

@@ -39,7 +39,17 @@ public class PizzasizeController {
             return new ResponseEntity<>(pizzasize, HttpStatus.NOT_FOUND);
 
     }
-
+    @PostMapping("/pizzasize")
+    public ResponseEntity<Pizzasize> savePizzasize(@RequestBody Pizzasize pizzasize) {
+        List<Pizzasize> pizzasizes =  pizzasizeRepository.findByNameOrDiameterOrPizzacostfactor(pizzasize.getName(),pizzasize.getDiameter(),pizzasize.getPizzacostfactor());
+        if(pizzasizes.isEmpty()) {
+            pizzasizeRepository.save(pizzasize);
+            return new ResponseEntity<>(pizzasize,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Pizzasize(),HttpStatus.NOT_FOUND);
+        }
+    }
     @PutMapping("/pizzasize/{id}")
     public ResponseEntity<Pizzasize> updatePizzasizeById(@PathVariable Integer id, @RequestBody Pizzasize pizzasize) {
         List<Pizzasize> u = pizzasizeRepository.findByNameOrDiameterOrPizzacostfactor(pizzasize.getName(), pizzasize.getDiameter(),pizzasize.getPizzacostfactor());

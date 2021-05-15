@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Card, Col, Form, Modal, Row } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "reactjs-popup/dist/index.css";
 import "./../css/index.css";
 import "./../css/pizza-list-style.css";
@@ -21,7 +21,7 @@ const PizzaOrderModal = (props) => {
     saucelist,
   } = props;
 
-  const [price, setPrice] = useState(null);
+  const [price, setPrice] = useState(pizza.price);
   const [pizzaSize, setPizzaSize] = useState({ pizzacostfactor: 1 });
   const [pizzaCrust, setPizzaCrust] = useState({ price: 0 });
   const [drink, setDrink] = useState({ price: 0 });
@@ -42,12 +42,12 @@ const PizzaOrderModal = (props) => {
 
   useEffect(() => {
     setPrice(
-      pizza.price * pizzaSize.pizzacostfactor +
+      price * pizzaSize.pizzacostfactor +
         pizzaCrust.price +
         drink.price +
         sauce.price
     );
-  }, [pizzaSize, pizzaCrust, drink, sauce]);
+  }, [pizzaSize, pizzaCrust, drink, sauce, price]);
   useEffect(() => {
     UserService.getUserById(localStorage.getItem("idUser")).then((res) => {
       setUser(res.data);
@@ -134,7 +134,7 @@ const PizzaOrderModal = (props) => {
       bakestyle: false,
       cutstyle: false,
     });
-    setPrice(0);
+    setPrice("");
   };
   const sendOrder = () => {
     const order = {
@@ -167,7 +167,8 @@ const PizzaOrderModal = (props) => {
         bakestyle: false,
         cutstyle: false,
       });
-      setPrice(0);
+      localStorage.setItem("userOrders", JSON.stringify(res.data));
+      setPrice("");
     });
   };
   const requiredLabel = () => {
@@ -240,10 +241,9 @@ const PizzaOrderModal = (props) => {
                 required
                 size="sm"
                 as="select"
-                style={selectStyle}
                 onChange={handlePizzaCrustChange}
                 className="my-1 mr-sm-2"
-                style={{ borderRadius: 15 }}
+                style={{ ...selectStyle, borderRadius: 15 }}
               >
                 <option value="">None</option>
                 {crustlist.map((crust) => {
@@ -273,10 +273,9 @@ const PizzaOrderModal = (props) => {
                 required
                 size="sm"
                 as="select"
-                style={selectStyle}
                 className="my-1 mr-sm-2"
                 onChange={handleBakestyleChange}
-                style={{ borderRadius: 15 }}
+                style={{ ...selectStyle, borderRadius: 15 }}
               >
                 <option value="">None</option>
                 {bakestylelist.map((bakestyle) => {
@@ -306,10 +305,9 @@ const PizzaOrderModal = (props) => {
                 required
                 size="sm"
                 as="select"
-                style={selectStyle}
                 className="my-1 mr-sm-2"
                 onChange={handleCutstyleChange}
-                style={{ borderRadius: 15 }}
+                style={{ ...selectStyle, borderRadius: 15 }}
               >
                 <option value="">None</option>
                 {cutstylelist.map((cutstyle) => {
@@ -340,7 +338,7 @@ const PizzaOrderModal = (props) => {
                 as="select"
                 className="my-1 mr-sm-2"
                 onChange={handleSauceChange}
-                style={{ borderRadius: 15 }}
+                style={{ ...selectStyle, borderRadius: 15 }}
               >
                 <option value="">None</option>
                 {saucelist.map((sauce) => {
@@ -371,7 +369,7 @@ const PizzaOrderModal = (props) => {
                 as="select"
                 onChange={handleDrinkChange}
                 className="my-1 mr-sm-2"
-                style={{ borderRadius: 15 }}
+                style={{ ...selectStyle, borderRadius: 15 }}
               >
                 <option value="">None</option>
                 {drinkslist.map((drink) => {

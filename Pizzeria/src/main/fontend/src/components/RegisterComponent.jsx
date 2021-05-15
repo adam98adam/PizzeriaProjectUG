@@ -182,7 +182,7 @@ const RegisterComponent = (props) => {
   };
 
   const validatePassword = (password) => {
-    const re = /^\w+(\w+[\.\@\?]\w+)*$/;
+    const re = /^\w+(\w+[.@?]\w+)*$/;
     return re.test(password);
   };
 
@@ -244,7 +244,7 @@ const RegisterComponent = (props) => {
     return (
       <>
         <a
-          ref={loginButtonTarget}
+          href={loginButtonTarget}
           onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -282,7 +282,7 @@ const RegisterComponent = (props) => {
     return (
       <>
         <a
-          ref={passwordButtonTarget}
+          href={passwordButtonTarget}
           onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
           style={{ color: "blue" }}
         >

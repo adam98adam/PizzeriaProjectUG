@@ -37,6 +37,17 @@ public class BakestyleController {
             return new ResponseEntity<>(bakestyle, HttpStatus.NOT_FOUND);
 
     }
+    @PostMapping("/bakestyle")
+    public ResponseEntity<Bakestyle> saveBakestyle(@RequestBody Bakestyle bakestyle) {
+        List<Bakestyle> bakestyles = bakestyleRepository.findByName(bakestyle.getName());
+        if(bakestyles.isEmpty()) {
+            bakestyleRepository.save(bakestyle);
+            return new ResponseEntity<>(bakestyle,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Bakestyle(),HttpStatus.NOT_FOUND);
+        }
+    }
 
     @PutMapping("/bakestyle/{id}")
     public ResponseEntity<Bakestyle> updateBakestyleById(@PathVariable Integer id, @RequestBody Bakestyle bakestyle) {
