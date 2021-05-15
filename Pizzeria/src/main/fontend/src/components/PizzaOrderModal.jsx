@@ -21,7 +21,7 @@ const PizzaOrderModal = (props) => {
     saucelist,
   } = props;
 
-  const [price, setPrice] = useState(pizza.price);
+  const [price, setPrice] = useState(null);
   const [pizzaSize, setPizzaSize] = useState({ pizzacostfactor: 1 });
   const [pizzaCrust, setPizzaCrust] = useState({ price: 0 });
   const [drink, setDrink] = useState({ price: 0 });
@@ -42,12 +42,12 @@ const PizzaOrderModal = (props) => {
 
   useEffect(() => {
     setPrice(
-      price * pizzaSize.pizzacostfactor +
+      pizza.price * pizzaSize.pizzacostfactor +
         pizzaCrust.price +
         drink.price +
         sauce.price
     );
-  }, [pizzaSize, pizzaCrust, drink, sauce, price]);
+  }, [pizzaSize, pizzaCrust, drink, sauce]);
   useEffect(() => {
     UserService.getUserById(localStorage.getItem("idUser")).then((res) => {
       setUser(res.data);
@@ -134,7 +134,7 @@ const PizzaOrderModal = (props) => {
       bakestyle: false,
       cutstyle: false,
     });
-    setPrice("");
+    setPrice(0);
   };
   const sendOrder = () => {
     const order = {
@@ -168,7 +168,7 @@ const PizzaOrderModal = (props) => {
         cutstyle: false,
       });
       localStorage.setItem("userOrders", JSON.stringify(res.data));
-      setPrice("");
+      setPrice(0);
     });
   };
   const requiredLabel = () => {
