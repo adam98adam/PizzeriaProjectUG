@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CutstyleRepository extends JpaRepository<Cutstyle,Integer> {
+
     List<Cutstyle> findByName(String name);
+
 }

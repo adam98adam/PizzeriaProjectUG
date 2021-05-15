@@ -52,18 +52,14 @@ public class CrustController {
         if (u.isEmpty()) {
             Optional<Crust> us = crustRepository.findById(id);
             us.ifPresent(value -> value.setCrust(crust.getCrust()));
-            System.out.println("Crust : " + crust.getCrust());
             us.ifPresent(value -> value.setPrice(crust.getPrice()));
-            System.out.println("Price : " + crust.getPrice());
             Crust updatedCrust = crustRepository.save(us.get());
             return new ResponseEntity<>(updatedCrust, HttpStatus.OK);
 
         } else if (u.size() == 1) {
             if (u.get(0).getId().equals(id)) {
                 u.get(0).setCrust(crust.getCrust());
-                System.out.println("Crust : " + crust.getCrust());
                 u.get(0).setPrice(crust.getPrice());
-                System.out.println("Price : " + crust.getPrice());
                 Crust updatedCrust = crustRepository.save(u.get(0));
                 return new ResponseEntity<>(updatedCrust, HttpStatus.OK);
             } else {

@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 
@@ -23,11 +23,10 @@ public class Cutstyle {
     private Integer id;
 
     @NotBlank
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String name;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="cutstyle",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonBackReference(value = "user-account")
-    //@JsonBackReference(value = "bakestyle-orders")
-    //@JsonManagedReference(value = "bakestyle-orders")
     private List<Orders> orders;
 }

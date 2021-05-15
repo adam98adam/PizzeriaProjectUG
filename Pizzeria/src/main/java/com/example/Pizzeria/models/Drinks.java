@@ -1,15 +1,15 @@
 package com.example.Pizzeria.models;
 
-
 import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Setter
@@ -23,14 +23,16 @@ public class Drinks {
     private Integer id;
 
     @NotBlank
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String name;
 
     @NotBlank
-    private float price;
+    @Column(nullable = false)
+    @DecimalMin(value = "1.00")
+    @DecimalMax(value = "6.00")
+    private Double price;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="drink",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonBackReference(value = "user-account")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
     private List<Orders> orders;
 }

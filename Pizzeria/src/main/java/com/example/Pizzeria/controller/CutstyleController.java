@@ -1,16 +1,11 @@
 package com.example.Pizzeria.controller;
 
-
-import com.example.Pizzeria.models.Bakestyle;
-import com.example.Pizzeria.models.Crust;
 import com.example.Pizzeria.models.Cutstyle;
-import com.example.Pizzeria.models.Pizzasize;
 import com.example.Pizzeria.repository.CutstyleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,17 +35,7 @@ public class CutstyleController {
             return new ResponseEntity<>(cutstyle,HttpStatus.NOT_FOUND);
 
     }
-    @PostMapping("/cutstyle")
-    public ResponseEntity<Cutstyle> saveCutstyle(@RequestBody Cutstyle cutstyle) {
-        List<Cutstyle> cutstyles  = cutstyleRepository.findByName(cutstyle.getName());
-        if(cutstyles.isEmpty()) {
-            cutstyleRepository.save(cutstyle);
-            return new ResponseEntity<>(cutstyle,HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(new Cutstyle(),HttpStatus.NOT_FOUND);
-        }
-    }
+
     @PutMapping("/cutstyle/{id}")
     public ResponseEntity<Cutstyle> updateCutstyleById(@PathVariable Integer id, @RequestBody Cutstyle cutstyle) {
         List<Cutstyle> cut = cutstyleRepository.findByName(cutstyle.getName());
@@ -65,6 +50,18 @@ public class CutstyleController {
             return new ResponseEntity<>(updatedCutstyle, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(new Cutstyle(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @PostMapping("/cutstyle")
+    public ResponseEntity<Cutstyle> saveCutstyle(@RequestBody Cutstyle cutstyle) {
+        List<Cutstyle> cutstyles  = cutstyleRepository.findByName(cutstyle.getName());
+        if(cutstyles.isEmpty()) {
+            cutstyleRepository.save(cutstyle);
+            return new ResponseEntity<>(cutstyle,HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(new Cutstyle(),HttpStatus.NOT_FOUND);
         }
     }
 

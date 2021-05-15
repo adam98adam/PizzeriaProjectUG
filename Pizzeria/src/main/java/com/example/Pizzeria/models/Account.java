@@ -1,17 +1,16 @@
 package com.example.Pizzeria.models;
 
-import com.fasterxml.jackson.annotation.*;
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Pattern;
 
 
 @Entity
+@Getter
+@Setter
 @ToString
 @Table(name = "Accounts")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Account {
 
     @Id
@@ -19,17 +18,18 @@ public class Account {
     private Integer id;
 
     @NotBlank
-    @Column(unique=true)
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9]{3,}")
     private String login;
 
     @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = "\\w+(\\w+[.@?]\\w+)*")
     private String password;
 
 
     @OneToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    //@JsonBackReference
-    //@JsonManagedReference(value = "user-account")
+    @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
     private User user;
 
 
@@ -41,35 +41,5 @@ public class Account {
         this.user = user;
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
 }

@@ -4,12 +4,10 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
-import java.util.Set;
-
 
 @Entity
 @Setter
@@ -24,11 +22,10 @@ public class Bakestyle {
     private Integer id;
 
     @NotBlank
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String name;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="bakestyle",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonBackReference(value = "user-account")
-    //@JsonBackReference(value = "bakestyle-orders")
-    //@JsonManagedReference(value = "bakestyle-orders")
     private List<Orders> orders;
 }

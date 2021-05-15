@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface PizzasizeRepository extends JpaRepository<Pizzasize,Integer> {
-    List<Pizzasize> findByNameOrDiameterOrPizzacostfactor(String name,Integer diameter, float pizzacostfactor);
+
+    List<Pizzasize> findByNameOrDiameterOrPizzacostfactor(String name,Integer diameter, Double pizzacostfactor);
+
 }

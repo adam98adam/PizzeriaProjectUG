@@ -7,7 +7,10 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 
 @Entity
@@ -23,14 +26,16 @@ public class Crust {
     private Integer id;
 
     @NotBlank
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String crust;
 
     @NotBlank
-    private float price;
+    @Column(unique = true,nullable = false)
+    @DecimalMin(value = "1.00")
+    @DecimalMax(value = "6.00")
+    private Double price;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="crust",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonBackReference(value = "user-account")
-    //@JsonBackReference(value = "bakestyle-orders")
-    //@JsonManagedReference(value = "bakestyle-orders")
     private List<Orders> orders;
 }

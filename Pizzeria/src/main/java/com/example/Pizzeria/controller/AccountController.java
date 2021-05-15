@@ -1,15 +1,11 @@
 package com.example.Pizzeria.controller;
 
 import com.example.Pizzeria.models.Account;
-import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +14,14 @@ import java.util.Optional;
 @RequestMapping("/api/")
 public class AccountController {
 
-
-
     @Autowired
     private AccountRepository accountRepository;
 
+    @GetMapping("/accounts/{id}")
+    public  ResponseEntity<Optional<Account>> getAccount(@PathVariable Integer id) {
+        Optional<Account> acc = accountRepository.findById(id);
+        return new ResponseEntity<>(acc,HttpStatus.OK);
+    }
 
     @GetMapping("/accounts/{login}/{password}")
     public ResponseEntity<Account> getAccount(@PathVariable String login,@PathVariable String password) {
@@ -38,7 +37,6 @@ public class AccountController {
     @PostMapping("/accounts")
     public ResponseEntity<Account> getAccountByLogin(@RequestBody Account newAccount) {
             List<Account> accounts = accountRepository.findByLogin(newAccount.getLogin());
-            //System.out.println(newAccount.getUser());
             if(accounts.isEmpty()) {
                 accountRepository.save(newAccount);
                 accounts = accountRepository.findByLogin(newAccount.getLogin());
@@ -48,16 +46,7 @@ public class AccountController {
             }
     }
 
-    @GetMapping("/accounts")
-    public List<Account> getAllAccounts() {
-        return accountRepository.findAll();
-    }
 
-    @GetMapping("/accounts/{id}")
-    public  ResponseEntity<Optional<Account>> getAccount(@PathVariable Integer id) {
-        Optional<Account> acc = accountRepository.findById(id);
-        return new ResponseEntity<>(acc,HttpStatus.OK);
-    }
 
     @PutMapping("/accounts/{id}")
     public ResponseEntity<Account> updateAccountById(@PathVariable Integer id,@RequestBody Account account) {
@@ -82,11 +71,6 @@ public class AccountController {
 
 
 
-
-
-
     }
-
-
 
 }

@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Set;
 
@@ -14,7 +15,6 @@ import java.util.Set;
 @Getter
 @ToString
 @Table(name = "Users")
-//@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 @JsonIgnoreProperties(value = { "orders","account","address" })
 public class User {
 
@@ -23,39 +23,38 @@ public class User {
     private Integer id;
 
     @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{2,}")
     private String name;
 
     @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String surname;
 
     @NotBlank
-    @Column(unique=true)
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "([a-z0-9]+\\.?)+[a-z0-9]+@[a-z]{2,}\\.[a-z]{2,}")
     private String email;
 
     @NotBlank
-    @Column(unique=true)
+    @Column(unique=true,nullable = false)
+    @Pattern(regexp = "(\\+[0-9]{2,3})?[0-9]{9}")
     private String phonenumber;
 
-
-    @Column(columnDefinition = "boolean default true")
+    @NotBlank
+    @Column(columnDefinition = "boolean default true not null")
     private Boolean customer;
 
 
     @OneToOne(targetEntity = Account.class,mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonManagedReference
-    //@JsonBackReference(value = "user-account")
     private Account account;
 
     @OneToOne(targetEntity = Address.class,mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonManagedReference
-    //@JsonBackReference(value = "user-address")
     private Address address;
 
 
     @OneToMany(targetEntity = Orders.class,mappedBy="user",cascade = CascadeType.ALL, orphanRemoval = true)
-    //@JsonBackReference(value = "user-account")
-    //@JsonBackReference(value = "user-orders")
-    //@JsonManagedReference(value = "user-orders")
     private List<Orders> orders;
 
 

@@ -1,22 +1,18 @@
 package com.example.Pizzeria.models;
-
-
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
 @Entity
 @Setter
 @Getter
 @ToString
-@Table(name = "UserAddress")
+@Table(name = "Address")
 public class Address {
 
     @Id
@@ -24,18 +20,22 @@ public class Address {
     private Integer id;
 
     @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String city;
 
     @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String street;
 
     @NotBlank
+    @Min(1)
+    @Max(100)
     private Integer number;
 
     @OneToOne(targetEntity = User.class)
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    //@JsonBackReference
-    //@JsonManagedReference(value = "user-address")
+    @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
     private User user;
 
     public Address(){};

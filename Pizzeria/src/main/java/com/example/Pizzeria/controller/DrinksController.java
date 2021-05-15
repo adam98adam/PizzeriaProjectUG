@@ -1,15 +1,11 @@
 package com.example.Pizzeria.controller;
 
-import com.example.Pizzeria.models.Bakestyle;
 import com.example.Pizzeria.models.Drinks;
-import com.example.Pizzeria.models.Pizza;
-import com.example.Pizzeria.models.Pizzasize;
 import com.example.Pizzeria.repository.DrinksRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 

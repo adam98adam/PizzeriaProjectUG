@@ -27,52 +27,35 @@ public class Orders {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "id")
-    //@JsonManagedReference(value = "user-orders")
-    //@JsonBackReference(value = "user-orders")
-    //@JsonManagedReference(value = "user-orders")
+    @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "pizza_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "pizza-orders")
-    //@JsonManagedReference(value = "pizza-orders")
+    @JoinColumn(name = "pizza_id", referencedColumnName = "id",nullable = false)
     private Pizza pizza;
 
     @ManyToOne
-    @JoinColumn(name = "bakestyle_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "bakestyle-orders")
-    //@JsonManagedReference(value = "bakestyle-orders")
+    @JoinColumn(name = "bakestyle_id", referencedColumnName = "id",nullable = false)
     private Bakestyle bakestyle;
 
     @ManyToOne
-    @JoinColumn(name = "crust_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
+    @JoinColumn(name = "crust_id", referencedColumnName = "id",nullable = false)
     private Crust crust;
 
     @ManyToOne
-    @JoinColumn(name = "pizzasize_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
+    @JoinColumn(name = "pizzasize_id", referencedColumnName = "id",nullable = false)
     private Pizzasize pizzasize;
 
     @ManyToOne
-    @JoinColumn(name = "cutstyle_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
+    @JoinColumn(name = "cutstyle_id", referencedColumnName = "id",nullable = false)
     private Cutstyle cutstyle;
 
     @ManyToOne
     @JoinColumn(name = "drink_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
     private Drinks drink;
 
     @ManyToOne
     @JoinColumn(name = "sauce_id", referencedColumnName = "id")
-    //@JsonBackReference(value = "drinks-orders")
-    //@JsonManagedReference(value = "drinks-orders")
     private Sauces sauce;
 
 

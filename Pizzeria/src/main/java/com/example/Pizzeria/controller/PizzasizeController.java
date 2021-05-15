@@ -1,14 +1,11 @@
 package com.example.Pizzeria.controller;
 
-
 import com.example.Pizzeria.models.*;
-import com.example.Pizzeria.repository.CutstyleRepository;
 import com.example.Pizzeria.repository.PizzasizeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -56,22 +53,16 @@ public class PizzasizeController {
         if (u.isEmpty()) {
             Optional<Pizzasize> us = pizzasizeRepository.findById(id);
             us.ifPresent(value -> value.setName(pizzasize.getName()));
-            System.out.println("Name : " + pizzasize.getName());
             us.ifPresent(value -> value.setDiameter(pizzasize.getDiameter()));
-            System.out.println("Diameter : " + pizzasize.getDiameter());
             us.ifPresent(value -> value.setPizzacostfactor(pizzasize.getPizzacostfactor()));
-            System.out.println("Pizzacostfactor : " + pizzasize.getPizzacostfactor());
             Pizzasize updatedPizzasize = pizzasizeRepository.save(us.get());
             return new ResponseEntity<>(updatedPizzasize, HttpStatus.OK);
 
         } else if (u.size() == 1) {
             if (u.get(0).getId().equals(id)) {
                 u.get(0).setName(pizzasize.getName());
-                System.out.println("Name : " + pizzasize.getName());
                 u.get(0).setDiameter(pizzasize.getDiameter());
-                System.out.println("Diameter : " + pizzasize.getDiameter());
                 u.get(0).setPizzacostfactor(pizzasize.getPizzacostfactor());
-                System.out.println("Pizzacostfactor : " + pizzasize.getPizzacostfactor());
                 Pizzasize updatedPizzasize = pizzasizeRepository.save(u.get(0));
                 return new ResponseEntity<>(updatedPizzasize, HttpStatus.OK);
             }

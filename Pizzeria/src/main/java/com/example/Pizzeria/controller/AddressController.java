@@ -1,17 +1,11 @@
 package com.example.Pizzeria.controller;
 
-
-import com.example.Pizzeria.models.Account;
 import com.example.Pizzeria.models.Address;
-import com.example.Pizzeria.models.User;
 import com.example.Pizzeria.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Collection;
-import java.util.List;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -22,11 +16,6 @@ public class AddressController {
     @Autowired
     private AddressRepository addressRepository;
 
-    @PostMapping("/users/address")
-    public ResponseEntity<Address> createAddress(@RequestBody Address newAddress) {
-        addressRepository.save(newAddress);
-        return new ResponseEntity<>(newAddress, HttpStatus.OK);
-    }
 
 
     @GetMapping("/users/address/idAddress/{id}")
@@ -41,13 +30,18 @@ public class AddressController {
 
     @GetMapping("/users/address/{id}")
     public ResponseEntity<Optional<Address>> getAddressByUserId(@PathVariable Integer id) {
-        //Optional<Address> address = addressRepository.findAddressByUserId(id);
         Optional<Address> address = addressRepository.findByUser_Id(id);
         if(address.isPresent())
             return new ResponseEntity<>(address,HttpStatus.OK);
         else
             return new ResponseEntity<>(address,HttpStatus.NOT_FOUND);
 
+    }
+
+    @PostMapping("/users/address")
+    public ResponseEntity<Address> createAddress(@RequestBody Address newAddress) {
+        addressRepository.save(newAddress);
+        return new ResponseEntity<>(newAddress, HttpStatus.OK);
     }
 
     @PutMapping("users/address/{id}")
