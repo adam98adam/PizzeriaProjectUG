@@ -39,7 +39,7 @@ const UpdateUserComponent = (props) => {
         });
       })
       .catch((er) => {
-        console.log(er);
+        // console.log(er);
       });
   }, [props.match.params.id]);
 
@@ -56,13 +56,13 @@ const UpdateUserComponent = (props) => {
       Object.values(user).every((el) => el) &&
       validations.every((el) => el)
     ) {
-      console.log(user);
+      // console.log(user);
       UserService.updateUser(user, parseInt(id, 10))
         .then((res) => {
           cancel(parseInt(idAccount, 10));
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           setShowInvalidUserModal(true);
         });
     } else {
@@ -79,10 +79,10 @@ const UpdateUserComponent = (props) => {
     return re.test(name);
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(validateName(event.target.value));
-    console.log(validateName(event.target.name));
+    // console.log(validateName(event.target.name));
   };
 
   // surname
@@ -90,7 +90,7 @@ const UpdateUserComponent = (props) => {
     const re = /^[A-Z][a-z]+$/;
     return re.test(surname);
   };
-  const changeSurnameHandler = (event) => {
+  const handleSurnameChange = (event) => {
     setSurname(event.target.value);
     setSurnameValid(validateSurname(event.target.value));
   };
@@ -101,7 +101,7 @@ const UpdateUserComponent = (props) => {
     return re.test(String(email).toLowerCase());
   };
 
-  const changeEmailHandler = (event) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
     setEmailValid(validateEmail(event.target.value));
   };
@@ -112,7 +112,7 @@ const UpdateUserComponent = (props) => {
     return re.test(phoneNumber);
   };
 
-  const changePhoneNumberHandler = (event) => {
+  const handlePhoneNumberChange = (event) => {
     setPhoneNumber(event.target.value);
     setPhoneNumberValid(validatePhoneNumber(event.target.value));
   };
@@ -162,7 +162,7 @@ const UpdateUserComponent = (props) => {
                       placeholder="Name"
                       name="name"
                       value={name}
-                      onChange={changeNameHandler}
+                      onChange={handleNameChange}
                     />
                     {!nameValid && (
                       <Form.Text className="text-muted">
@@ -179,7 +179,7 @@ const UpdateUserComponent = (props) => {
                       }
                       name="surname"
                       value={surname}
-                      onChange={changeSurnameHandler}
+                      onChange={handleSurnameChange}
                     />
                     {!surnameValid && (
                       <Form.Text className="text-muted">
@@ -198,7 +198,7 @@ const UpdateUserComponent = (props) => {
                       }
                       name="email"
                       value={email}
-                      onChange={changeEmailHandler}
+                      onChange={handleEmailChange}
                     />
                     {!emailValid && (
                       <Form.Text className="text-muted">
@@ -217,7 +217,7 @@ const UpdateUserComponent = (props) => {
                       }
                       name="phonenumber"
                       value={phoneNumber}
-                      onChange={changePhoneNumberHandler}
+                      onChange={handlePhoneNumberChange}
                     />
                     {!phoneNumberValid && (
                       <Form.Text className="text-muted">

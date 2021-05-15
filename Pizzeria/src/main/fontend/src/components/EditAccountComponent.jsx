@@ -11,14 +11,13 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AccountService from "../services/AccountService";
-import UserService from "../services/UserService";
 import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
 const EditAccountComponent = (props) => {
   const loginButtonTarget = useRef(null);
   const passwordButtonTarget = useRef(null);
-  const [id, setId] = useState(props.match.params.id);
+  const id = props.match.params.id;
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const [showInvalidAccountUpdateModal, setShowInvalidAccountUpdateModal] =
@@ -31,7 +30,7 @@ const EditAccountComponent = (props) => {
   const [showPasswordInfoTooltip, setShowPasswordInfoTooltip] = useState(false);
 
   useEffect(() => {
-    console.log(id);
+    // console.log(id);
     AccountService.getAccountById(parseInt(props.match.params.id, 10))
       .then((res) => {
         let account = res.data;
@@ -39,7 +38,7 @@ const EditAccountComponent = (props) => {
         setPassword(account.password);
       })
       .catch((err) => {
-        console.log(err.response);
+        // console.log(err.response);
         setShowInvalidAccountUpdateModal(true);
       });
   }, [props.match.params.id]);
@@ -88,7 +87,7 @@ const EditAccountComponent = (props) => {
           cancel(parseInt(id, 10));
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           setShowInvalidAccountUpdateModal(true);
         });
     } else {
@@ -101,17 +100,17 @@ const EditAccountComponent = (props) => {
     return re.test(login);
   };
 
-  const changeLoginHandler = (event) => {
+  const handleLoginChange = (event) => {
     setLogin(event.target.value);
     setLoginValid(validateLogin(event.target.value));
   };
 
   const validatePassword = (password) => {
-    const re = /^\w+(\w+[\.@\?]\w*)+$/;
+    const re = /^\w+(\w+[.@?]\w*)+$/;
     return re.test(password);
   };
 
-  const changePasswordHandler = (event) => {
+  const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setPasswordValid(validatePassword(event.target.value));
   };
@@ -119,7 +118,7 @@ const EditAccountComponent = (props) => {
     return (
       <>
         <a
-          ref={loginButtonTarget}
+          href={loginButtonTarget}
           onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -157,7 +156,7 @@ const EditAccountComponent = (props) => {
     return (
       <>
         <a
-          ref={passwordButtonTarget}
+          href={passwordButtonTarget}
           onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -209,9 +208,8 @@ const EditAccountComponent = (props) => {
                       className={
                         loginValid ? "form-control" : "form-control-error"
                       }
-                      className="form-control"
                       value={login}
-                      onChange={changeLoginHandler}
+                      onChange={handleLoginChange}
                     />
                     {!loginValid && (
                       <Form.Text className="text-muted">
@@ -231,9 +229,8 @@ const EditAccountComponent = (props) => {
                         passwordValid ? "form-control" : "form-control-error"
                       }
                       name="password"
-                      className="form-control"
                       value={password}
-                      onChange={changePasswordHandler}
+                      onChange={handlePasswordChange}
                     />
                     {!passwordValid && (
                       <Form.Text className="text-muted">

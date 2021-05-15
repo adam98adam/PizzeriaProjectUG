@@ -24,15 +24,16 @@ const AdminCrustListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deleteCrust = (id) => {
-    console.log("delete crust");
+    // console.log("delete crust");
     CrustService.deleteCrustById(id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setCrustList(crustList.filter((el) => el.id !== id));
     });
   };
@@ -101,7 +102,7 @@ const AdminCrustListComponent = (props) => {
               </thead>
               <tbody>
                 {crustList.map((crust) => {
-                  console.log(crust);
+                  // console.log(crust);
                   return (
                     <tr key={crust.id}>
                       <td>{crust.crust}</td>

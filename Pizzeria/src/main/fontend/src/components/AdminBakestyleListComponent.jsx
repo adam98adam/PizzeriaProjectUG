@@ -8,7 +8,6 @@ import AdminBakestyleUpdateModal from "./AdminBakestyleUpdateModal";
 
 const AdminBakestyleListComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
-  const [orders, setOrders] = useState([]);
 
   const [selectedBakestyle, setSelectedBakestyle] = useState({});
   const [bakestyleList, setBakestyleList] = useState([]);
@@ -26,15 +25,16 @@ const AdminBakestyleListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deleteBakestyle = (id) => {
-    console.log("delete crust");
+    // console.log("delete crust");
     BakestyleService.deleteBakestyleById(id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setBakestyleList(bakestyleList.filter((el) => el.id !== id));
     });
   };
@@ -102,7 +102,7 @@ const AdminBakestyleListComponent = (props) => {
               </thead>
               <tbody>
                 {bakestyleList.map((bakestyle) => {
-                  console.log(bakestyle);
+                  // console.log(bakestyle);
                   return (
                     <tr key={bakestyle.id}>
                       <td>{bakestyle.name}</td>

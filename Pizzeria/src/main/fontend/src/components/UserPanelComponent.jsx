@@ -33,42 +33,43 @@ const UserPanelComponent = (props) => {
   const [sauceList, setSauceList] = useState([]);
 
   useEffect(() => {
+    const idAccount = localStorage.getItem("idAccount");
+    const idUser = localStorage.getItem("idUser");
     AccountService.getAccountById(idAccount).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
 
       AddressService.getAddressByUserId(idUser).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setIdAddress(res.data.id);
       });
 
       PizzaService.getAllPizza().then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPizzaList(res.data);
-        console.log(pizzaList);
       });
       CrustService.getAllCrust().then((res) => {
         setCrustList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
       BakestyleService.getAllBakestyle().then((res) => {
         setBakestyleList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
       DrinksService.getAllDrinks().then((res) => {
         setDrinksList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
       PizzasizeService.getAllPizzasize().then((res) => {
         setPizzaSizeList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
       CutstyleService.getAllCutstyle().then((res) => {
         setCutstyleList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
       SaucesService.getAllSauces().then((res) => {
         setSauceList(res.data);
-        console.log(res.data);
+        // console.log(res.data);
       });
     });
   }, []);
@@ -96,6 +97,7 @@ const UserPanelComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const handleDeleteAccountClose = () => {

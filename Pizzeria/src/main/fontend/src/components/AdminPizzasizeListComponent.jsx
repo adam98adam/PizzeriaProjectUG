@@ -24,15 +24,16 @@ const AdminPizzasizeListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deletePizzasize = (id) => {
-    console.log("delete crust");
+    // console.log("delete crust");
     PizzasizeService.deletePizzasizeById(id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       //   alert(res.data);
       setPizzasizeList(pizzasizeList.filter((el) => el.id !== id));
     });
@@ -103,7 +104,7 @@ const AdminPizzasizeListComponent = (props) => {
               </thead>
               <tbody>
                 {pizzasizeList.map((pizzasize) => {
-                  console.log(pizzasize);
+                  // console.log(pizzasize);
                   return (
                     <tr key={pizzasize.id}>
                       <td>{pizzasize.name}</td>

@@ -5,7 +5,6 @@ import BakestyleService from "../services/BakestyleService";
 
 const AdminNewBakestyleModal = (props) => {
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
 
   const [nameValid, setNameValid] = useState(true);
 
@@ -21,18 +20,18 @@ const AdminNewBakestyleModal = (props) => {
     ) {
       BakestyleService.addNewBakestyle(newBakestyle)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleNewBakestyleModalClose();
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           alert("Sauce data is not unique");
         });
     } else {
     }
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -40,7 +39,6 @@ const AdminNewBakestyleModal = (props) => {
   const handleNewBakestyleModalClose = () => {
     props.onHide();
     setName("");
-    setPrice("");
   };
 
   const ifDisable = () => {
@@ -64,7 +62,7 @@ const AdminNewBakestyleModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>

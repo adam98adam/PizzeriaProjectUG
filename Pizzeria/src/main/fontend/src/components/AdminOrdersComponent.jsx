@@ -10,8 +10,8 @@ const formatDate = (datetime) => {
   const time = splitDateTime[1].split("+")[0].split(".")[0];
   const splitDate = date.split("-").map((el) => parseInt(el));
   const splitTime = time.split(":").map((el) => parseInt(el));
-  //   console.log(splitDate);
-  //   console.log(splitTime);
+  //   // console.log(splitDate);
+  //   // console.log(splitTime);
   const formattedDate = new Date(
     splitDate[0],
     splitDate[1],
@@ -30,7 +30,6 @@ const formatDate = (datetime) => {
 
 const AdminOrdersComponent = (props) => {
   const idAccount = localStorage.getItem("idUser");
-  const [idUser, setIdUser] = useState(props.match.params.idUser);
   const [orders, setOrders] = useState([]);
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -43,6 +42,7 @@ const AdminOrdersComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
@@ -127,7 +127,7 @@ const AdminOrdersComponent = (props) => {
               </thead>
               <tbody>
                 {orders.map((order) => {
-                  console.log(order);
+                  // console.log(order);
                   return (
                     <tr key={order.id}>
                       <td>{`${order.user.name} ${order.user.surname}`}</td>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "reactjs-popup/dist/index.css";
 import "./../css/index.css";
@@ -22,6 +22,7 @@ const PizzaOrderModal = (props) => {
   } = props;
 
   const [price, setPrice] = useState(null);
+  const pizzaPrice = useRef(null);
   const [pizzaSize, setPizzaSize] = useState({ pizzacostfactor: 1 });
   const [pizzaCrust, setPizzaCrust] = useState({ price: 0 });
   const [drink, setDrink] = useState({ price: 0 });
@@ -36,28 +37,20 @@ const PizzaOrderModal = (props) => {
     cutstyle: false,
   });
 
-  /*   useEffect(() => {
-    setPrice(pizza.price);
-  }, [pizza.price]); */
-
   useEffect(() => {
-    setPrice(
-      pizza.price * pizzaSize.pizzacostfactor +
-        pizzaCrust.price +
-        drink.price +
-        sauce.price
-    );
+    pizzaPrice.current =
+      pizzaPrice * pizzaSize.pizzacostfactor +
+      pizzaCrust.price +
+      drink.price +
+      sauce.price;
+    setPrice(pizzaPrice.current);
   }, [pizzaSize, pizzaCrust, drink, sauce]);
   useEffect(() => {
     UserService.getUserById(localStorage.getItem("idUser")).then((res) => {
       setUser(res.data);
     });
   }, []);
-  /* 
-  useEffect(() => {
-    console.log(selected);
-  }, [selected]);
- */
+
   const handlePizzaSizeChange = ({ target }) => {
     if (target.value !== "") {
       setPizzaSize(
@@ -156,10 +149,10 @@ const PizzaOrderModal = (props) => {
     //   sauce: sauce.price === 0 ? null : sauce.id,
     //   user_id: localStorage.getItem("idUser"),
     // };
-    console.log(order);
+    // console.log(order);
 
     OrdersService.postOrdersByUserId(user.id, order).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       props.onHide();
       setSelected({
         size: false,

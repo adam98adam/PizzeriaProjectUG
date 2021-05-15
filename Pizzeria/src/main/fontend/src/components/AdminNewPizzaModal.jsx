@@ -34,11 +34,11 @@ const AdminNewPizzaModal = (props) => {
     ) {
       PizzaService.addPizza(newPizza)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleNewPizzaModalClose();
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           alert("Pizza data is not unique");
         });
     } else {
@@ -53,21 +53,21 @@ const AdminNewPizzaModal = (props) => {
     return re.test(s);
   };
 
-  const changePriceHandler = (event) => {
+  const handlePriceChange = (event) => {
     setPrice(event.target.value);
     setPriceValid(validatePrice(event.target.value));
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
 
-  const changeDescriptionHandler = (event) => {
+  const handleDescriptionChange = (event) => {
     setDescription(event.target.value);
     setDescriptionValid(event.target.value !== "");
   };
-  const changeImageHandler = (event) => {
+  const handleImageChange = (event) => {
     setImage(event.target.value);
     setImageValid(validateImage(event.target.value));
   };
@@ -110,7 +110,7 @@ const AdminNewPizzaModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>
@@ -127,7 +127,7 @@ const AdminNewPizzaModal = (props) => {
                     }
                     value={description}
                     as="textarea"
-                    onChange={changeDescriptionHandler}
+                    onChange={handleDescriptionChange}
                   />
                   {!descriptionValid && (
                     <span style={{ color: "red" }}>
@@ -144,7 +144,7 @@ const AdminNewPizzaModal = (props) => {
                       priceValid ? "form-control" : "form-control-error"
                     }
                     value={price}
-                    onChange={changePriceHandler}
+                    onChange={handlePriceChange}
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>
@@ -160,7 +160,7 @@ const AdminNewPizzaModal = (props) => {
                       imageValid ? "form-control" : "form-control-error"
                     }
                     value={image}
-                    onChange={changeImageHandler}
+                    onChange={handleImageChange}
                   />
                   {!imageValid && (
                     <span style={{ color: "red" }}>

@@ -23,6 +23,7 @@ const AdminPizzaListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
@@ -101,7 +102,7 @@ const AdminPizzaListComponent = (props) => {
               </thead>
               <tbody>
                 {pizzaList.map((pizza) => {
-                  console.log(pizza);
+                  // console.log(pizza);
                   return (
                     <tr key={pizza.id}>
                       <td>{pizza.name}</td>
@@ -110,6 +111,7 @@ const AdminPizzaListComponent = (props) => {
                       <td>
                         <img
                           src={pizza.image}
+                          alt="Pizza"
                           style={{ width: "3rem", height: "3rem" }}
                         />
                       </td>

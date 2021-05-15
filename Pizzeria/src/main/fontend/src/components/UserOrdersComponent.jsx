@@ -10,8 +10,8 @@ const formatDate = (datetime) => {
   const time = splitDateTime[1].split("+")[0].split(".")[0];
   const splitDate = date.split("-").map((el) => parseInt(el));
   const splitTime = time.split(":").map((el) => parseInt(el));
-  //   console.log(splitDate);
-  //   console.log(splitTime);
+  //   // console.log(splitDate);
+  //   // console.log(splitTime);
   const formattedDate = new Date(
     splitDate[0],
     splitDate[1],
@@ -30,12 +30,13 @@ const formatDate = (datetime) => {
 
 const UserOrdersComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
-  const idUser = props.match.params.idUser;
+
   const [orders, setOrders] = useState([]);
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   useEffect(() => {
+    const idUser = localStorage.getItem("idUser");
     OrdersService.getOrdersByUserId(idUser).then((res) => {
       setOrders(res.data);
     });
@@ -43,6 +44,7 @@ const UserOrdersComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToUserPanel = (id) => {
@@ -105,7 +107,7 @@ const UserOrdersComponent = (props) => {
               </thead>
               <tbody>
                 {orders.map((order) => {
-                  console.log(order);
+                  // console.log(order);
                   return (
                     <tr key={order.id}>
                       <td>

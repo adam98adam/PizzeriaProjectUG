@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Col, Container, Form, Modal, Row } from "react-bootstrap";
 import WarningIcon from "./icons/WarningIcon";
 import PizzasizeService from "../services/PizzasizeService";
@@ -26,7 +26,7 @@ const AdminNewPizzasizeModal = (props) => {
     ) {
       PizzasizeService.addNewPizzasize(newPizzasize)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleNewPizzasizeModalClose();
         })
         .catch((error) => alert("Pizzasize data is not unique"));
@@ -42,16 +42,16 @@ const AdminNewPizzasizeModal = (props) => {
     return re.test(s);
   };
 
-  const changePizzacostfactorHandler = (event) => {
+  const handlePizzacostfactorChange = (event) => {
     setPizzacostfactor(event.target.value);
     setPizzacostfactorValid(validatePizzacostfactor(event.target.value));
   };
 
-  const changeDiameterHandler = (event) => {
+  const handleDiameterChange = (event) => {
     setDiameter(event.target.value);
     setDiameterValid(validateDiameter(event.target.value));
   };
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -89,7 +89,7 @@ const AdminNewPizzasizeModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>
@@ -105,7 +105,7 @@ const AdminNewPizzasizeModal = (props) => {
                       diameterValid ? "form-control" : "form-control-error"
                     }
                     value={diameter}
-                    onChange={changeDiameterHandler}
+                    onChange={handleDiameterChange}
                   />
                   {!diameterValid && (
                     <span style={{ color: "red" }}>
@@ -123,7 +123,7 @@ const AdminNewPizzasizeModal = (props) => {
                         : "form-control-error"
                     }
                     value={pizzacostfactor}
-                    onChange={changePizzacostfactorHandler}
+                    onChange={handlePizzacostfactorChange}
                   />
                   {!pizzacostfactorValid && (
                     <span style={{ color: "red" }}>

@@ -18,16 +18,16 @@ const CreateUserComponent = (props) => {
       email: email,
       phonenumber: phoneNumber,
     };
-    console.log("user => " + JSON.stringify(user));
+    // console.log("user => " + JSON.stringify(user));
     UserService.createUser(user).then((res) => {
       this.props.history.push("/users");
     });
   };
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
   };
 
-  const changeSurnameHandler = (event) => {
+  const handleSurnameChange = (event) => {
     setSurname(event.target.value);
   };
 
@@ -36,22 +36,19 @@ const CreateUserComponent = (props) => {
     return re.test(String(email).toLowerCase());
   };
 
-  const changeEmailHandler = (event) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
     setEmailValid(validateEmail(event.target.value));
-    console.log(emailValid);
+    // console.log(emailValid);
   };
 
-  const changePhonenumberHandler = (event) => {
+  const handlePhonenumberChange = (event) => {
     setPhoneNumber(event.target.value);
   };
 
   const cancel = () => {
     props.history.push("/users");
   };
-  const allFieldsValid = () => {
-      const validations = [emailValid]
-  }
 
   return (
     <Card>
@@ -67,7 +64,7 @@ const CreateUserComponent = (props) => {
                     placeholder="Name"
                     name="name"
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                 </Form.Group>
                 <Form.Group>
@@ -76,7 +73,7 @@ const CreateUserComponent = (props) => {
                     placeholder="Surname"
                     name="surname"
                     value={surname}
-                    onChange={changeSurnameHandler}
+                    onChange={handleSurnameChange}
                   />
                 </Form.Group>
                 <Form.Group>
@@ -85,7 +82,7 @@ const CreateUserComponent = (props) => {
                     placeholder="Email"
                     name="email"
                     value={email}
-                    onChange={changeEmailHandler}
+                    onChange={handleEmailChange}
                   />
 
                   <Form.Text className="text-muted"> Wrong email</Form.Text>
@@ -96,12 +93,14 @@ const CreateUserComponent = (props) => {
                     placeholder="Phonenumber"
                     name="phonenumber"
                     value={phoneNumber}
-                    onChange={changePhonenumberHandler}
+                    onChange={handlePhonenumberChange}
                   />
                 </Form.Group>
-                <Button disabled={() => {
-
-                }} variant="success" onClick={saveUser}>
+                <Button
+                  disabled={() => {}}
+                  variant="success"
+                  onClick={saveUser}
+                >
                   Save
                 </Button>
                 <Button

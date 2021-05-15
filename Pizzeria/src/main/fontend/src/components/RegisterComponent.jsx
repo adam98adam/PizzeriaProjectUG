@@ -17,7 +17,6 @@ import { Link } from "react-router-dom";
 import WarningIcon from "./icons/WarningIcon";
 
 const RegisterComponent = (props) => {
-  // const [registerStatus, setRegisterstatus] = useState(true)
   const loginButtonTarget = useRef(null);
   const passwordButtonTarget = useRef(null);
 
@@ -87,20 +86,18 @@ const RegisterComponent = (props) => {
               },
             })
               .then((res) => {
-                console.log(res.data);
-                console.log(res.data.user.id);
-                //res.data.user.id
-                //this.props.history.push(`/register-user-address/${id}`);
                 address(res.data.user.id);
               })
               .catch((error) => {
-                UserService.deleteUser(res.data.id).then((res) =>
-                  console.log(res.data)
-                );
-                console.log(error.response);
+                UserService.deleteUser(res.data.id).then((res) => {
+                  // console.log(res.data)
+                  // console.log(error.response);
+                });
               });
           })
-          .catch((error) => console.log(error.response));
+          .catch((error) => {
+            // console.log(error.response));
+          });
       } else {
         setShowLoginModal(true);
       }
@@ -109,34 +106,18 @@ const RegisterComponent = (props) => {
     }
   };
 
-  /*
-    registerToSystem = (e) => {
-        e.preventDefault();
-        let user = {name: name,surname: surname,email: email,phonenumber: phonenumber,customer : true}
-        RegisterService.createUser(user).then((res) => console.log(res.data)).catch((error) => console.log("Error"))
-    }
-    */
-
   const cancel = () => {
     props.history.push("/");
   };
-  /*
-  const address = (id) => {
-    props.history.push(`/register-user-address/${id}`)
-  }
-*/
 
-  /* walidacja */
-  // name
   const validateName = (name) => {
     const re = /^[A-Z][a-z]+$/;
     return re.test(name);
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(validateName(event.target.value));
-    console.log(emailValid);
   };
 
   // surname
@@ -144,7 +125,7 @@ const RegisterComponent = (props) => {
     const re = /[A-Z][a-z]+/;
     return re.test(surname);
   };
-  const changeSurnameHandler = (event) => {
+  const handleSurnameChange = (event) => {
     setSurname(event.target.value);
     setSurnameValid(validateSurname(event.target.value));
   };
@@ -155,7 +136,7 @@ const RegisterComponent = (props) => {
     return re.test(String(email).toLowerCase());
   };
 
-  const changeEmailHandler = (event) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
     setEmailValid(validateEmail(event.target.value));
   };
@@ -166,7 +147,7 @@ const RegisterComponent = (props) => {
     return re.test(phoneNumber);
   };
 
-  const changePhoneNumberHandler = (event) => {
+  const handlePhoneNumberChange = (event) => {
     setPhoneNumber(event.target.value);
     setPhoneNumberValid(validatePhoneNumber(event.target.value));
   };
@@ -176,7 +157,7 @@ const RegisterComponent = (props) => {
     return re.test(login);
   };
 
-  const changeLoginHandler = (event) => {
+  const handleLoginChange = (event) => {
     setLogin(event.target.value);
     setLoginValid(validateLogin(event.target.value));
   };
@@ -186,7 +167,7 @@ const RegisterComponent = (props) => {
     return re.test(password);
   };
 
-  const changePasswordHandler = (event) => {
+  const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setPasswordValid(validatePassword(event.target.value));
   };
@@ -346,7 +327,7 @@ const RegisterComponent = (props) => {
                             nameValid ? "form-control" : "form-control-error"
                           }
                           placeholder="Enter your first name"
-                          onChange={changeNameHandler}
+                          onChange={handleNameChange}
                           id="name"
                         />
                         {!nameValid && (
@@ -364,7 +345,7 @@ const RegisterComponent = (props) => {
                             surnameValid ? "form-control" : "form-control-error"
                           }
                           placeholder="Enter your last name"
-                          onChange={changeSurnameHandler}
+                          onChange={handleSurnameChange}
                           id="surname"
                         />
                         {!surnameValid && (
@@ -381,7 +362,7 @@ const RegisterComponent = (props) => {
                             emailValid ? "form-control" : "form-control-error"
                           }
                           placeholder="Enter your email"
-                          onChange={changeEmailHandler}
+                          onChange={handleEmailChange}
                           id="email"
                         />
                         {!emailValid && (
@@ -398,7 +379,7 @@ const RegisterComponent = (props) => {
                               : "form-control-error"
                           }
                           placeholder="Enter your phone number"
-                          onChange={changePhoneNumberHandler}
+                          onChange={handlePhoneNumberChange}
                           id="phone-number"
                         />
                         {!phoneNumberValid && (
@@ -427,7 +408,7 @@ const RegisterComponent = (props) => {
                             loginValid ? "form-control" : "form-control-error"
                           }
                           placeholder="Enter your login"
-                          onChange={changeLoginHandler}
+                          onChange={handleLoginChange}
                         />
                         {!loginValid && (
                           <Form.Text className="text-muted">
@@ -446,7 +427,7 @@ const RegisterComponent = (props) => {
                               : "form-control-error"
                           }
                           placeholder="Enter your password"
-                          onChange={changePasswordHandler}
+                          onChange={handlePasswordChange}
                         />
                         {!passwordValid && (
                           <Form.Text className="text-muted">

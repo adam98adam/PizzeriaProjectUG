@@ -23,16 +23,17 @@ const AdminSaucesListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deleteSauce = (id) => {
-    console.log("delete sauces");
+    // console.log("delete sauces");
     SaucesService.deleteSauceById(id).then((res) => {
       // alert(res.data);
-      console.log(res.data);
+      // console.log(res.data);
       setSaucesList(saucesList.filter((el) => el.id !== id));
     });
   };
@@ -101,7 +102,7 @@ const AdminSaucesListComponent = (props) => {
               </thead>
               <tbody>
                 {saucesList.map((sauce) => {
-                  console.log(sauce);
+                  // console.log(sauce);
                   return (
                     <tr key={sauce.id}>
                       <td>{sauce.name}</td>

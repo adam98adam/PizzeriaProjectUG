@@ -5,7 +5,6 @@ import CutstyleService from "../services/CutstyleService";
 
 const AdminNewCutstyleModal = (props) => {
   const [name, setName] = useState("");
-  const [price, setPrice] = useState("");
 
   const [nameValid, setNameValid] = useState(true);
 
@@ -21,18 +20,18 @@ const AdminNewCutstyleModal = (props) => {
     ) {
       CutstyleService.addNewCutstyle(newCutstyle)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleNewCutstyleModalClose();
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           alert("Sauce data is not unique");
         });
     } else {
     }
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -40,7 +39,6 @@ const AdminNewCutstyleModal = (props) => {
   const handleNewCutstyleModalClose = () => {
     props.onHide();
     setName("");
-    setPrice("");
   };
 
   const ifDisable = () => {
@@ -64,7 +62,7 @@ const AdminNewCutstyleModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>

@@ -14,7 +14,7 @@ import WarningIcon from "./icons/WarningIcon";
 
 const EditAddressComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
-  const [idAddress, setIdAddress] = useState(props.match.params.idAddress);
+  const idAddress = props.match.params.idAddress;
   const [city, setCity] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState(0);
@@ -30,7 +30,7 @@ const EditAddressComponent = (props) => {
       parseInt(props.match.params.idAddress, 10)
     ).then((res) => {
       let address = res.data;
-      console.log(address);
+      // console.log(address);
       setCity(address.city);
       setStreet(address.street);
       setNumber(address.number);
@@ -52,7 +52,9 @@ const EditAddressComponent = (props) => {
         .then((res) => {
           cancel(parseInt(idAccount, 10));
         })
-        .catch((error) => console.log(error.response));
+        .catch((error) => {
+          // console.log(error.response));
+        });
     } else {
       setShowAddressModal(true);
     }
@@ -62,7 +64,7 @@ const EditAddressComponent = (props) => {
     return re.test(city);
   };
 
-  const changeCityHandler = (event) => {
+  const handleCityChange = (event) => {
     setCity(event.target.value);
     setCityValid(validateCity(event.target.value));
   };
@@ -72,7 +74,7 @@ const EditAddressComponent = (props) => {
     return re.test(street);
   };
 
-  const changeStreetHandler = (event) => {
+  const handleStreetChange = (event) => {
     setStreet(event.target.value);
     setStreetValid(validateStreet(event.target.value));
   };
@@ -82,7 +84,7 @@ const EditAddressComponent = (props) => {
     return re.test(number);
   };
 
-  const changeNumberHandler = (event) => {
+  const handleNumberChange = (event) => {
     setNumber(event.target.value);
     setNumberValid(validateNumber(event.target.value));
   };
@@ -134,7 +136,7 @@ const EditAddressComponent = (props) => {
                         cityValid ? "form-control" : "form-control-error"
                       }
                       value={city}
-                      onChange={changeCityHandler}
+                      onChange={handleCityChange}
                     />
                     {!cityValid && (
                       <span style={{ color: "red" }}>
@@ -151,7 +153,7 @@ const EditAddressComponent = (props) => {
                         streetValid ? "form-control" : "form-control-error"
                       }
                       value={street}
-                      onChange={changeStreetHandler}
+                      onChange={handleStreetChange}
                     />
                     {!streetValid && (
                       <span style={{ color: "red" }}>
@@ -168,7 +170,7 @@ const EditAddressComponent = (props) => {
                         numberValid ? "form-control" : "form-control-error"
                       }
                       value={number}
-                      onChange={changeNumberHandler}
+                      onChange={handleNumberChange}
                     />
                     {!numberValid && (
                       <span style={{ color: "red" }}>

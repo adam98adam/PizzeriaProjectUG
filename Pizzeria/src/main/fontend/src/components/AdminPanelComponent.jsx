@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   CardDeck,
   Button,
@@ -19,7 +19,6 @@ import DrinksService from "../services/DrinksService";
 import PizzaService from "../services/PizzaService";
 import PizzasizeService from "../services/PizzasizeService";
 import SaucesService from "../services/SaucesService";
-import UserService from "../services/UserService";
 import PizzaLogo from "./../images/pizza-logo.png";
 
 import PizzaBackground from "./../images/pizza-background.png";
@@ -32,77 +31,77 @@ import SauceBackground from "./../images/sauce-background.jpg";
 
 const AdminPanelComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
-  const [login, setLogin] = useState("");
-  const [password, setPassword] = useState("");
-  const [idUser, setIdUser] = useState("");
-  const [name, setName] = useState("");
-  const [surname, setSurname] = useState("");
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [idAddress, setIdAddress] = useState("");
-  const [city, setCity] = useState("");
-  const [street, setStreet] = useState("");
-  const [number, setNumber] = useState("");
+  const login = useRef("");
+  const password = useRef("");
+  const idUser = useRef("");
+  const name = useRef("");
+  const surname = useRef("");
+  const email = useRef("");
+  const phoneNumber = useRef("");
+  const idAddress = useRef("");
+  const city = useRef("");
+  const street = useRef("");
+  const number = useRef("");
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  const [pizzaList, setPizzaList] = useState([]);
-  const [crustList, setCrustList] = useState([]);
-  const [bakestyleList, setBakestyleList] = useState([]);
-  const [drinksList, setDrinksList] = useState([]);
-  const [pizzaSizeList, setPizzaSizeList] = useState([]);
-  const [cutstyleList, setCutstyleList] = useState([]);
-  const [sauceList, setSauceList] = useState([]);
+  const pizzaList = useRef([]);
+  const crustList = useRef([]);
+  const bakestyleList = useRef([]);
+  const drinksList = useRef([]);
+  const pizzaSizeList = useRef([]);
+  const cutstyleList = useRef([]);
+  const sauceList = useRef([]);
 
   useEffect(() => {
     AccountService.getAccountById(parseInt(props.match.params.id, 10)).then(
       (res) => {
-        console.log(res.data);
-        setLogin(res.data.login);
-        setPassword(res.data.password);
-        setIdUser(res.data.user.id);
-        setName(res.data.user.name);
-        setSurname(res.data.user.surname);
-        setEmail(res.data.user.email);
-        setPhoneNumber(res.data.user.phonenumber);
+        // console.log(res.data);
+        login.current = res.data.login;
+        password.current = res.data.password;
+        idUser.current = res.data.user.id;
+        name.current = res.data.user.name;
+        surname.current = res.data.user.surname;
+        email.current = res.data.user.email;
+        phoneNumber.current = res.data.user.phonenumber;
         AddressService.getAddressByUserId(parseInt(res.data.user.id, 10)).then(
           (res) => {
-            console.log(res.data);
-            setIdAddress(res.data.id);
-            setCity(res.data.city);
-            setStreet(res.data.street);
-            setNumber(res.data.number);
+            // console.log(res.data);
+            idAddress.current = res.data.id;
+            city.current = res.data.city;
+            street.current = res.data.street;
+            number.current = res.data.number;
           }
         );
 
         PizzaService.getAllPizza().then((res) => {
-          console.log(res.data);
-          setPizzaList(res.data);
-          console.log(pizzaList);
+          //   // console.log(res.data);
+          pizzaList.current = res.data;
+          //   // console.log(pizzaList);
         });
         CrustService.getAllCrust().then((res) => {
-          setCrustList(res.data);
-          console.log(res.data);
+          crustList.current = res.data;
+          //   // console.log(res.data);
         });
         BakestyleService.getAllBakestyle().then((res) => {
-          setBakestyleList(res.data);
-          console.log(res.data);
+          bakestyleList.current = res.data;
+          //   // console.log(res.data);
         });
         DrinksService.getAllDrinks().then((res) => {
-          setDrinksList(res.data);
-          console.log(res.data);
+          drinksList.current = res.data;
+          //   // console.log(res.data);
         });
         PizzasizeService.getAllPizzasize().then((res) => {
-          setPizzaSizeList(res.data);
-          console.log(res.data);
+          pizzaSizeList.current = res.data;
+          //   // console.log(res.data);
         });
         CutstyleService.getAllCutstyle().then((res) => {
-          setCutstyleList(res.data);
-          console.log(res.data);
+          cutstyleList.current = res.data;
+          //   // console.log(res.data);
         });
         SaucesService.getAllSauces().then((res) => {
-          setSauceList(res.data);
-          console.log(res.data);
+          sauceList.current = res.data;
+          //   // console.log(res.data);
         });
       }
     );
@@ -127,7 +126,7 @@ const AdminPanelComponent = (props) => {
     props.history.push("/");
   };
   const choosePizza = () => {
-    console.log();
+    // console.log();
     props.history.push("/admin-pizza");
   };
   const chooseCrust = () => {

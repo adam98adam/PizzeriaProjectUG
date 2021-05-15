@@ -5,10 +5,9 @@ import BakestyleService from "../services/BakestyleService";
 
 const AdminBakestyleUpdateModal = (props) => {
   const bakestyleId = props.bakestyle.id;
-  const [name, setName] = useState(props.bakestyle.name);
-
   const initialName = props.bakestyle.name;
 
+  const [name, setName] = useState(props.bakestyle.name);
   const [nameValid, setNameValid] = useState(true);
 
   useEffect(() => {
@@ -18,6 +17,7 @@ const AdminBakestyleUpdateModal = (props) => {
       setName("");
     }
   }, [props.bakestyle]);
+
   const updateBakestyle = (e) => {
     e.preventDefault();
     let updatedDrink = {
@@ -27,7 +27,7 @@ const AdminBakestyleUpdateModal = (props) => {
     if (Object.values(updatedDrink).every((el) => el.length !== 0)) {
       BakestyleService.updateBakestyle(updatedDrink, parseInt(bakestyleId, 10))
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleBakestyleUpdateModalClose();
         })
         .catch((error) => alert("Drink data is not unique"));
@@ -35,7 +35,7 @@ const AdminBakestyleUpdateModal = (props) => {
     }
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -66,7 +66,7 @@ const AdminBakestyleUpdateModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>

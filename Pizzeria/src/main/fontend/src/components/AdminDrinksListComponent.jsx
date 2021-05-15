@@ -22,16 +22,17 @@ const AdminDrinksListComponent = (props) => {
 
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deleteDrink = (id) => {
-    console.log("delete crust");
+    // console.log("delete crust");
     DrinksService.deleteDrinkById(id).then((res) => {
       // alert(res.data);
-      console.log(res.data);
+      // console.log(res.data);
       setDrinksList(drinksList.filter((el) => el.id !== id));
     });
   };
@@ -100,7 +101,7 @@ const AdminDrinksListComponent = (props) => {
               </thead>
               <tbody>
                 {drinksList.map((drink) => {
-                  console.log(drink);
+                  // console.log(drink);
                   return (
                     <tr key={drink.id}>
                       <td>{drink.name}</td>

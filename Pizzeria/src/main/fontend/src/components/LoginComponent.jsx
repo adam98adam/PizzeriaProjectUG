@@ -42,13 +42,13 @@ const LoginComponent = (props) => {
     } else {
       AccountService.getAccount(login, password)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           userPanel(res.data.id, res.data);
         })
         .catch((er) => {
           setLoginStatus(!loginStatus);
           setShowModal(true);
-          console.log(er.response);
+          // console.log(er.response);
         });
     }
   };

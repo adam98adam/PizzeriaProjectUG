@@ -37,9 +37,9 @@ const RegisterUserAddressComponent = (props) => {
       validations.every((el) => el)
     ) {
       e.preventDefault();
-      console.log("address => " + JSON.stringify(address));
+      // console.log("address => " + JSON.stringify(address));
       AddressService.createAddress(address).then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         props.history.push("/");
       });
     } else {
@@ -52,7 +52,7 @@ const RegisterUserAddressComponent = (props) => {
     return re.test(city);
   };
 
-  const changeCityHandler = (event) => {
+  const handleCityChange = (event) => {
     setCity(event.target.value);
     setCityValid(validateCity(event.target.value));
   };
@@ -62,7 +62,7 @@ const RegisterUserAddressComponent = (props) => {
     return re.test(street);
   };
 
-  const changeStreetHandler = (event) => {
+  const handleStreetChange = (event) => {
     setStreet(event.target.value);
     setStreetValid(validateStreet(event.target.value));
   };
@@ -72,7 +72,7 @@ const RegisterUserAddressComponent = (props) => {
     return re.test(number);
   };
 
-  const changeNumberHandler = (event) => {
+  const handleNumberChange = (event) => {
     setNumber(event.target.value);
     setNumberValid(validateNumber(event.target.value));
   };
@@ -123,7 +123,7 @@ const RegisterUserAddressComponent = (props) => {
                       }
                       name="city"
                       value={city}
-                      onChange={changeCityHandler}
+                      onChange={handleCityChange}
                     />
                     {!cityValid && (
                       <span style={{ color: "red" }}>City is not valid</span>
@@ -138,7 +138,7 @@ const RegisterUserAddressComponent = (props) => {
                       }
                       name="street"
                       value={street}
-                      onChange={changeStreetHandler}
+                      onChange={handleStreetChange}
                     />
                     {!streetValid && (
                       <span style={{ color: "red" }}>Street is not valid</span>
@@ -153,7 +153,7 @@ const RegisterUserAddressComponent = (props) => {
                       }
                       name="number"
                       value={number}
-                      onChange={changeNumberHandler}
+                      onChange={handleNumberChange}
                     />
                     {!numberValid && (
                       <span style={{ color: "red" }}>Number is not valid</span>

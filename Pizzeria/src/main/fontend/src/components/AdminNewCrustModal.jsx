@@ -23,11 +23,11 @@ const AdminNewCrustModal = (props) => {
     ) {
       CrustService.addNewCrust(newCrust)
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleNewCrustModalClose();
         })
         .catch((error) => {
-          console.log(error);
+          // console.log(error);
           alert("Sauce data is not unique");
         });
     } else {
@@ -38,12 +38,12 @@ const AdminNewCrustModal = (props) => {
     return re.test(s);
   };
 
-  const changePriceHandler = (event) => {
+  const handlePriceChange = (event) => {
     setPrice(event.target.value);
     setPriceValid(validatePrice(event.target.value));
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -77,7 +77,7 @@ const AdminNewCrustModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>
@@ -93,7 +93,7 @@ const AdminNewCrustModal = (props) => {
                       priceValid ? "form-control" : "form-control-error"
                     }
                     value={price}
-                    onChange={changePriceHandler}
+                    onChange={handlePriceChange}
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>

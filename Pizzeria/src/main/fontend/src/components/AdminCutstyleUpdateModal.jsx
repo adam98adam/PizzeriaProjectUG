@@ -27,7 +27,7 @@ const AdminCutstyleUpdateModal = (props) => {
     if (Object.values(updatedDrink).every((el) => el.length !== 0)) {
       CutstyleService.updateCutstyle(updatedDrink, parseInt(cutstyleId, 10))
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           handleCutstyleUpdateModalClose();
         })
         .catch((error) => alert("Drink data is not unique"));
@@ -35,7 +35,7 @@ const AdminCutstyleUpdateModal = (props) => {
     }
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(event.target.value !== "");
   };
@@ -66,7 +66,7 @@ const AdminCutstyleUpdateModal = (props) => {
                       nameValid ? "form-control" : "form-control-error"
                     }
                     value={name}
-                    onChange={changeNameHandler}
+                    onChange={handleNameChange}
                   />
                   {!nameValid && (
                     <span style={{ color: "red" }}>

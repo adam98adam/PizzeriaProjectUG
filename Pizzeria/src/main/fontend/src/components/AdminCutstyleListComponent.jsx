@@ -8,7 +8,6 @@ import AdminNewCutstyleModal from "./AdminNewCutstyleModal";
 
 const AdminCutstyleListComponent = (props) => {
   const idAccount = localStorage.getItem("idUser");
-  const [orders, setOrders] = useState([]);
   const [cutstyleList, setCutstyleList] = useState([]);
 
   const [selectedCutstyle, setSelectedCutstyle] = useState({});
@@ -25,15 +24,16 @@ const AdminCutstyleListComponent = (props) => {
   }, [showAdminNewCutstyleModal, showAdminCutstyleUpdateModal]);
   const logout = () => {
     props.history.push("/");
+    localStorage.clear();
   };
 
   const getBackToAdminPanel = (id) => {
     props.history.push(`/admin/${id}`);
   };
   const deleteCutstyle = (id) => {
-    console.log("delete crust");
+    // console.log("delete crust");
     CutstyleService.deleteCutstyleById(id).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       setCutstyleList(cutstyleList.filter((el) => el.id !== id));
     });
   };
@@ -101,7 +101,7 @@ const AdminCutstyleListComponent = (props) => {
               </thead>
               <tbody>
                 {cutstyleList.map((cutstyle) => {
-                  console.log(cutstyle);
+                  // console.log(cutstyle);
                   return (
                     <tr key={cutstyle.id}>
                       <td>{cutstyle.name}</td>

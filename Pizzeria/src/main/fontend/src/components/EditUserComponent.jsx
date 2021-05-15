@@ -6,7 +6,6 @@ import {
   Container,
   Form,
   Modal,
-  Navbar,
   Row,
 } from "react-bootstrap";
 import UserService from "../services/UserService";
@@ -16,6 +15,7 @@ import WarningIcon from "./icons/WarningIcon";
 const EditUserComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
   const idUser = localStorage.getItem("idUser");
+
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
@@ -29,13 +29,15 @@ const EditUserComponent = (props) => {
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   useEffect(() => {
-    UserService.getUserById(parseInt(idUser, 10)).then((res) => {
-      let user = res.data;
-      setName(user.name);
-      setSurname(user.surname);
-      setEmail(user.email);
-      setPhoneNumber(user.phonenumber);
-    });
+    UserService.getUserById(parseInt(localStorage.getItem("idUser"), 10)).then(
+      (res) => {
+        let user = res.data;
+        setName(user.name);
+        setSurname(user.surname);
+        setEmail(user.email);
+        setPhoneNumber(user.phonenumber);
+      }
+    );
   }, []);
 
   const invalidUserModalClose = () => {
@@ -73,10 +75,10 @@ const EditUserComponent = (props) => {
     return re.test(name);
   };
 
-  const changeNameHandler = (event) => {
+  const handleNameChange = (event) => {
     setName(event.target.value);
     setNameValid(validateName(event.target.value));
-    console.log(validateName(event.target.name));
+    // console.log(validateName(event.target.name));
   };
 
   // surname
@@ -84,7 +86,7 @@ const EditUserComponent = (props) => {
     const re = /^[A-Z][a-z]+$/;
     return re.test(surname);
   };
-  const changeSurnameHandler = (event) => {
+  const handleSurnameChange = (event) => {
     setSurname(event.target.value);
     setSurnameValid(validateSurname(event.target.value));
   };
@@ -95,7 +97,7 @@ const EditUserComponent = (props) => {
     return re.test(String(email).toLowerCase());
   };
 
-  const changeEmailHandler = (event) => {
+  const handleEmailChange = (event) => {
     setEmail(event.target.value);
     setEmailValid(validateEmail(event.target.value));
   };
@@ -106,13 +108,9 @@ const EditUserComponent = (props) => {
     return re.test(phoneNumber);
   };
 
-  const changePhoneNumberHandler = (event) => {
+  const handlePhoneNumberChange = (event) => {
     setPhoneNumber(event.target.value);
     setPhoneNumberValid(validatePhoneNumber(event.target.value));
-  };
-
-  const handleInvalidUserModalClose = () => {
-    setShowInvalidUserModal(false);
   };
 
   const updateUser = (e) => {
@@ -128,13 +126,13 @@ const EditUserComponent = (props) => {
       Object.values(user).every((el) => el) &&
       validations.every((el) => el)
     ) {
-      console.log(user);
+      // console.log(user);
       UserService.updateUser(user, parseInt(idUser, 10))
         .then((res) => {
           cancel(parseInt(idAccount, 10));
         })
         .catch((error) => {
-          console.log(error.response);
+          // console.log(error.response);
           setShowInvalidUserModal(true);
         });
     } else {
@@ -161,7 +159,7 @@ const EditUserComponent = (props) => {
                       }
                       name="name"
                       value={name}
-                      onChange={changeNameHandler}
+                      onChange={handleNameChange}
                     />
                     {!nameValid && (
                       <Form.Text className="text-muted">
@@ -180,7 +178,7 @@ const EditUserComponent = (props) => {
                       }
                       name="surname"
                       value={surname}
-                      onChange={changeSurnameHandler}
+                      onChange={handleSurnameChange}
                     />
                     {!surnameValid && (
                       <Form.Text className="text-muted">
@@ -199,7 +197,7 @@ const EditUserComponent = (props) => {
                       }
                       name="email"
                       value={email}
-                      onChange={changeEmailHandler}
+                      onChange={handleEmailChange}
                     />
                     {!emailValid && (
                       <Form.Text className="text-muted">
@@ -218,7 +216,7 @@ const EditUserComponent = (props) => {
                       }
                       name="phonenumber"
                       value={phoneNumber}
-                      onChange={changePhoneNumberHandler}
+                      onChange={handlePhoneNumberChange}
                     />
                     {!phoneNumberValid && (
                       <Form.Text className="text-muted">
