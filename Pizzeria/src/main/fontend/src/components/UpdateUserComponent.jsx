@@ -166,7 +166,9 @@ const UpdateUserComponent = (props) => {
                     />
                     {!nameValid && (
                       <Form.Text className="text-muted">
-                        <span style={{ color: "red" }}>Name is not valid</span>
+                        <span style={{ color: "red" }}>
+                          Name value is not valid
+                        </span>
                       </Form.Text>
                     )}
                   </Form.Group>
@@ -184,7 +186,7 @@ const UpdateUserComponent = (props) => {
                     {!surnameValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          <WarningIcon /> Last name is not valid
+                          <WarningIcon /> Last name value is not valid
                         </span>
                       </Form.Text>
                     )}
@@ -203,7 +205,7 @@ const UpdateUserComponent = (props) => {
                     {!emailValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          <WarningIcon /> Email is not valid
+                          <WarningIcon /> Email value is not valid
                         </span>
                       </Form.Text>
                     )}

@@ -45,8 +45,8 @@ const AdminNewPizzaModal = (props) => {
     }
   };
   const validatePrice = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
-    return re.test(s);
+    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]{1,2})?$/;
+    return re.test(s) && parseFloat(s) <= 30.0 && parseFloat(s) >= 10.0;
   };
   const validateImage = (s) => {
     const re = /^((http(s)?)?:\/\/.*\.(?:png|jpg))$/;
@@ -148,7 +148,8 @@ const AdminNewPizzaModal = (props) => {
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Price is not valid
+                      <WarningIcon /> Price value is not valid (or not from
+                      10.00$ to 30.00$)
                     </span>
                   )}
                 </Form.Group>
@@ -165,7 +166,7 @@ const AdminNewPizzaModal = (props) => {
                   {!imageValid && (
                     <span style={{ color: "red" }}>
                       <WarningIcon />
-                      Image url is not valid
+                      Image url value is not valid
                     </span>
                   )}
                 </Form.Group>

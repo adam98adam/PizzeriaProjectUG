@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -15,7 +15,7 @@ import OrdersService from "../services/OrdersService";
 
 const PizzaListComponent = (props) => {
   const [showPizzaOrder, setShowPizzaOrder] = useState(false);
-  const [selectedPizza, setSelectedPizza] = useState({});
+  const selectedPizza = useRef({});
   const { pizzalist } = props;
   const {
     crustlist,
@@ -99,7 +99,7 @@ const PizzaListComponent = (props) => {
                 <Button
                   variant="success"
                   onClick={() => {
-                    setSelectedPizza(pizza);
+                    selectedPizza.current = pizza;
                     setShowPizzaOrder(true);
                   }}
                 >
@@ -109,7 +109,7 @@ const PizzaListComponent = (props) => {
             </Col>
           ))}
           <PizzaOrderModal
-            pizza={selectedPizza}
+            pizza={selectedPizza.current}
             crustlist={crustlist}
             bakestylelist={bakestylelist}
             drinkslist={drinkslist}

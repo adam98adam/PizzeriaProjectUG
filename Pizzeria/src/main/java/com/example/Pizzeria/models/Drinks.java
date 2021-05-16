@@ -29,7 +29,7 @@ public class Drinks {
 
     @NotBlank
     //@Column(nullable = false)
-    @Column(columnDefinition = "Double precision not null CHECK (price >= 1.00 AND diameter <= 6.00)")
+    @Column(columnDefinition = "Double precision not null CHECK (price >= 1.00 AND price <= 6.00)")
     @DecimalMin(value = "1.00")
     @DecimalMax(value = "6.00")
     private Double price;

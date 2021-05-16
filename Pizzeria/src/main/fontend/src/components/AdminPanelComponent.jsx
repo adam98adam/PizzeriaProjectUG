@@ -54,57 +54,57 @@ const AdminPanelComponent = (props) => {
   const sauceList = useRef([]);
 
   useEffect(() => {
-    AccountService.getAccountById(parseInt(props.match.params.id, 10)).then(
-      (res) => {
-        // console.log(res.data);
-        login.current = res.data.login;
-        password.current = res.data.password;
-        idUser.current = res.data.user.id;
-        name.current = res.data.user.name;
-        surname.current = res.data.user.surname;
-        email.current = res.data.user.email;
-        phoneNumber.current = res.data.user.phonenumber;
-        AddressService.getAddressByUserId(parseInt(res.data.user.id, 10)).then(
-          (res) => {
-            // console.log(res.data);
-            idAddress.current = res.data.id;
-            city.current = res.data.city;
-            street.current = res.data.street;
-            number.current = res.data.number;
-          }
-        );
+    AccountService.getAccountById(
+      parseInt(localStorage.getItem("idAccount"), 10)
+    ).then((res) => {
+      // console.log(res.data);
+      login.current = res.data.login;
+      password.current = res.data.password;
+      idUser.current = res.data.user.id;
+      name.current = res.data.user.name;
+      surname.current = res.data.user.surname;
+      email.current = res.data.user.email;
+      phoneNumber.current = res.data.user.phonenumber;
+      AddressService.getAddressByUserId(parseInt(res.data.user.id, 10)).then(
+        (res) => {
+          // console.log(res.data);
+          idAddress.current = res.data.id;
+          city.current = res.data.city;
+          street.current = res.data.street;
+          number.current = res.data.number;
+        }
+      );
 
-        PizzaService.getAllPizza().then((res) => {
-          //   // console.log(res.data);
-          pizzaList.current = res.data;
-          //   // console.log(pizzaList);
-        });
-        CrustService.getAllCrust().then((res) => {
-          crustList.current = res.data;
-          //   // console.log(res.data);
-        });
-        BakestyleService.getAllBakestyle().then((res) => {
-          bakestyleList.current = res.data;
-          //   // console.log(res.data);
-        });
-        DrinksService.getAllDrinks().then((res) => {
-          drinksList.current = res.data;
-          //   // console.log(res.data);
-        });
-        PizzasizeService.getAllPizzasize().then((res) => {
-          pizzaSizeList.current = res.data;
-          //   // console.log(res.data);
-        });
-        CutstyleService.getAllCutstyle().then((res) => {
-          cutstyleList.current = res.data;
-          //   // console.log(res.data);
-        });
-        SaucesService.getAllSauces().then((res) => {
-          sauceList.current = res.data;
-          //   // console.log(res.data);
-        });
-      }
-    );
+      PizzaService.getAllPizza().then((res) => {
+        //   // console.log(res.data);
+        pizzaList.current = res.data;
+        //   // console.log(pizzaList);
+      });
+      CrustService.getAllCrust().then((res) => {
+        crustList.current = res.data;
+        //   // console.log(res.data);
+      });
+      BakestyleService.getAllBakestyle().then((res) => {
+        bakestyleList.current = res.data;
+        //   // console.log(res.data);
+      });
+      DrinksService.getAllDrinks().then((res) => {
+        drinksList.current = res.data;
+        //   // console.log(res.data);
+      });
+      PizzasizeService.getAllPizzasize().then((res) => {
+        pizzaSizeList.current = res.data;
+        //   // console.log(res.data);
+      });
+      CutstyleService.getAllCutstyle().then((res) => {
+        cutstyleList.current = res.data;
+        //   // console.log(res.data);
+      });
+      SaucesService.getAllSauces().then((res) => {
+        sauceList.current = res.data;
+        //   // console.log(res.data);
+      });
+    });
   }, [props.match.params.id]);
 
   const user = (idAccount, idUser) => {
@@ -217,7 +217,7 @@ const AdminPanelComponent = (props) => {
             </Nav.Link>
             <Nav.Link
               onClick={() =>
-                address(parseInt(idAccount, 10), parseInt(idAddress, 10))
+                address(parseInt(idAccount, 10), parseInt(idAddress.current, 10))
               }
             >
               Address

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -23,7 +23,21 @@ const RegisterUserAddressComponent = (props) => {
   const [numberValid, setNumberValid] = useState(true);
 
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [disableSaveButton, setDisableSaveButton] = useState(true);
 
+  useEffect(() => {
+    const saveButtonDisabled = () => {
+      return (
+        !cityValid ||
+        !streetValid ||
+        !numberValid ||
+        city === "" ||
+        street === "" ||
+        number === ""
+      );
+    };
+    setDisableSaveButton(saveButtonDisabled());
+  }, [city, number, street, cityValid, streetValid, numberValid]);
   const saveAddress = (e) => {
     let address = {
       city: city,
@@ -58,7 +72,7 @@ const RegisterUserAddressComponent = (props) => {
   };
 
   const validateStreet = (street) => {
-    const re = /^[1-9]+[0-9]*(\/[1-9]+[0-9]*)?$/;
+    const re = /^[A-Z][a-z]+$/;
     return re.test(street);
   };
 
@@ -69,16 +83,12 @@ const RegisterUserAddressComponent = (props) => {
 
   const validateNumber = (number) => {
     const re = /^[1-9]+[0-9]*(\/[1-9]+[0-9]*)?$/;
-    return re.test(number);
+    return re.test(number) && parseInt(number) >= 1 && parseInt(number) <= 100;
   };
 
   const handleNumberChange = (event) => {
     setNumber(event.target.value);
     setNumberValid(validateNumber(event.target.value));
-  };
-
-  const cancel = () => {
-    props.history.push("/register");
   };
   const handleAddressModalClose = () => {
     setShowAddressModal(false);
@@ -126,7 +136,9 @@ const RegisterUserAddressComponent = (props) => {
                       onChange={handleCityChange}
                     />
                     {!cityValid && (
-                      <span style={{ color: "red" }}>City is not valid</span>
+                      <span style={{ color: "red" }}>
+                        City value is not valid
+                      </span>
                     )}
                   </Form.Group>
                   <Form.Group controlId="formStreet">
@@ -141,7 +153,9 @@ const RegisterUserAddressComponent = (props) => {
                       onChange={handleStreetChange}
                     />
                     {!streetValid && (
-                      <span style={{ color: "red" }}>Street is not valid</span>
+                      <span style={{ color: "red" }}>
+                        Street value is not valid
+                      </span>
                     )}
                   </Form.Group>
                   <Form.Group>
@@ -156,14 +170,17 @@ const RegisterUserAddressComponent = (props) => {
                       onChange={handleNumberChange}
                     />
                     {!numberValid && (
-                      <span style={{ color: "red" }}>Number is not valid</span>
+                      <span style={{ color: "red" }}>
+                        Number value is not valid
+                      </span>
                     )}
                   </Form.Group>
-                  <Button variant="success" onClick={saveAddress}>
+                  <Button
+                    variant="success"
+                    onClick={saveAddress}
+                    disabled={disableSaveButton}
+                  >
                     Save
-                  </Button>
-                  <Button variant="danger" onClick={cancel}>
-                    Cancel
                   </Button>
                 </Card.Body>
               </Card>

@@ -5,8 +5,8 @@ import SaucesService from "../services/SaucesService";
 
 const AdminSauceUpdateModal = (props) => {
   const sauceId = props.sauce.id;
-  const [name, setName] = useState(props.sauce.name);
-  const [price, setPrice] = useState(props.sauce.price);
+  const [name, setName] = useState(props.sauce.name || "");
+  const [price, setPrice] = useState(props.sauce.price || "");
 
   const initialName = props.sauce.name;
   const initialPrice = props.sauce.price;
@@ -45,7 +45,7 @@ const AdminSauceUpdateModal = (props) => {
     }
   };
   const validatePrice = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
+    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]{1,2})?$/;
     return re.test(s);
   };
 
@@ -61,8 +61,8 @@ const AdminSauceUpdateModal = (props) => {
 
   const handleSauceUpdateModalClose = () => {
     props.onHide();
-    setName(props.sauce.name);
-    setPrice(props.sauce.price);
+    setName("");
+    setPrice("");
     setNameValid(true);
     setPriceValid(true);
   };
@@ -111,7 +111,8 @@ const AdminSauceUpdateModal = (props) => {
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Price is not valid
+                      <WarningIcon /> Price value is not valid (or not from 0.5$
+                      to 3.00$)
                     </span>
                   )}
                 </Form.Group>

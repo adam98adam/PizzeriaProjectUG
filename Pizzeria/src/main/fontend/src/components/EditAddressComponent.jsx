@@ -80,8 +80,8 @@ const EditAddressComponent = (props) => {
   };
 
   const validateNumber = (number) => {
-    const re = /^[1-9]+[0-9]*(\/[1-9]+[0-9]*)?$/;
-    return re.test(number);
+    const re = /^[1-9][0-9]*$/;
+    return re.test(number) && parseInt(number) <= 100 && parseInt(number) >= 1;
   };
 
   const handleNumberChange = (event) => {
@@ -101,12 +101,12 @@ const EditAddressComponent = (props) => {
     return (
       <Modal show={showAddressModal} centered onHide={handleAddressModalClose}>
         <Modal.Header>
-          <Modal.Title>Address Fields Empty/Not Valid</Modal.Title>
+          <Modal.Title>Invalid New Data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <p>
-            One or more of address fields are empty or not valid. Please fill up
-            these fields.
+            One or more of address fields are empty not valid or not unique.
+            Please fill up these fields with different values.
           </p>
         </Modal.Body>
         <Modal.Footer>
@@ -122,7 +122,7 @@ const EditAddressComponent = (props) => {
       <PizzeriaUpdatePageNavHeader />
       <Card className="main-card">
         <Card.Body>
-          <Card.Title>Update User</Card.Title>
+          <Card.Title>Update User Address</Card.Title>
           <Form className="center">
             <Container fluid>
               <Row>
@@ -140,7 +140,7 @@ const EditAddressComponent = (props) => {
                     />
                     {!cityValid && (
                       <span style={{ color: "red" }}>
-                        <WarningIcon /> City is not valid
+                        <WarningIcon /> City value is not valid
                       </span>
                     )}
                   </Form.Group>
@@ -157,7 +157,7 @@ const EditAddressComponent = (props) => {
                     />
                     {!streetValid && (
                       <span style={{ color: "red" }}>
-                        <WarningIcon /> Street is not valid
+                        <WarningIcon /> Street value is not valid
                       </span>
                     )}
                   </Form.Group>
@@ -174,7 +174,7 @@ const EditAddressComponent = (props) => {
                     />
                     {!numberValid && (
                       <span style={{ color: "red" }}>
-                        <WarningIcon /> Number is not valid
+                        <WarningIcon /> Number value is not valid
                       </span>
                     )}
                   </Form.Group>

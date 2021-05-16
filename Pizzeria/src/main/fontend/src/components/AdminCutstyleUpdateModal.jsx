@@ -30,7 +30,7 @@ const AdminCutstyleUpdateModal = (props) => {
           // console.log(res.data);
           handleCutstyleUpdateModalClose();
         })
-        .catch((error) => alert("Drink data is not unique"));
+        .catch((error) => alert("Cutstyle data is not unique"));
     } else {
     }
   };

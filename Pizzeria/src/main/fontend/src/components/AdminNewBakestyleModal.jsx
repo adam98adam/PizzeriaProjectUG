@@ -25,7 +25,7 @@ const AdminNewBakestyleModal = (props) => {
         })
         .catch((error) => {
           // console.log(error);
-          alert("Sauce data is not unique");
+          alert("Bakestyle data is not unique");
         });
     } else {
     }

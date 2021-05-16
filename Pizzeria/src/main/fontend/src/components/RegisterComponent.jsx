@@ -7,13 +7,13 @@ import {
   Col,
   Container,
   Form,
+  InputGroup,
   Modal,
   Navbar,
   Overlay,
   Row,
   Tooltip,
 } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import WarningIcon from "./icons/WarningIcon";
 
 const RegisterComponent = (props) => {
@@ -90,6 +90,7 @@ const RegisterComponent = (props) => {
               })
               .catch((error) => {
                 UserService.deleteUser(res.data.id).then((res) => {
+                  setShowLoginModal(true);
                   // console.log(res.data)
                   // console.log(error.response);
                 });
@@ -97,6 +98,7 @@ const RegisterComponent = (props) => {
           })
           .catch((error) => {
             // console.log(error.response));
+            setShowUserModal(true);
           });
       } else {
         setShowLoginModal(true);
@@ -143,7 +145,7 @@ const RegisterComponent = (props) => {
 
   // phone number
   const validatePhoneNumber = (phoneNumber) => {
-    const re = /(\+[0-9]{2,3})?[0-9]{9}$/;
+    const re = /^[0-9]{9}$/;
     return re.test(phoneNumber);
   };
 
@@ -163,7 +165,7 @@ const RegisterComponent = (props) => {
   };
 
   const validatePassword = (password) => {
-    const re = /^\w+(\w+[.@?]\w+)*$/;
+    const re = /^\w+(\w*[.?$]\w*)+$/;
     return re.test(password);
   };
 
@@ -202,19 +204,17 @@ const RegisterComponent = (props) => {
     return (
       <Modal show={showLoginModal} centered onHide={handleLoginModalClose}>
         <Modal.Header>
-          <Modal.Title>User Not Found</Modal.Title>
+          <Modal.Title>Login Not Found/Empty</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Can't find user, wrong login/password</p>
+          <p>
+            One or more of login fields are empty or not valid. Please fill up
+            these fields.
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={handleLoginModalClose}>
             Try again
-          </Button>
-          <Button variant="secondary">
-            <Link style={{ color: "white" }} to={"/register"}>
-              Register
-            </Link>
           </Button>
         </Modal.Footer>
       </Modal>
@@ -224,8 +224,8 @@ const RegisterComponent = (props) => {
   const loginInfoIcon = () => {
     return (
       <>
-        <a
-          href={loginButtonTarget}
+        <span
+          ref={loginButtonTarget}
           onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -239,11 +239,12 @@ const RegisterComponent = (props) => {
           >
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
           </svg>
-        </a>
+        </span>
         <Overlay
           target={loginButtonTarget.current}
           show={showLoginInfoTooltip}
           placement="right"
+          onExit={() => setShowLoginInfoTooltip(false)}
         >
           {(props) => (
             <Tooltip id="overlay-example" {...props}>
@@ -262,10 +263,12 @@ const RegisterComponent = (props) => {
   const passwordInfoIcon = () => {
     return (
       <>
-        <a
-          href={passwordButtonTarget}
-          onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
+        <span
+          ref={passwordButtonTarget}
           style={{ color: "blue" }}
+          onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
+          onMouseEnter={() => setShowPasswordInfoTooltip(true)}
+          onMouseLeave={() => setShowPasswordInfoTooltip(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -277,18 +280,21 @@ const RegisterComponent = (props) => {
           >
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
           </svg>
-        </a>
+        </span>
         <Overlay
           target={passwordButtonTarget.current}
           show={showPasswordInfoTooltip}
           placement="right"
+          onExit={() => setShowPasswordInfoTooltip(false)}
+          onMouseEnter={() => setShowPasswordInfoTooltip(true)}
+          onMouseLeave={() => setShowPasswordInfoTooltip(false)}
         >
           {(props) => (
             <Tooltip id="overlay-example" {...props}>
               <p>
                 Password should: <br />
                 - have at least 6 characters
-                <br />- have at least one of characters(. or @)
+                <br />- have at least one of special characters
                 <br />- start with a letter
               </p>
             </Tooltip>
@@ -334,7 +340,7 @@ const RegisterComponent = (props) => {
                           <Form.Text className="text-muted">
                             <span style={{ color: "red" }}>
                               <WarningIcon />
-                              Name is not valid
+                              Name value is not valid
                             </span>
                           </Form.Text>
                         )}
@@ -351,7 +357,8 @@ const RegisterComponent = (props) => {
                         {!surnameValid && (
                           <Form.Text className="text-muted">
                             <span style={{ color: "red" }}>
-                              Last name is not valid
+                              <WarningIcon />
+                              Last name value is not valid
                             </span>
                           </Form.Text>
                         )}
@@ -367,7 +374,10 @@ const RegisterComponent = (props) => {
                         />
                         {!emailValid && (
                           <Form.Text className="text-muted">
-                            <p style={{ color: "red" }}>Email is not valid</p>
+                            <span style={{ color: "red" }}>
+                              <WarningIcon />
+                              Email value is not valid
+                            </span>
                           </Form.Text>
                         )}
                         <Form.Label>Phone Number</Form.Label>
@@ -384,9 +394,10 @@ const RegisterComponent = (props) => {
                         />
                         {!phoneNumberValid && (
                           <Form.Text className="text-muted">
-                            <p style={{ color: "red" }}>
+                            <span style={{ color: "red" }}>
+                              <WarningIcon />
                               Phone number is invalid
-                            </p>
+                            </span>
                           </Form.Text>
                         )}
                       </Form.Group>
@@ -412,8 +423,9 @@ const RegisterComponent = (props) => {
                         />
                         {!loginValid && (
                           <Form.Text className="text-muted">
+                            <WarningIcon />
                             <span style={{ color: "red" }}>
-                              Login is not valid
+                              Login value is not valid
                             </span>
                             {loginInfoIcon()}
                           </Form.Text>
@@ -429,9 +441,13 @@ const RegisterComponent = (props) => {
                           placeholder="Enter your password"
                           onChange={handlePasswordChange}
                         />
+                        <InputGroup.Append>
+                          <i className="bi bi-eye"></i>
+                        </InputGroup.Append>
                         {!passwordValid && (
                           <Form.Text className="text-muted">
                             <span style={{ color: "red" }}>
+                              <WarningIcon />
                               Password is invalid
                             </span>
                             {passwordInfoIcon()}

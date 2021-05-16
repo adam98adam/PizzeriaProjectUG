@@ -17,9 +17,12 @@ import WarningIcon from "./icons/WarningIcon";
 const EditAccountComponent = (props) => {
   const loginButtonTarget = useRef(null);
   const passwordButtonTarget = useRef(null);
+
   const id = props.match.params.id;
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+  const initialLogin = useRef("");
+  const initialPassword = useRef("");
   const [showInvalidAccountUpdateModal, setShowInvalidAccountUpdateModal] =
     useState(false);
 
@@ -29,11 +32,16 @@ const EditAccountComponent = (props) => {
   const [showLoginInfoTooltip, setShowLoginInfoTooltip] = useState(false);
   const [showPasswordInfoTooltip, setShowPasswordInfoTooltip] = useState(false);
 
+  const [disableSaveButton, setDisableSaveButton] = useState(true);
   useEffect(() => {
     // console.log(id);
-    AccountService.getAccountById(parseInt(props.match.params.id, 10))
+    AccountService.getAccountById(
+      parseInt(localStorage.getItem("idAccount"), 10)
+    )
       .then((res) => {
         let account = res.data;
+        initialLogin.current = account.login;
+        initialPassword.current = account.password;
         setLogin(account.login);
         setPassword(account.password);
       })
@@ -43,6 +51,18 @@ const EditAccountComponent = (props) => {
       });
   }, [props.match.params.id]);
 
+  useEffect(() => {
+    const saveButtonDisabled = () => {
+      return (
+        !loginValid ||
+        !passwordValid ||
+        login === "" ||
+        password === "" ||
+        (login === initialLogin && password === initialPassword)
+      );
+    };
+    setDisableSaveButton(saveButtonDisabled());
+  }, [login, password, loginValid, passwordValid]);
   const cancel = (id) => {
     const userType = localStorage.getItem("userType");
     props.history.push(`/${userType}/${id}`);
@@ -63,7 +83,10 @@ const EditAccountComponent = (props) => {
           <Modal.Title>Invalid New data</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Data to update is not valid. </p>
+          <p>
+            One or more of account fields are empty not valid or not unique.
+            Please fill up these fields with different values.{" "}
+          </p>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="primary" onClick={invalidAccountUpdateModalClose}>
@@ -106,7 +129,7 @@ const EditAccountComponent = (props) => {
   };
 
   const validatePassword = (password) => {
-    const re = /^\w+(\w+[.@?]\w*)+$/;
+    const re = /^\w+(\w+[.@?]\w*)*$/;
     return re.test(password);
   };
 
@@ -117,8 +140,8 @@ const EditAccountComponent = (props) => {
   const loginInfoIcon = () => {
     return (
       <>
-        <a
-          href={loginButtonTarget}
+        <span
+          ref={loginButtonTarget}
           onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -132,7 +155,7 @@ const EditAccountComponent = (props) => {
           >
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
           </svg>
-        </a>
+        </span>
         <Overlay
           target={loginButtonTarget.current}
           show={showLoginInfoTooltip}
@@ -155,8 +178,8 @@ const EditAccountComponent = (props) => {
   const passwordInfoIcon = () => {
     return (
       <>
-        <a
-          href={passwordButtonTarget}
+        <span
+          ref={passwordButtonTarget}
           onClick={() => setShowPasswordInfoTooltip(!showPasswordInfoTooltip)}
           style={{ color: "blue" }}
         >
@@ -170,7 +193,7 @@ const EditAccountComponent = (props) => {
           >
             <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z" />
           </svg>
-        </a>
+        </span>
         <Overlay
           target={passwordButtonTarget.current}
           show={showPasswordInfoTooltip}
@@ -190,6 +213,7 @@ const EditAccountComponent = (props) => {
       </>
     );
   };
+
   return (
     <div>
       <PizzeriaUpdatePageNavHeader />
@@ -215,7 +239,7 @@ const EditAccountComponent = (props) => {
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
                           <WarningIcon />
-                          Login is not valid
+                          Login value is not valid
                         </span>
                         {loginInfoIcon()}
                       </Form.Text>
@@ -242,7 +266,11 @@ const EditAccountComponent = (props) => {
                       </Form.Text>
                     )}
                   </Form.Group>
-                  <Button variant="success" onClick={updateAccount}>
+                  <Button
+                    variant="success"
+                    onClick={updateAccount}
+                    disabled={disableSaveButton}
+                  >
                     Save
                   </Button>
                   <Button

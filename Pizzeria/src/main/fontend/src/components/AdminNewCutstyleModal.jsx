@@ -25,7 +25,7 @@ const AdminNewCutstyleModal = (props) => {
         })
         .catch((error) => {
           // console.log(error);
-          alert("Sauce data is not unique");
+          alert("Cutstyle data is not unique");
         });
     } else {
     }

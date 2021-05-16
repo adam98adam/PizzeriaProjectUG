@@ -28,14 +28,14 @@ const AdminNewCrustModal = (props) => {
         })
         .catch((error) => {
           // console.log(error);
-          alert("Sauce data is not unique");
+          alert("Crust data is not unique");
         });
     } else {
     }
   };
   const validatePrice = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
-    return re.test(s);
+    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]{1,2})?$/;
+    return re.test(s) && parseFloat(s) < 6.01 && parseFloat(s) > 0.99;
   };
 
   const handlePriceChange = (event) => {
@@ -97,7 +97,8 @@ const AdminNewCrustModal = (props) => {
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Price is not valid
+                      <WarningIcon /> Price value is not valid (or not from
+                      1.00$ to 6.00$)
                     </span>
                   )}
                 </Form.Group>

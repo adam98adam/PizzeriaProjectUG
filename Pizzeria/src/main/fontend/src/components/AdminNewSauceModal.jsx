@@ -34,8 +34,8 @@ const AdminNewSauceModal = (props) => {
     }
   };
   const validatePrice = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
-    return re.test(s);
+    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]{1,2})?$/;
+    return re.test(s) && parseFloat(s) <= 3.0 && parseFloat(s) >= 0.5;
   };
 
   const handlePriceChange = (event) => {
@@ -97,7 +97,8 @@ const AdminNewSauceModal = (props) => {
                   />
                   {!priceValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Price is not valid
+                      <WarningIcon /> Price value is not valid (or not from 0.5$
+                      to 3.00$)
                     </span>
                   )}
                 </Form.Group>

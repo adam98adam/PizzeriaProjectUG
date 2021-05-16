@@ -34,12 +34,12 @@ const AdminNewPizzasizeModal = (props) => {
     }
   };
   const validatePizzacostfactor = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
-    return re.test(s);
+    const re = /^[1-9]{1,2}(\.[0-9]{1,2})?$/;
+    return re.test(s) && parseFloat(s) <= 2.5 && parseFloat(s) >= 1.0;
   };
   const validateDiameter = (s) => {
     const re = /^([0-9]|([1-9][0-9]*))$/;
-    return re.test(s);
+    return re.test(s) && parseInt(s) <= 65 && parseInt(s) >= 10;
   };
 
   const handlePizzacostfactorChange = (event) => {
@@ -71,6 +71,7 @@ const AdminNewPizzasizeModal = (props) => {
       (name === "" && pizzacostfactor === "" && diameter === "")
     );
   };
+
   return (
     <Modal centered {...props} onExit={handleNewPizzasizeModalClose}>
       <Modal.Header className="text-center" closeButton>
@@ -98,7 +99,7 @@ const AdminNewPizzasizeModal = (props) => {
                   )}
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Diameter</Form.Label>
+                  <Form.Label>Diameter (cm)</Form.Label>
                   <Form.Control
                     name="diameter"
                     className={
@@ -109,12 +110,13 @@ const AdminNewPizzasizeModal = (props) => {
                   />
                   {!diameterValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Diameter is not valid
+                      <WarningIcon /> Diameter value is not valid (or not
+                      from 10 to 65 )
                     </span>
                   )}
                 </Form.Group>
                 <Form.Group>
-                  <Form.Label>Pizzacostfactor</Form.Label>
+                  <Form.Label>Price cost factor</Form.Label>
                   <Form.Control
                     name="pizzacostfactor"
                     className={
@@ -127,7 +129,7 @@ const AdminNewPizzasizeModal = (props) => {
                   />
                   {!pizzacostfactorValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Pizzacostfactor is not valid
+                      <WarningIcon /> Price cost factor value is not valid
                     </span>
                   )}
                 </Form.Group>

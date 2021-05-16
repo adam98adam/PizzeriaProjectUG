@@ -30,7 +30,7 @@ const AdminBakestyleUpdateModal = (props) => {
           // console.log(res.data);
           handleBakestyleUpdateModalClose();
         })
-        .catch((error) => alert("Drink data is not unique"));
+        .catch((error) => alert("Bakestyle data is not unique"));
     } else {
     }
   };

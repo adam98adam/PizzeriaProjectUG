@@ -4,28 +4,20 @@ import OrdersService from "../services/OrdersService";
 import PizzaLogo from "./../images/pizza-logo.png";
 import "./../css/index.css";
 
-const formatDate = (datetime) => {
-  const splitDateTime = datetime.split("T");
-  const date = splitDateTime[0];
-  const time = splitDateTime[1].split("+")[0].split(".")[0];
-  const splitDate = date.split("-").map((el) => parseInt(el));
-  const splitTime = time.split(":").map((el) => parseInt(el));
-  //   // console.log(splitDate);
-  //   // console.log(splitTime);
-  const formattedDate = new Date(
-    splitDate[0],
-    splitDate[1],
-    splitDate[2],
-    splitTime[0],
-    splitTime[1],
-    splitTime[2]
-  );
-  formattedDate.setMinutes(
-    formattedDate.getMinutes() - formattedDate.getTimezoneOffset()
-  );
-  return `${formattedDate.getHours()}:${formattedDate.getMinutes()}:${
-    time.split(":")[2]
-  } ${formattedDate.getDate()}-${formattedDate.getMonth()}-${formattedDate.getFullYear()}`;
+const formatDate = (dateString) => {
+  let date = new Date(dateString);
+  const hours = date.getHours().toString();
+  const minutes = date.getMinutes().toString();
+  const time = `${hours < 10 ? "0" + hours : hours}:${
+    minutes < 10 ? "0" + minutes : minutes
+  }`;
+  const day = date.getDate().toString();
+  const month = date.getMonth().toString();
+  const year = date.getFullYear().toString();
+  date = `${day < 10 ? "0" + day : day}-${
+    month < 10 ? "0" + month : month
+  }-${year}`;
+  return `${time}  ${date}`;
 };
 
 const AdminOrdersComponent = (props) => {
@@ -95,22 +87,22 @@ const AdminOrdersComponent = (props) => {
               bordered
               hover
               responsive
-              style={{
+              /* style={{
                 backgroundColor: "rgba(0,188,44,0.63)",
                 borderRadius: 30,
-              }}
+              }} */
             >
               <thead
-                style={{
+              /* style={{
                   backgroundColor: "rgba(255,255,255,0.3)",
                   borderRadius: 13,
-                }}
+                }} */
               >
                 <tr
-                  style={{
+                /*  style={{
                     backgroundColor: "rgba(255,255,255,0.3)",
                     borderRadius: 13,
-                  }}
+                  }} */
                 >
                   <th>User</th>
                   <th>Email</th>

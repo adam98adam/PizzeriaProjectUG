@@ -37,7 +37,7 @@ public class Pizza {
 
     @NotBlank
     //@Column(nullable = false)
-    @Column(columnDefinition = "Double precision not null unique CHECK (price >= 10.00 AND price <= 30.00)")
+    @Column(columnDefinition = "Double precision not null CHECK (price >= 10.00 AND price <= 30.00)")
     @DecimalMin(value = "10.00")
     @DecimalMax(value = "30.00")
     private Double price;

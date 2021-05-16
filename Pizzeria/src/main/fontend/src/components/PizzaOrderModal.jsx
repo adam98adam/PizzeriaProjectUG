@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
 import "reactjs-popup/dist/index.css";
 import "./../css/index.css";
@@ -20,10 +20,8 @@ const PizzaOrderModal = (props) => {
     cutstylelist,
     saucelist,
   } = props;
-
-  const [price, setPrice] = useState(null);
-  const pizzaPrice = useRef(null);
-  const [pizzaSize, setPizzaSize] = useState({ pizzacostfactor: 1 });
+  const [price, setPrice] = useState(0);
+  const [pizzaSize, setPizzaSize] = useState({ pizzacostfactor: 0 });
   const [pizzaCrust, setPizzaCrust] = useState({ price: 0 });
   const [drink, setDrink] = useState({ price: 0 });
   const [sauce, setSauce] = useState({ price: 0 });
@@ -37,14 +35,14 @@ const PizzaOrderModal = (props) => {
     cutstyle: false,
   });
 
-  useEffect(() => {
-    pizzaPrice.current =
-      pizzaPrice * pizzaSize.pizzacostfactor +
-      pizzaCrust.price +
-      drink.price +
-      sauce.price;
-    setPrice(pizzaPrice.current);
-  }, [pizzaSize, pizzaCrust, drink, sauce]);
+  /* useEffect(() => {
+    setPrice(
+      pizza.price * pizzaSize.pizzacostfactor +
+        pizzaCrust.price +
+        drink.price +
+        sauce.price
+    );
+  }, [pizzaSize, pizzaCrust, drink, sauce]); */
   useEffect(() => {
     UserService.getUserById(localStorage.getItem("idUser")).then((res) => {
       setUser(res.data);
@@ -52,27 +50,47 @@ const PizzaOrderModal = (props) => {
   }, []);
 
   const handlePizzaSizeChange = ({ target }) => {
-    if (target.value !== "") {
+    let pizzaSizeCostFactor = 0;
+    if (target.value === "") {
+      setPizzaSize({ pizzacostfactor: 0 });
+    } else {
       setPizzaSize(
         pizzasizelist.filter((el) => el.id === parseInt(target.value))[0]
       );
-    } else {
-      setPizzaSize({ pizzacostfactor: 0 });
+      pizzaSizeCostFactor = pizzasizelist.filter(
+        (el) => el.id === parseInt(target.value)
+      )[0].pizzacostfactor;
     }
     setSelected({
       ...selected,
       size: target.value !== "",
     });
+    setPrice(
+      pizza.price * pizzaSizeCostFactor +
+        pizzaCrust.price +
+        drink.price +
+        sauce.price
+    );
   };
 
   const handlePizzaCrustChange = ({ target }) => {
+    let crustPrice = 0;
     if (target.value === "") {
       setPizzaCrust({ price: 0 });
     } else {
       setPizzaCrust(
         crustlist.filter((el) => el.id === parseInt(target.value))[0]
       );
+      crustPrice = crustlist.filter((el) => el.id === parseInt(target.value))[0]
+        .price;
     }
+
+    setPrice(
+      pizza.price * pizzaSize.pizzacostfactor +
+        crustPrice +
+        drink.price +
+        sauce.price
+    );
     setSelected({
       ...selected,
       crust: target.value !== "",
@@ -80,11 +98,22 @@ const PizzaOrderModal = (props) => {
   };
 
   const handleDrinkChange = ({ target }) => {
+    let drinkPrice = 0;
     if (target.value === "") {
       setDrink({ price: 0 });
     } else {
       setDrink(drinkslist.filter((el) => el.id === parseInt(target.value))[0]);
+      drinkPrice = drinkslist.filter(
+        (el) => el.id === parseInt(target.value)
+      )[0].price;
     }
+
+    setPrice(
+      pizza.price * pizzaSize.pizzacostfactor +
+        pizzaCrust.price +
+        drinkPrice +
+        sauce.price
+    );
   };
   const handleBakestyleChange = ({ target }) => {
     if (target.value === "") {
@@ -113,11 +142,20 @@ const PizzaOrderModal = (props) => {
     });
   };
   const handleSauceChange = ({ target }) => {
+    let saucePrice = 0;
     if (target.value === "") {
       setSauce({ price: 0 });
     } else {
       setSauce(saucelist.filter((el) => el.id === parseInt(target.value))[0]);
+      saucePrice = saucelist.filter((el) => el.id === parseInt(target.value))[0]
+        .price;
     }
+    setPrice(
+      pizza.price * pizzaSize.pizzacostfactor +
+        pizzaCrust.price +
+        drink.price +
+        saucePrice
+    );
   };
   const handlePizzaOrderModalClose = () => {
     props.onHide();
@@ -162,6 +200,9 @@ const PizzaOrderModal = (props) => {
       });
       localStorage.setItem("userOrders", JSON.stringify(res.data));
       setPrice(0);
+      setPizzaCrust({ price: 0 });
+      setDrink({ price: 0 });
+      setSauce({ price: 0 });
     });
   };
   const requiredLabel = () => {
@@ -179,7 +220,12 @@ const PizzaOrderModal = (props) => {
     );
   };
   return (
-    <Modal centered {...props}>
+    <Modal centered {...props} onExit={() => {
+        setPrice(0);
+        setPizzaCrust({ price: 0 });
+        setDrink({ price: 0 });
+        setSauce({ price: 0 });
+    }}>
       <Modal.Header className="text-center" closeButton>
         <Modal.Title className="w-100">Pizza Order Details</Modal.Title>
       </Modal.Header>

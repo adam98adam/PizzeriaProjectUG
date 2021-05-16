@@ -40,31 +40,7 @@ const EditUserComponent = (props) => {
     );
   }, []);
 
-  const invalidUserModalClose = () => {
-    setShowInvalidUserModal(false);
-  };
-
-  const invalidUserModal = () => {
-    return (
-      <Modal
-        show={showInvalidUserModal}
-        centered
-        onHide={invalidUserModalClose}
-      >
-        <Modal.Header>
-          <Modal.Title>Invalid New data</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>Data to update is not valid. </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={invalidUserModalClose}>
-            OK
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
+ 
 
   const cancel = (id) => {
     const userType = localStorage.getItem("userType");
@@ -139,7 +115,30 @@ const EditUserComponent = (props) => {
       setShowInvalidUserModal(true);
     }
   };
+ const invalidUserModalClose = () => {
+   setShowInvalidUserModal(false);
+ };
 
+ const invalidUserModal = () => {
+   return (
+     <Modal show={showInvalidUserModal} centered onHide={invalidUserModalClose}>
+       <Modal.Header>
+         <Modal.Title>Invalid New data</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <p>
+           One or more of user fields are empty not valid or not unique.
+           Please fill up these fields with different values.
+         </p>
+       </Modal.Body>
+       <Modal.Footer>
+         <Button variant="primary" onClick={invalidUserModalClose}>
+           OK
+         </Button>
+       </Modal.Footer>
+     </Modal>
+   );
+ };
   return (
     <div>
       <PizzeriaUpdatePageNavHeader />
@@ -164,7 +163,7 @@ const EditUserComponent = (props) => {
                     {!nameValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          <WarningIcon /> Name is not valid
+                          <WarningIcon /> Name value is not valid
                         </span>
                       </Form.Text>
                     )}
@@ -183,7 +182,7 @@ const EditUserComponent = (props) => {
                     {!surnameValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          <WarningIcon /> Last name is not valid
+                          <WarningIcon /> Last name value is not valid
                         </span>
                       </Form.Text>
                     )}
@@ -202,7 +201,7 @@ const EditUserComponent = (props) => {
                     {!emailValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          <WarningIcon /> Email is not valid
+                          <WarningIcon /> Email value is not valid
                         </span>
                       </Form.Text>
                     )}

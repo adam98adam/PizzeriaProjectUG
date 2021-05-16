@@ -56,12 +56,12 @@ const AdminPizzasizeUpdateModal = (props) => {
     }
   };
   const validatePizzacostfactor = (s) => {
-    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]+)?$/;
-    return re.test(s);
+    const re = /^([0-9]|([1-9][0-9]*))(\.[0-9]{1,2})?$/;
+    return re.test(s) && parseFloat(s) <= 2.5 && parseFloat(s) >= 1.0;
   };
   const validateDiameter = (s) => {
     const re = /^([0-9]|([1-9][0-9]*))$/;
-    return re.test(s);
+    return re.test(s) && parseInt(s) <= 65 && parseInt(s) >= 10;
   };
 
   const handlePizzacostfactorChange = (event) => {
@@ -133,7 +133,7 @@ const AdminPizzasizeUpdateModal = (props) => {
                   />
                   {!diameterValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Diameter is not valid
+                      <WarningIcon /> Diameter value is not valid
                     </span>
                   )}
                 </Form.Group>
@@ -151,7 +151,7 @@ const AdminPizzasizeUpdateModal = (props) => {
                   />
                   {!pizzacostfactorValid && (
                     <span style={{ color: "red" }}>
-                      <WarningIcon /> Pizzacostfactor is not valid
+                      <WarningIcon /> Pizzacostfactor value is not valid
                     </span>
                   )}
                 </Form.Group>
