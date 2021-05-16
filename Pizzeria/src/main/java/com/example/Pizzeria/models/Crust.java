@@ -31,7 +31,8 @@ public class Crust {
     private String crust;
 
     @NotBlank
-    @Column(unique = true,nullable = false)
+    //@Column(unique = true,nullable = false)
+    @Column(columnDefinition = "Double precision not null unique CHECK (price >= 1.00 AND price <= 6.00)")
     @DecimalMin(value = "1.00")
     @DecimalMax(value = "6.00")
     private Double price;

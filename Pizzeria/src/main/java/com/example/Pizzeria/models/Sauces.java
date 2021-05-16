@@ -32,9 +32,10 @@ public class Sauces {
     private String name;
 
     @NotBlank
-    @Column(nullable = false)
+    //@Column(nullable = false)
+    @Column(columnDefinition = "Double precision not null CHECK (price >= 0.50 AND price <= 3.00)")
     @DecimalMin(value = "0.50")
-    @DecimalMax(value = "3,00")
+    @DecimalMax(value = "3.00")
     private Double price;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="sauce",cascade = CascadeType.ALL, orphanRemoval = true)

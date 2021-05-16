@@ -30,6 +30,7 @@ public class Address {
     private String street;
 
     @NotBlank
+    @Column(columnDefinition = "Integer not null CHECK (number >= 1 AND number <= 100)")
     @Min(1)
     @Max(100)
     private Integer number;

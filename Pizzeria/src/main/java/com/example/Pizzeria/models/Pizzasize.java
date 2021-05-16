@@ -27,13 +27,15 @@ public class Pizzasize {
     private String name;
 
     @NotBlank
-    @Column(unique=true,nullable = false)
+    //@Column(unique=true,nullable = false)
+    @Column(columnDefinition = "Integer not null unique CHECK (diameter >= 10 AND diameter <= 65)")
     @Min(10)
     @Max(65)
     private Integer diameter;
 
     @NotBlank
-    @Column(unique=true,nullable = false)
+    //@Column(unique=true,nullable = false)
+    @Column(columnDefinition = "Double precision not null unique CHECK (pizzacostfactor >= 1.00 AND pizzacostfactor <= 2.50)")
     @DecimalMin(value = "1.00")
     @DecimalMax(value = "2.50")
     private Double pizzacostfactor;
