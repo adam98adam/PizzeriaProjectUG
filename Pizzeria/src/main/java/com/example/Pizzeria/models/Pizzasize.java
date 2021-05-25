@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.validator.constraints.Range;
+
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.List;
@@ -28,7 +30,7 @@ public class Pizzasize {
 
     @NotNull(message = "Diameter can not be null")
     @Column(columnDefinition = "Integer not null unique CHECK (diameter >= 10 AND diameter <= 65)")
-    @Size(min = 10,max = 65,message = "Diameter must be between 10 and 65")
+    @Range(min = 10,max = 65,message = "Diameter must be between 10 and 65")
     private Integer diameter;
 
     @NotNull(message = "Pizzacostfactor can not be null")

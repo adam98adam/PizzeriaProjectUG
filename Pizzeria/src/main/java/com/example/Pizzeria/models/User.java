@@ -58,18 +58,6 @@ public class User {
     @OneToMany(targetEntity = Orders.class,mappedBy="user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders;
 
-/*
-    public User(){}
-    public User(String name,String surname,String email,String phonenumber,Boolean customer){
-        this.name = name;
-        this.surname = surname;
-        this.email = email;
-        this.phonenumber = phonenumber;
-        this.customer = customer;
-    }
-
- */
-
 
 
 }

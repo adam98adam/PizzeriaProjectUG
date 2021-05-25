@@ -36,12 +36,5 @@ public class Sauces {
     @OneToMany(targetEntity = Orders.class,mappedBy="sauce",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders;
 
-    /*
-    public Sauces(){}
-    public Sauces(String name,Double price) {
-        this.name = name;
-        this.price = price;
-    }
 
-*/
 }
