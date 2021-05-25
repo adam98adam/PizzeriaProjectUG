@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +37,7 @@ public class AccountController {
 
 
     @PostMapping("/accounts")
-    public ResponseEntity<Account> getAccountByLogin(@RequestBody Account newAccount) {
+    public ResponseEntity<Account> getAccountByLogin(@Valid @RequestBody Account newAccount) {
             List<Account> accounts = accountRepository.findByLogin(newAccount.getLogin());
             if(accounts.isEmpty()) {
                 accountRepository.save(newAccount);
@@ -49,7 +51,7 @@ public class AccountController {
 
 
     @PutMapping("/accounts/{id}")
-    public ResponseEntity<Account> updateAccountById(@PathVariable Integer id,@RequestBody Account account) {
+    public ResponseEntity<Account> updateAccountById(@PathVariable Integer id,@Valid @RequestBody Account account) {
        List<Account> acc = accountRepository.findByLogin(account.getLogin());
        if(acc.isEmpty()) {
            Optional<Account> ac = accountRepository.findById(id);

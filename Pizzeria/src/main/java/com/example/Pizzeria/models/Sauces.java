@@ -1,17 +1,13 @@
 package com.example.Pizzeria.models;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -26,13 +22,12 @@ public class Sauces {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message="Name can not be null")
     @Column(unique=true)
-    @Pattern(regexp = "[A-Z][a-z]{3,}")
+    @Pattern(regexp = "[A-Z][A-Za-z ]{3,}")
     private String name;
 
-    @NotBlank
-    //@Column(nullable = false)
+    @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null CHECK (price >= 0.50 AND price <= 3.00)")
     @DecimalMin(value = "0.50")
     @DecimalMax(value = "3.00")
@@ -41,5 +36,12 @@ public class Sauces {
     @OneToMany(targetEntity = Orders.class,mappedBy="sauce",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders;
 
+    /*
+    public Sauces(){}
+    public Sauces(String name,Double price) {
+        this.name = name;
+        this.price = price;
+    }
 
+*/
 }

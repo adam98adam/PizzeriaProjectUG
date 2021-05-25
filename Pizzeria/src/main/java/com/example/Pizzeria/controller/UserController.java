@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -36,7 +38,7 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public ResponseEntity<User> getAccountByEmailAndPhonenumebr(@RequestBody User newUser) {
+    public ResponseEntity<User> getAccountByEmailAndPhonenumebr(@Valid @RequestBody User newUser) {
         List<User> users = userRepository.findByEmailOrPhonenumber(newUser.getEmail(), newUser.getPhonenumber());
         if (users.isEmpty()) {
             userRepository.save(newUser);
@@ -48,7 +50,7 @@ public class UserController {
 
 
     @PutMapping("/users/{id}")
-    public ResponseEntity<User> updateUserById(@PathVariable Integer id, @RequestBody User user) {
+    public ResponseEntity<User> updateUserById(@PathVariable Integer id,@Valid @RequestBody User user) {
         List<User> u = userRepository.findByEmailOrPhonenumber(user.getEmail(), user.getPhonenumber());
         if (u.isEmpty()) {
             Optional<User> us = userRepository.findById(id);

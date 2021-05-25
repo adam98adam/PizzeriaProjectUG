@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Set;
@@ -22,27 +23,27 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Name can not be null")
     @Column(nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{2,}")
     private String name;
 
-    @NotBlank
+    @NotNull(message = "Surname can not be null")
     @Column(nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String surname;
 
-    @NotBlank
+    @NotNull(message = "Email can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "([a-z0-9]+\\.?)+[a-z0-9]+@[a-z]{2,}\\.[a-z]{2,}")
     private String email;
 
-    @NotBlank
+    @NotNull(message = "Phonenumber can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "(\\+[0-9]{2,3})?[0-9]{9}")
     private String phonenumber;
 
-    @NotBlank
+    @NotNull(message = "Customer can not be null")
     @Column(columnDefinition = "boolean default true not null")
     private Boolean customer;
 
@@ -57,7 +58,7 @@ public class User {
     @OneToMany(targetEntity = Orders.class,mappedBy="user",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders;
 
-
+/*
     public User(){}
     public User(String name,String surname,String email,String phonenumber,Boolean customer){
         this.name = name;
@@ -66,6 +67,8 @@ public class User {
         this.phonenumber = phonenumber;
         this.customer = customer;
     }
+
+ */
 
 
 

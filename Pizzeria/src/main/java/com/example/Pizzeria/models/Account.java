@@ -3,6 +3,7 @@ package com.example.Pizzeria.models;
 import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 
@@ -17,12 +18,12 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Login can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "[a-zA-Z][a-zA-Z0-9]{3,}")
     private String login;
 
-    @NotBlank
+    @NotNull(message = "Password can not be null")
     @Column(nullable = false)
     @Pattern(regexp = "\\w+(\\w+[.@?]\\w+)*")
     private String password;
@@ -32,7 +33,7 @@ public class Account {
     @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
     private User user;
 
-
+/*
     public Account() {}
 
     public Account(String login,String password,User user) {
@@ -40,6 +41,6 @@ public class Account {
         this.password = password;
         this.user = user;
     }
-
+*/
 
 }

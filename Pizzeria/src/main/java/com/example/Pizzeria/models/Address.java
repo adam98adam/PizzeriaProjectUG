@@ -3,10 +3,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 
 @Entity
 @Setter
@@ -19,26 +16,26 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "City can not be null")
     @Column(nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String city;
 
-    @NotBlank
+    @NotNull(message = "Street can not be null")
     @Column(nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String street;
 
-    @NotBlank
+    @NotNull(message = "Number can not be null")
     @Column(columnDefinition = "Integer not null CHECK (number >= 1 AND number <= 100)")
-    @Min(1)
-    @Max(100)
+    @Size(min = 1,max = 100,message = "Number must be between 1 and 100")
     private Integer number;
 
     @OneToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id", referencedColumnName = "id",nullable = false)
     private User user;
 
+    /*
     public Address(){};
     public Address(String city, String street, Integer id, User user) {
         this.city = city;
@@ -47,5 +44,6 @@ public class Address {
         this.user = user;
 
     }
+     */
 
 }

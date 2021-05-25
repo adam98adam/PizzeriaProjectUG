@@ -21,20 +21,17 @@ public class Pizzasize {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Name can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String name;
 
-    @NotBlank
-    //@Column(unique=true,nullable = false)
+    @NotNull(message = "Diameter can not be null")
     @Column(columnDefinition = "Integer not null unique CHECK (diameter >= 10 AND diameter <= 65)")
-    @Min(10)
-    @Max(65)
+    @Size(min = 10,max = 65,message = "Diameter must be between 10 and 65")
     private Integer diameter;
 
-    @NotBlank
-    //@Column(unique=true,nullable = false)
+    @NotNull(message = "Pizzacostfactor can not be null")
     @Column(columnDefinition = "Double precision not null unique CHECK (pizzacostfactor >= 1.00 AND pizzacostfactor <= 2.50)")
     @DecimalMin(value = "1.00")
     @DecimalMax(value = "2.50")
@@ -42,7 +39,6 @@ public class Pizzasize {
 
     @OneToMany(targetEntity = Orders.class,mappedBy="pizzasize",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orders> orders;
-
 
 
 

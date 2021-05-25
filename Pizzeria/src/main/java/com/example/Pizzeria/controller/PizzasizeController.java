@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,7 @@ public class PizzasizeController {
 
     }
     @PostMapping("/pizzasize")
-    public ResponseEntity<Pizzasize> savePizzasize(@RequestBody Pizzasize pizzasize) {
+    public ResponseEntity<Pizzasize> savePizzasize(@Valid @RequestBody Pizzasize pizzasize) {
         List<Pizzasize> pizzasizes =  pizzasizeRepository.findByNameOrDiameterOrPizzacostfactor(pizzasize.getName(),pizzasize.getDiameter(),pizzasize.getPizzacostfactor());
         if(pizzasizes.isEmpty()) {
             pizzasizeRepository.save(pizzasize);
@@ -48,7 +50,7 @@ public class PizzasizeController {
         }
     }
     @PutMapping("/pizzasize/{id}")
-    public ResponseEntity<Pizzasize> updatePizzasizeById(@PathVariable Integer id, @RequestBody Pizzasize pizzasize) {
+    public ResponseEntity<Pizzasize> updatePizzasizeById(@PathVariable Integer id,@Valid @RequestBody Pizzasize pizzasize) {
         List<Pizzasize> u = pizzasizeRepository.findByNameOrDiameterOrPizzacostfactor(pizzasize.getName(), pizzasize.getDiameter(),pizzasize.getPizzacostfactor());
         if (u.isEmpty()) {
             Optional<Pizzasize> us = pizzasizeRepository.findById(id);

@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.List;
 
@@ -22,9 +23,9 @@ public class Cutstyle {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Name can not be null")
     @Column(unique=true,nullable = false)
-    @Pattern(regexp = "[A-Z][a-z]{3,}")
+    @Pattern(regexp = "[A-Z][A-Za-z0-9 ]{3,}")
     private String name;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="cutstyle",cascade = CascadeType.ALL, orphanRemoval = true)

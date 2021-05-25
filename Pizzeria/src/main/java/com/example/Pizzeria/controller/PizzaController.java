@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class PizzaController {
 
     }
     @PostMapping("/pizza")
-    public ResponseEntity<Pizza> savePizza(@RequestBody Pizza pizza) {
+    public ResponseEntity<Pizza> savePizza(@Valid @RequestBody Pizza pizza) {
         List<Pizza> pizzas = pizzaRepository.findByNameOrDescriptionOrImage(pizza.getName(),pizza.getDescription(),pizza.getImage());
         if(pizzas.isEmpty()) {
             pizzaRepository.save(pizza);
@@ -48,7 +50,7 @@ public class PizzaController {
     }
 
     @PutMapping("/pizza/{id}")
-    public ResponseEntity<Pizza> updatePizzaById(@PathVariable Integer id, @RequestBody Pizza pizza) {
+    public ResponseEntity<Pizza> updatePizzaById(@PathVariable Integer id,@Valid @RequestBody Pizza pizza) {
         List<Pizza> u = pizzaRepository.findByNameOrDescriptionOrImage(pizza.getName(), pizza.getDescription(),pizza.getImage());
         if (u.isEmpty()) {
             Optional<Pizza> us = pizzaRepository.findById(id);

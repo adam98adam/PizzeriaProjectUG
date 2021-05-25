@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -39,13 +41,13 @@ public class AddressController {
     }
 
     @PostMapping("/users/address")
-    public ResponseEntity<Address> createAddress(@RequestBody Address newAddress) {
+    public ResponseEntity<Address> createAddress(@Valid @RequestBody Address newAddress) {
         addressRepository.save(newAddress);
         return new ResponseEntity<>(newAddress, HttpStatus.OK);
     }
 
     @PutMapping("users/address/{id}")
-    public ResponseEntity<Address> updateAddress(@PathVariable Integer id, @RequestBody Address address) {
+    public ResponseEntity<Address> updateAddress(@PathVariable Integer id,@Valid @RequestBody Address address) {
         Optional<Address> a = addressRepository.findById(id);
         if(a.isPresent()) {
             a.get().setCity(address.getCity());

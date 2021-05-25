@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public class CrustController {
             return new ResponseEntity<>(crust, HttpStatus.NOT_FOUND);
     }
     @PostMapping("/crusts")
-    public ResponseEntity<Crust> saveCrust(@RequestBody Crust crust) {
+    public ResponseEntity<Crust> saveCrust(@Valid @RequestBody Crust crust) {
         List<Crust> crusts = crustRepository.findByCrustOrPrice(crust.getCrust(), crust.getPrice());
         if(crusts.isEmpty()) {
             crustRepository.save(crust);
@@ -47,7 +48,7 @@ public class CrustController {
         }
     }
     @PutMapping("/crusts/{id}")
-    public ResponseEntity<Crust> updateCrustById(@PathVariable Integer id, @RequestBody Crust crust) {
+    public ResponseEntity<Crust> updateCrustById(@PathVariable Integer id,@Valid @RequestBody Crust crust) {
         List<Crust> u = crustRepository.findByCrustOrPrice(crust.getCrust(), crust.getPrice());
         if (u.isEmpty()) {
             Optional<Crust> us = crustRepository.findById(id);

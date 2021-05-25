@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class DrinksController {
 
     }
     @PostMapping("/drinks")
-    public ResponseEntity<Drinks> saveDrink(@RequestBody Drinks drink) {
+    public ResponseEntity<Drinks> saveDrink(@Valid @RequestBody Drinks drink) {
         List<Drinks> drinks = drinksRepository.findByName(drink.getName());
         if(drinks.isEmpty()) {
             drinksRepository.save(drink);
@@ -48,7 +50,7 @@ public class DrinksController {
     }
 
     @PutMapping("/drinks/{id}")
-    public ResponseEntity<Drinks> updateDrinkById(@PathVariable Integer id, @RequestBody Drinks drinks) {
+    public ResponseEntity<Drinks> updateDrinkById(@PathVariable Integer id,@Valid @RequestBody Drinks drinks) {
         List<Drinks> dri = drinksRepository.findByName(drinks.getName());
         if (dri.isEmpty()) {
             Optional<Drinks> ac = drinksRepository.findById(id);

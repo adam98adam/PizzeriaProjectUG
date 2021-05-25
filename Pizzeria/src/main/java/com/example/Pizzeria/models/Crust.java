@@ -7,10 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Entity
@@ -25,13 +22,12 @@ public class Crust {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Crust can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String crust;
 
-    @NotBlank
-    //@Column(unique = true,nullable = false)
+    @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null unique CHECK (price >= 1.00 AND price <= 6.00)")
     @DecimalMin(value = "1.00")
     @DecimalMax(value = "6.00")

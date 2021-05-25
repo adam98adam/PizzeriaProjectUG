@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import javax.persistence.*;
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
+import javax.validation.constraints.*;
 import java.util.List;
 
 
@@ -24,25 +21,24 @@ public class Pizza {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank
+    @NotNull(message = "Name can not be null")
     @Column(unique=true,nullable = false)
     @Pattern(regexp = "[A-Z][a-z]{3,}")
     private String name;
 
 
-    @NotBlank
+    @NotNull(message = "Description can not be null")
     @Column(columnDefinition="character varying (300) not null unique")
     @Pattern(regexp = "[A-Z][a-z ]{9,}")
     private String description;
 
-    @NotBlank
-    //@Column(nullable = false)
+    @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null CHECK (price >= 10.00 AND price <= 30.00)")
     @DecimalMin(value = "10.00")
     @DecimalMax(value = "30.00")
     private Double price;
 
-    @NotBlank
+    @NotNull(message = "Image can not be null")
     @Column(unique = true,nullable = false)
     @Pattern(regexp = "((http(s)?)?:\\/\\/.*\\.(?:png|jpg))")
     private String image;

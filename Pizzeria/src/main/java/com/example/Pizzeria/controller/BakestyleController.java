@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +38,7 @@ public class BakestyleController {
 
     }
     @PostMapping("/bakestyle")
-    public ResponseEntity<Bakestyle> saveBakestyle(@RequestBody Bakestyle bakestyle) {
+    public ResponseEntity<Bakestyle> saveBakestyle(@Valid @RequestBody Bakestyle bakestyle) {
         List<Bakestyle> bakestyles = bakestyleRepository.findByName(bakestyle.getName());
         if(bakestyles.isEmpty()) {
             bakestyleRepository.save(bakestyle);
@@ -48,7 +50,7 @@ public class BakestyleController {
     }
 
     @PutMapping("/bakestyle/{id}")
-    public ResponseEntity<Bakestyle> updateBakestyleById(@PathVariable Integer id, @RequestBody Bakestyle bakestyle) {
+    public ResponseEntity<Bakestyle> updateBakestyleById(@PathVariable Integer id,@Valid @RequestBody Bakestyle bakestyle) {
         List<Bakestyle> bak = bakestyleRepository.findByName(bakestyle.getName());
         if (bak.isEmpty()) {
             Optional<Bakestyle> ac = bakestyleRepository.findById(id);

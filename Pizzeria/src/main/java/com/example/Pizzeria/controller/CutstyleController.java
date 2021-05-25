@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,7 +39,7 @@ public class CutstyleController {
     }
 
     @PutMapping("/cutstyle/{id}")
-    public ResponseEntity<Cutstyle> updateCutstyleById(@PathVariable Integer id, @RequestBody Cutstyle cutstyle) {
+    public ResponseEntity<Cutstyle> updateCutstyleById(@PathVariable Integer id,@Valid @RequestBody Cutstyle cutstyle) {
         List<Cutstyle> cut = cutstyleRepository.findByName(cutstyle.getName());
         if (cut.isEmpty()) {
             Optional<Cutstyle> ac = cutstyleRepository.findById(id);
@@ -54,7 +56,7 @@ public class CutstyleController {
     }
 
     @PostMapping("/cutstyle")
-    public ResponseEntity<Cutstyle> saveCutstyle(@RequestBody Cutstyle cutstyle) {
+    public ResponseEntity<Cutstyle> saveCutstyle(@Valid @RequestBody Cutstyle cutstyle) {
         List<Cutstyle> cutstyles  = cutstyleRepository.findByName(cutstyle.getName());
         if(cutstyles.isEmpty()) {
             cutstyleRepository.save(cutstyle);
