@@ -29,13 +29,13 @@ public class Pizza {
 
     @NotNull(message = "Description can not be null")
     @Column(columnDefinition="character varying (300) not null unique")
-    @Pattern(regexp = "[A-Z][a-z ]{9,}")
+    @Pattern(regexp = "[A-Z][A-Za-z (),-]{9,}")
     private String description;
 
     @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null CHECK (price >= 10.00 AND price <= 30.00)")
-    @DecimalMin(value = "10.00")
-    @DecimalMax(value = "30.00")
+    @DecimalMin(value = "10.00",message = "Price must be between 10.00 and 30.00")
+    @DecimalMax(value = "30.00",message = "Price must be between 10.00 and 30.00 ")
     private Double price;
 
     @NotNull(message = "Image can not be null")

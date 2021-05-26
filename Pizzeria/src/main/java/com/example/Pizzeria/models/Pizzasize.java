@@ -35,8 +35,8 @@ public class Pizzasize {
 
     @NotNull(message = "Pizzacostfactor can not be null")
     @Column(columnDefinition = "Double precision not null unique CHECK (pizzacostfactor >= 1.00 AND pizzacostfactor <= 2.50)")
-    @DecimalMin(value = "1.00")
-    @DecimalMax(value = "2.50")
+    @DecimalMin(value = "1.00",message = "Price must be between 1.00 and 2.50")
+    @DecimalMax(value = "2.50",message = "Price must be between 1.00 and 2.50")
     private Double pizzacostfactor;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="pizzasize",cascade = CascadeType.ALL, orphanRemoval = true)

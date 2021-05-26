@@ -29,8 +29,8 @@ public class Crust {
 
     @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null unique CHECK (price >= 1.00 AND price <= 6.00)")
-    @DecimalMin(value = "1.00")
-    @DecimalMax(value = "6.00")
+    @DecimalMin(value = "1.00",message = "Price must be between 1.00 and 6.00")
+    @DecimalMax(value = "6.00",message = "Price must be between 1.00 and 6.00")
     private Double price;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="crust",cascade = CascadeType.ALL, orphanRemoval = true)

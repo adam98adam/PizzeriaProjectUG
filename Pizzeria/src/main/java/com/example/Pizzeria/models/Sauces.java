@@ -29,8 +29,8 @@ public class Sauces {
 
     @NotNull(message = "Price can not be null")
     @Column(columnDefinition = "Double precision not null CHECK (price >= 0.50 AND price <= 3.00)")
-    @DecimalMin(value = "0.50")
-    @DecimalMax(value = "3.00")
+    @DecimalMin(value = "0.50",message = "Price must be between 0.50 and 3.00")
+    @DecimalMax(value = "3.00",message = "Price must be between 0.50 and 3.00")
     private Double price;
 
     @OneToMany(targetEntity = Orders.class,mappedBy="sauce",cascade = CascadeType.ALL, orphanRemoval = true)
