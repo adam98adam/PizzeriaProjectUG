@@ -9,10 +9,10 @@ import {
   Modal,
   Row,
 } from "react-bootstrap";
-import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
+import UpdatePageNavHeader from "./UpdatePageNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
-const EditAddressComponent = (props) => {
+const UpdateAddressComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
   const idAddress = props.match.params.idAddress;
   const [city, setCity] = useState("");
@@ -119,7 +119,7 @@ const EditAddressComponent = (props) => {
   };
   return (
     <div>
-      <PizzeriaUpdatePageNavHeader />
+      <UpdatePageNavHeader />
       <Card className="main-card">
         <Card.Body>
           <Card.Title>Update User Address</Card.Title>
@@ -199,4 +199,4 @@ const EditAddressComponent = (props) => {
   );
 };
 
-export default EditAddressComponent;
+export default UpdateAddressComponent;

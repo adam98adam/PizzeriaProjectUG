@@ -2,7 +2,7 @@ import React from "react";
 import { Navbar } from "react-bootstrap";
 import PizzaLogo from "./../images/pizza-logo.png";
 
-const PizzeriaUpdatePageNavHeader = () => {
+const UpdatePageNavHeader = () => {
   return (
     <header>
       <Navbar fixed="top" bg="dark" variant="dark">
@@ -15,4 +15,4 @@ const PizzeriaUpdatePageNavHeader = () => {
   );
 };
 
-export default PizzeriaUpdatePageNavHeader;
+export default UpdatePageNavHeader;

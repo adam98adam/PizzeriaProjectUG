@@ -123,6 +123,7 @@ const AdminPanelComponent = (props) => {
   };
 
   const logout = () => {
+    localStorage.clear();
     props.history.push("/");
   };
   const choosePizza = () => {
@@ -217,7 +218,10 @@ const AdminPanelComponent = (props) => {
             </Nav.Link>
             <Nav.Link
               onClick={() =>
-                address(parseInt(idAccount, 10), parseInt(idAddress.current, 10))
+                address(
+                  parseInt(idAccount, 10),
+                  parseInt(idAddress.current, 10)
+                )
               }
             >
               Address

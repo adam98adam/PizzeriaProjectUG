@@ -228,6 +228,8 @@ const RegisterComponent = (props) => {
           ref={loginButtonTarget}
           onClick={() => setShowLoginInfoTooltip(!showLoginInfoTooltip)}
           style={{ color: "blue" }}
+          onMouseEnter={() => setShowLoginInfoTooltip(true)}
+          onMouseLeave={() => setShowLoginInfoTooltip(false)}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -286,8 +288,6 @@ const RegisterComponent = (props) => {
           show={showPasswordInfoTooltip}
           placement="right"
           onExit={() => setShowPasswordInfoTooltip(false)}
-          onMouseEnter={() => setShowPasswordInfoTooltip(true)}
-          onMouseLeave={() => setShowPasswordInfoTooltip(false)}
         >
           {(props) => (
             <Tooltip id="overlay-example" {...props}>
@@ -411,49 +411,45 @@ const RegisterComponent = (props) => {
                       <Card.Subtitle style={{ marginBottom: 10 }}>
                         Add your new account
                       </Card.Subtitle>
-                      <Form.Group controlId="formLogin">
-                        <Form.Label>Login</Form.Label>
-                        <Form.Control
-                          type="text"
-                          className={
-                            loginValid ? "form-control" : "form-control-error"
-                          }
-                          placeholder="Enter your login"
-                          onChange={handleLoginChange}
-                        />
-                        {!loginValid && (
-                          <Form.Text className="text-muted">
+                      <Form.Label>Login</Form.Label>
+                      <Form.Control
+                        type="text"
+                        className={
+                          loginValid ? "form-control" : "form-control-error"
+                        }
+                        placeholder="Enter your login"
+                        onChange={handleLoginChange}
+                      />
+                      {!loginValid && (
+                        <Form.Text className="text-muted">
+                          <WarningIcon />
+                          <span style={{ color: "red" }}>
+                            Login value is not valid
+                          </span>
+                          {loginInfoIcon()}
+                        </Form.Text>
+                      )}
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control
+                        type="password"
+                        className={
+                          passwordValid ? "form-control" : "form-control-error"
+                        }
+                        placeholder="Enter your password"
+                        onChange={handlePasswordChange}
+                      />
+                      <InputGroup.Append>
+                        <i className="bi bi-eye"></i>
+                      </InputGroup.Append>
+                      {!passwordValid && (
+                        <Form.Text className="text-muted">
+                          <span style={{ color: "red" }}>
                             <WarningIcon />
-                            <span style={{ color: "red" }}>
-                              Login value is not valid
-                            </span>
-                            {loginInfoIcon()}
-                          </Form.Text>
-                        )}
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control
-                          type="password"
-                          className={
-                            passwordValid
-                              ? "form-control"
-                              : "form-control-error"
-                          }
-                          placeholder="Enter your password"
-                          onChange={handlePasswordChange}
-                        />
-                        <InputGroup.Append>
-                          <i className="bi bi-eye"></i>
-                        </InputGroup.Append>
-                        {!passwordValid && (
-                          <Form.Text className="text-muted">
-                            <span style={{ color: "red" }}>
-                              <WarningIcon />
-                              Password is invalid
-                            </span>
-                            {passwordInfoIcon()}
-                          </Form.Text>
-                        )}
-                      </Form.Group>
+                            Password is invalid
+                          </span>
+                          {passwordInfoIcon()}
+                        </Form.Text>
+                      )}
                     </Card.Body>
                   </Card>
                 </Col>

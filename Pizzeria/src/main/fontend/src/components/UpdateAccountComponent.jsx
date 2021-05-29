@@ -11,10 +11,10 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import AccountService from "../services/AccountService";
-import PizzeriaUpdatePageNavHeader from "./PizzeriaUpdateNavHeader";
+import UpdatePageNavHeader from "./UpdatePageNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
-const EditAccountComponent = (props) => {
+const UpdateAccountComponent = (props) => {
   const loginButtonTarget = useRef(null);
   const passwordButtonTarget = useRef(null);
 
@@ -216,7 +216,7 @@ const EditAccountComponent = (props) => {
 
   return (
     <div>
-      <PizzeriaUpdatePageNavHeader />
+      <UpdatePageNavHeader />
       <Card className="main-card">
         <Card.Body>
           <Card.Title>Update Acccount</Card.Title>
@@ -291,4 +291,4 @@ const EditAccountComponent = (props) => {
   );
 };
 
-export default EditAccountComponent;
+export default UpdateAccountComponent;

@@ -9,7 +9,7 @@ import {
   Row,
 } from "react-bootstrap";
 import AddressService from "../services/AddressService";
-import PizzeriaUpdateNavHeader from "./PizzeriaUpdateNavHeader";
+import UpdatePageNavHeader from "./UpdatePageNavHeader";
 
 const RegisterUserAddressComponent = (props) => {
   const userId = props.match.params.id;
@@ -115,7 +115,7 @@ const RegisterUserAddressComponent = (props) => {
   };
   return (
     <div>
-      <PizzeriaUpdateNavHeader />
+      <UpdatePageNavHeader />
       <Form className="center">
         <Container>
           <Row className="align-items-center">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import "reactjs-popup/dist/index.css";
 import "../css/index.css";
@@ -23,6 +23,17 @@ const LoginComponent = (props) => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
+  useEffect(() => {
+    if (
+      localStorage.getItem("idAccount") !== null &&
+      localStorage.getItem("idUser") !== null &&
+      localStorage.getItem("userType") !== null
+    ) {
+      props.history.push(
+        `/${localStorage.getItem("userType")}/${localStorage.getItem("idUser")}`
+      );
+    }
+  }, [props.history]);
   const userPanel = (id, data) => {
     localStorage.setItem("idAccount", id);
     localStorage.setItem("idUser", data.user.id);

@@ -5,9 +5,9 @@ import LoginComponent from "./components/LoginComponent";
 import RegisterComponent from "./components/RegisterComponent";
 import RegisterUserAddressComponent from "./components/RegisterUserAddressComponent";
 import UserPanelComponent from "./components/UserPanelComponent";
-import EditAccountComponent from "./components/EditAccountComponent";
-import EditUserComponent from "./components/EditUserComponent";
-import EditAddressComponent from "./components/EditAddressComponent";
+import UpdateAccountComponent from "./components/UpdateAccountComponent";
+import UpdateUserComponent from "./components/UpdateUserComponent";
+import UpdateAddressComponent from "./components/UpdateAddressComponent";
 import UserOrdersComponent from "./components/UserOrdersComponent";
 import AdminPanelComponent from "./components/AdminPanelComponent";
 import AdminOrdersComponent from "./components/AdminOrdersComponent";
@@ -67,15 +67,15 @@ function App() {
             ></Route>
             <Route
               path="/account-edit/:id"
-              component={EditAccountComponent}
+              component={UpdateAccountComponent}
             ></Route>
             <Route
               path="/user-edit/:idAccount/:idUser"
-              component={EditUserComponent}
+              component={UpdateUserComponent}
             ></Route>
             <Route
               path="/address-edit/:idAccount/:idAddress"
-              component={EditAddressComponent}
+              component={UpdateAddressComponent}
             ></Route>
             <Route
               path="/user-orders/:idAccount/:idUser"

@@ -9,11 +9,12 @@ import {
   Row,
 } from "react-bootstrap";
 import UserService from "../services/UserService";
+import UpdatePageNavHeader from "./UpdatePageNavHeader";
 import WarningIcon from "./icons/WarningIcon";
 
 const UpdateUserComponent = (props) => {
-  const id = props.match.params.id;
   const idAccount = localStorage.getItem("idAccount");
+  const idUser = localStorage.getItem("idUser");
 
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
@@ -28,52 +29,23 @@ const UpdateUserComponent = (props) => {
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
 
   useEffect(() => {
-    UserService.getUserById(props.match.params.id)
-      .then((res) => {
+    UserService.getUserById(parseInt(localStorage.getItem("idUser"), 10)).then(
+      (res) => {
         let user = res.data;
-        this.setState({
-          name: user.name,
-          surname: user.surname,
-          email: user.email,
-          phonenumber: user.phonenumber,
-        });
-      })
-      .catch((er) => {
-        // console.log(er);
-      });
-  }, [props.match.params.id]);
+        setName(user.name);
+        setSurname(user.surname);
+        setEmail(user.email);
+        setPhoneNumber(user.phonenumber);
+      }
+    );
+  }, []);
 
-  const updateUser = (e) => {
-    const validations = [nameValid, surnameValid, emailValid, phoneNumberValid];
-    let user = {
-      name: name,
-      surname: surname,
-      email: email,
-      phonenumber: phoneNumber,
-    };
-    e.preventDefault();
-    if (
-      Object.values(user).every((el) => el) &&
-      validations.every((el) => el)
-    ) {
-      // console.log(user);
-      UserService.updateUser(user, parseInt(id, 10))
-        .then((res) => {
-          cancel(parseInt(idAccount, 10));
-        })
-        .catch((error) => {
-          // console.log(error.response);
-          setShowInvalidUserModal(true);
-        });
-    } else {
-      setShowInvalidUserModal(true);
-    }
+ 
+
+  const cancel = (id) => {
+    const userType = localStorage.getItem("userType");
+    props.history.push(`/${userType}/${id}`);
   };
-
-  const cancel = () => {
-    props.history.push("/users");
-  };
-
   const validateName = (name) => {
     const re = /^[A-Z][a-z]+$/;
     return re.test(name);
@@ -117,37 +89,60 @@ const UpdateUserComponent = (props) => {
     setPhoneNumberValid(validatePhoneNumber(event.target.value));
   };
 
-  const handleInvalidUserModalClose = () => {
-    setShowInvalidUserModal(false);
+  const updateUser = (e) => {
+    const validations = [nameValid, surnameValid, emailValid, phoneNumberValid];
+    let user = {
+      name: name,
+      surname: surname,
+      email: email,
+      phonenumber: phoneNumber,
+      customer: localStorage.getItem("userType") === "user"
+    };
+    e.preventDefault();
+    if (
+      Object.values(user).every((el) => el) &&
+      validations.every((el) => el)
+    ) {
+      // console.log(user);
+      UserService.updateUser(user, parseInt(idUser, 10))
+        .then((res) => {
+          cancel(parseInt(idAccount, 10));
+        })
+        .catch((error) => {
+          // console.log(error.response);
+          setShowInvalidUserModal(true);
+        });
+    } else {
+      setShowInvalidUserModal(true);
+    }
   };
+ const invalidUserModalClose = () => {
+   setShowInvalidUserModal(false);
+ };
 
-  const invalidUserModal = () => {
-    return (
-      <Modal
-        show={showInvalidUserModal}
-        centered
-        onHide={handleInvalidUserModalClose}
-      >
-        <Modal.Header>
-          <Modal.Title>User Fields Empty/Not Valid</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <p>
-            One or more of user fields are empty or not valid. Please fill up
-            these fields.
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={handleInvalidUserModalClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    );
-  };
-
+ const invalidUserModal = () => {
+   return (
+     <Modal show={showInvalidUserModal} centered onHide={invalidUserModalClose}>
+       <Modal.Header>
+         <Modal.Title>Invalid New data</Modal.Title>
+       </Modal.Header>
+       <Modal.Body>
+         <p>
+           One or more of user fields are empty not valid or not unique.
+           Please fill up these fields with different values.
+         </p>
+       </Modal.Body>
+       <Modal.Footer>
+         <Button variant="primary" onClick={invalidUserModalClose}>
+           OK
+         </Button>
+       </Modal.Footer>
+     </Modal>
+   );
+ };
   return (
     <div>
+      <UpdatePageNavHeader />
       <Card className="main-card">
         <Card.Body>
           <Card.Title>Update User</Card.Title>
@@ -158,8 +153,10 @@ const UpdateUserComponent = (props) => {
                   <Form.Group>
                     <Form.Label> Name : </Form.Label>
                     <Form.Control
-                      border={nameValid ? "none" : "danger"}
                       placeholder="Name"
+                      className={
+                        nameValid ? "form-control" : "form-control-error"
+                      }
                       name="name"
                       value={name}
                       onChange={handleNameChange}
@@ -167,7 +164,7 @@ const UpdateUserComponent = (props) => {
                     {!nameValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>
-                          Name value is not valid
+                          <WarningIcon /> Name value is not valid
                         </span>
                       </Form.Text>
                     )}
@@ -250,4 +247,5 @@ const UpdateUserComponent = (props) => {
     </div>
   );
 };
+
 export default UpdateUserComponent;
