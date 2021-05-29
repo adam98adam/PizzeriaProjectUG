@@ -31,9 +31,9 @@ import SauceBackground from "./../images/sauce-background.jpg";
 
 const AdminPanelComponent = (props) => {
   const idAccount = localStorage.getItem("idAccount");
+  const idUser = localStorage.getItem("idUser");
   const login = useRef("");
   const password = useRef("");
-  const idUser = useRef("");
   const name = useRef("");
   const surname = useRef("");
   const email = useRef("");
@@ -60,7 +60,6 @@ const AdminPanelComponent = (props) => {
       // console.log(res.data);
       login.current = res.data.login;
       password.current = res.data.password;
-      idUser.current = res.data.user.id;
       name.current = res.data.user.name;
       surname.current = res.data.user.surname;
       email.current = res.data.user.email;
@@ -105,7 +104,7 @@ const AdminPanelComponent = (props) => {
         //   // console.log(res.data);
       });
     });
-  }, [props.match.params.id]);
+  }, [idUser]);
 
   const user = (idAccount, idUser) => {
     props.history.push(`/user-edit/${idAccount}/${idUser}`);

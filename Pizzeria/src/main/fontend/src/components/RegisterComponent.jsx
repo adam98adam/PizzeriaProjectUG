@@ -15,6 +15,8 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import WarningIcon from "./icons/WarningIcon";
+import ShowPasswordIcon from "../images/eye-fill.svg";
+import HidePasswordIcon from "../images/eye-slash-fill.svg";
 
 const RegisterComponent = (props) => {
   const loginButtonTarget = useRef(null);
@@ -40,6 +42,8 @@ const RegisterComponent = (props) => {
 
   const [showUserModal, setShowUserModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const registerToSystem = (e) => {
     e.preventDefault();
@@ -176,6 +180,9 @@ const RegisterComponent = (props) => {
 
   const handleUserModalClose = () => {
     setShowUserModal(false);
+  };
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
   };
   const userModal = () => {
     return (
@@ -429,18 +436,33 @@ const RegisterComponent = (props) => {
                           {loginInfoIcon()}
                         </Form.Text>
                       )}
+
                       <Form.Label>Password</Form.Label>
-                      <Form.Control
-                        type="password"
-                        className={
-                          passwordValid ? "form-control" : "form-control-error"
-                        }
-                        placeholder="Enter your password"
-                        onChange={handlePasswordChange}
-                      />
-                      <InputGroup.Append>
-                        <i className="bi bi-eye"></i>
-                      </InputGroup.Append>
+                      <InputGroup>
+                        <Form.Control
+                          type={showPassword ? "text" : "password"}
+                          className={
+                            passwordValid
+                              ? "form-control"
+                              : "form-control-error"
+                          }
+                          placeholder="Enter your password"
+                          onChange={handlePasswordChange}
+                        />
+                        <InputGroup.Append>
+                          <InputGroup.Text>
+                            <img
+                              src={
+                                showPassword
+                                  ? HidePasswordIcon
+                                  : ShowPasswordIcon
+                              }
+                              onClick={togglePassword}
+                              alt="show pass"
+                            ></img>
+                          </InputGroup.Text>
+                        </InputGroup.Append>
+                      </InputGroup>
                       {!passwordValid && (
                         <Form.Text className="text-muted">
                           <span style={{ color: "red" }}>

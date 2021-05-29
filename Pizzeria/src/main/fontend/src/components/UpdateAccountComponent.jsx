@@ -5,6 +5,7 @@ import {
   Col,
   Container,
   Form,
+  InputGroup,
   Modal,
   Overlay,
   Row,
@@ -13,12 +14,14 @@ import {
 import AccountService from "../services/AccountService";
 import UpdatePageNavHeader from "./UpdatePageNavHeader";
 import WarningIcon from "./icons/WarningIcon";
+import ShowPasswordIcon from "../images/eye-fill.svg";
+import HidePasswordIcon from "../images/eye-slash-fill.svg";
 
 const UpdateAccountComponent = (props) => {
   const loginButtonTarget = useRef(null);
   const passwordButtonTarget = useRef(null);
 
-  const id = props.match.params.id;
+  const id = localStorage.getItem("idAccount");
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
   const initialLogin = useRef("");
@@ -33,6 +36,8 @@ const UpdateAccountComponent = (props) => {
   const [showPasswordInfoTooltip, setShowPasswordInfoTooltip] = useState(false);
 
   const [disableSaveButton, setDisableSaveButton] = useState(true);
+
+  const [showPassword, setShowPassword] = useState(false);
   useEffect(() => {
     // console.log(id);
     AccountService.getAccountById(
@@ -58,7 +63,7 @@ const UpdateAccountComponent = (props) => {
         !passwordValid ||
         login === "" ||
         password === "" ||
-        (login === initialLogin && password === initialPassword)
+        (login === initialLogin.current && password === initialPassword.current)
       );
     };
     setDisableSaveButton(saveButtonDisabled());
@@ -136,6 +141,9 @@ const UpdateAccountComponent = (props) => {
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
     setPasswordValid(validatePassword(event.target.value));
+  };
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
   };
   const loginInfoIcon = () => {
     return (
@@ -247,15 +255,29 @@ const UpdateAccountComponent = (props) => {
                   </Form.Group>
                   <Form.Group>
                     <Form.Label> Password : </Form.Label>
-                    <Form.Control
-                      placeholder="Password"
-                      className={
-                        passwordValid ? "form-control" : "form-control-error"
-                      }
-                      name="password"
-                      value={password}
-                      onChange={handlePasswordChange}
-                    />
+                    <InputGroup>
+                      <Form.Control
+                        placeholder="Password"
+                        className={
+                          passwordValid ? "form-control" : "form-control-error"
+                        }
+                        name="password"
+                        value={password}
+                        type={showPassword ? "text" : "password"}
+                        onChange={handlePasswordChange}
+                      />
+                      <InputGroup.Append>
+                        <InputGroup.Text>
+                          <img
+                            src={
+                              showPassword ? HidePasswordIcon : ShowPasswordIcon
+                            }
+                            onClick={togglePassword}
+                            alt="show pass"
+                          ></img>
+                        </InputGroup.Text>
+                      </InputGroup.Append>
+                    </InputGroup>
                     {!passwordValid && (
                       <Form.Text className="text-muted">
                         <span style={{ color: "red" }}>

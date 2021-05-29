@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Button,
   Card,
@@ -20,6 +20,10 @@ const UpdateUserComponent = (props) => {
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
+  const initialName = useRef();
+  const initialSurname = useRef();
+  const initialEmail = useRef();
+  const initialPhoneNumber = useRef();
 
   const [nameValid, setNameValid] = useState(true);
   const [surnameValid, setSurnameValid] = useState(true);
@@ -27,6 +31,7 @@ const UpdateUserComponent = (props) => {
   const [phoneNumberValid, setPhoneNumberValid] = useState(true);
 
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   useEffect(() => {
     UserService.getUserById(parseInt(localStorage.getItem("idUser"), 10)).then(
@@ -36,11 +41,42 @@ const UpdateUserComponent = (props) => {
         setSurname(user.surname);
         setEmail(user.email);
         setPhoneNumber(user.phonenumber);
+
+        initialName.current = user.name;
+        initialSurname.current = user.surname;
+        initialEmail.current = user.email;
+        initialPhoneNumber.current = user.phonenumber;
       }
     );
   }, []);
-
- 
+  useEffect(() => {
+    const disableSaveButton = () => {
+      return (
+        !nameValid ||
+        !surnameValid ||
+        !emailValid ||
+        !phoneNumberValid ||
+        name === "" ||
+        surname === "" ||
+        email === "" ||
+        phoneNumber === "" ||
+        (initialName.current === name &&
+          initialSurname.current === surname &&
+          initialEmail.current === email &&
+          initialPhoneNumber.current === phoneNumber)
+      );
+    };
+    setSaveButtonDisabled(disableSaveButton());
+  }, [
+    name,
+    surname,
+    email,
+    phoneNumber,
+    nameValid,
+    surnameValid,
+    emailValid,
+    phoneNumberValid,
+  ]);
 
   const cancel = (id) => {
     const userType = localStorage.getItem("userType");
@@ -96,11 +132,12 @@ const UpdateUserComponent = (props) => {
       surname: surname,
       email: email,
       phonenumber: phoneNumber,
-      customer: localStorage.getItem("userType") === "user"
+      customer: localStorage.getItem("userType") === "user",
     };
+    console.log(user);
     e.preventDefault();
     if (
-      Object.values(user).every((el) => el) &&
+      Object.values(user).every((el) => el !== null) &&
       validations.every((el) => el)
     ) {
       // console.log(user);
@@ -116,30 +153,34 @@ const UpdateUserComponent = (props) => {
       setShowInvalidUserModal(true);
     }
   };
- const invalidUserModalClose = () => {
-   setShowInvalidUserModal(false);
- };
+  const invalidUserModalClose = () => {
+    setShowInvalidUserModal(false);
+  };
 
- const invalidUserModal = () => {
-   return (
-     <Modal show={showInvalidUserModal} centered onHide={invalidUserModalClose}>
-       <Modal.Header>
-         <Modal.Title>Invalid New data</Modal.Title>
-       </Modal.Header>
-       <Modal.Body>
-         <p>
-           One or more of user fields are empty not valid or not unique.
-           Please fill up these fields with different values.
-         </p>
-       </Modal.Body>
-       <Modal.Footer>
-         <Button variant="primary" onClick={invalidUserModalClose}>
-           OK
-         </Button>
-       </Modal.Footer>
-     </Modal>
-   );
- };
+  const invalidUserModal = () => {
+    return (
+      <Modal
+        show={showInvalidUserModal}
+        centered
+        onHide={invalidUserModalClose}
+      >
+        <Modal.Header>
+          <Modal.Title>Invalid New data</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>
+            One or more of user fields are empty not valid or not unique. Please
+            fill up these fields with different values.
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={invalidUserModalClose}>
+            OK
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    );
+  };
   return (
     <div>
       <UpdatePageNavHeader />
@@ -227,7 +268,11 @@ const UpdateUserComponent = (props) => {
                     )}
                   </Form.Group>
 
-                  <Button variant="success" onClick={updateUser}>
+                  <Button
+                    variant="success"
+                    onClick={updateUser}
+                    disabled={saveButtonDisabled}
+                  >
                     Save
                   </Button>
                   <Button

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddressService from "../services/AddressService";
 import {
   Button,
@@ -23,19 +23,42 @@ const UpdateAddressComponent = (props) => {
   const [streetValid, setStreetValid] = useState(true);
   const [numberValid, setNumberValid] = useState(true);
 
+  const initialCity = useRef("");
+  const initialStreet = useRef("");
+  const initialNumber = useRef("");
+
   const [showAddressModal, setShowAddressModal] = useState(false);
+  const [saveButtonDisabled, setSaveButtonDisabled] = useState(true);
 
   useEffect(() => {
-    AddressService.getAddressById(
-      parseInt(props.match.params.idAddress, 10)
-    ).then((res) => {
+    AddressService.getAddressById(idAddress).then((res) => {
       let address = res.data;
       // console.log(address);
       setCity(address.city);
       setStreet(address.street);
       setNumber(address.number);
+      initialCity.current = address.city;
+      initialStreet.current = address.street;
+      initialNumber.current = address.number;
     });
-  }, [props.match.params.idAddress]);
+  }, [idAddress]);
+  useEffect(() => {
+    const disableSaveButton = () => {
+      return (
+        !cityValid ||
+        !streetValid ||
+        !numberValid ||
+        city === "" ||
+        street === "" ||
+        number === "" ||
+        (initialCity.current === city &&
+          initialStreet.current === street &&
+          initialNumber.current === number)
+      );
+    };
+    setSaveButtonDisabled(disableSaveButton());
+  }, [city, street, number, cityValid, streetValid, numberValid]);
+
   const updateAddress = (e) => {
     const validations = [cityValid, streetValid, numberValid];
     e.preventDefault();
@@ -178,7 +201,7 @@ const UpdateAddressComponent = (props) => {
                       </span>
                     )}
                   </Form.Group>
-                  <Button variant="success" onClick={updateAddress}>
+                  <Button variant="success" onClick={updateAddress} disabled={saveButtonDisabled}>
                     Save
                   </Button>
                   <Button

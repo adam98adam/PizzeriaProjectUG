@@ -10,10 +10,13 @@ import {
   Card,
   Modal,
   Navbar,
+  InputGroup,
 } from "react-bootstrap";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import AccountService from "../services/AccountService";
+import ShowPasswordIcon from "../images/eye-fill.svg";
+import HidePasswordIcon from "../images/eye-slash-fill.svg";
 
 const inputStyle = {};
 
@@ -22,6 +25,8 @@ const LoginComponent = (props) => {
   const [showModal, setShowModal] = useState(false);
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
+
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (
@@ -69,7 +74,9 @@ const LoginComponent = (props) => {
     setLogin("");
     setPassword("");
   };
-
+  const togglePassword = () => {
+    setShowPassword(!showPassword);
+  };
   return (
     <div>
       <header>
@@ -130,12 +137,25 @@ const LoginComponent = (props) => {
                 >
                   <Form.Group controlId="formPassword">
                     {/* <Form.Label>Password</Form.Label> */}
-                    <Form.Control
-                      type="password"
-                      placeholder="Enter your password"
-                      onChange={({ target }) => setPassword(target.value)}
-                      value={password}
-                    />
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? "text" : "password"}
+                        placeholder="Enter your password"
+                        onChange={({ target }) => setPassword(target.value)}
+                        value={password}
+                      />
+                      <InputGroup.Append>
+                        <InputGroup.Text>
+                          <img
+                            src={
+                              showPassword ? HidePasswordIcon : ShowPasswordIcon
+                            }
+                            onClick={togglePassword}
+                            alt="show pass"
+                          ></img>
+                        </InputGroup.Text>
+                      </InputGroup.Append>
+                    </InputGroup>
                   </Form.Group>
                 </Col>
               </Row>
